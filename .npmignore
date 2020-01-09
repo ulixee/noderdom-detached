@@ -1,14 +1,9 @@
 node_modules/
 
 /docs/_build/
-lib/
-dist/
-types/
 
 # Logs
 *.log
-
-tests-to-import/
 
 # Coverage
 /.nyc_output
@@ -18,7 +13,6 @@ tests-to-import/
 /.vscode/
 /.project/
 /.settings/
-/.idea/
 
 /.DS_Store
 src/.DS_Store
