@@ -16,6 +16,7 @@ export default class HTMLParser {
       treeAdapter: (new Parse5TreeAdapter(domImplementation, document) as unknown) as TreeAdapter,
     };
 
-    return parse5.parse(markup, config);
+    const response = parse5.parse(markup, config);
+    return response;
   }
 }

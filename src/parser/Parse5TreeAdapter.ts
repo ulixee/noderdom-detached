@@ -5,20 +5,19 @@ import {
   INode,
   IMutable,
   IParentNode,
-  IChildNode,
   IDocumentFragment,
   IText,
   IComment,
   IDocumentType,
 } from '../interfaces';
 import Document from '../api/Document';
-import NodeListOf from '../api/NodeListOf';
 import './PatchedOpenElementStack';
 import ITreeAdapter, { IAttribute, IDocumentMode } from './ITreeAdapter';
 import NODE_TYPE from '../constants/NodeType';
 import DocumentType from '../api/DocumentType';
 import Text from '../api/Text';
 import Attr from '../api/Attr';
+import Node from '../api/Node';
 
 export default class Parse5TreeAdapter implements ITreeAdapter {
   private readonly implementation: IDOMImplementation;
@@ -30,6 +29,7 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   constructor(domImplementation: IDOMImplementation, document: IDocument) {
     this.implementation = domImplementation;
     this.document = document;
+    (document as any).testing = true;
   }
 
   public createDocument() {
@@ -54,17 +54,21 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   }
 
   public appendChild(parentNode: INode & IParentNode, newNode: INode) {
-    (parentNode.childNodes as NodeListOf<IChildNode>).push(newNode);
-    ((newNode as unknown) as IMutable<INode>).parentNode = parentNode;
-    parentNode.append(newNode);
+    const nodeToReplace = this.findNodeToReplace(parentNode, newNode)
+    if (nodeToReplace) {
+      parentNode.replaceChild(newNode, nodeToReplace);
+    } else {
+      parentNode.append(newNode);
+    }
   }
 
   public insertBefore(parentNode: INode & IParentNode, newNode: INode, referenceNode: INode) {
-    const childNodes = parentNode.childNodes as NodeListOf<IChildNode>;
-    const insertionIdx = childNodes.indexOf(referenceNode);
-    childNodes.splice(insertionIdx, 0, newNode);
-    ((newNode as unknown) as IMutable<INode>).parentNode = parentNode;
-    parentNode.prepend(newNode, referenceNode);
+    const nodeToReplace = this.findNodeToReplace(parentNode, newNode);
+    if (nodeToReplace) {
+      parentNode.replaceChild(newNode, nodeToReplace);
+    } else {
+      parentNode.prepend(newNode, referenceNode);
+    }
   }
 
   public setTemplateContent(templateElement: IElement, contentFragment: IDocumentFragment) {
@@ -220,6 +224,23 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
 
   private ownerDocument(): Document {
     // The currentElement is undefined when parsing elements at the root of the document.
+    // console.log('------------------------ OWNER DOCUMENT ------------------------');
+    // console.log(this.document.constructor.name, this.document.nodeName, (this.document as any).testing);
+    // if (this.currentElement) {
+    //   console.log(this.currentElement.ownerDocument!.constructor.name, this.currentElement.ownerDocument!.nodeName, (this.currentElement.ownerDocument as any).testing);
+    // }
     return (this.currentElement ? this.currentElement.ownerDocument : this.document) as Document;
+  }
+
+  private findNodeToReplace(parentNode: INode & IParentNode, newNode: INode): Node | null {
+    if (
+      parentNode.nodeType === NODE_TYPE.DOCUMENT_NODE &&
+      newNode.nodeType === NODE_TYPE.ELEMENT_NODE &&
+      newNode.nodeName === 'HTML' &&
+      this.ownerDocument().documentElement
+    ) {
+      return this.ownerDocument().documentElement as Node;
+    }
+    return null;
   }
 }

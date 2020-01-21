@@ -45,6 +45,7 @@ export default function ParentNode<TBase extends Constructor>(base: TBase) {
         if (typeof node === 'string') {
           node = ownerNode.ownerDocument!.createTextNode(node as string);
         }
+        console.log('APPENDING ', node.nodeName);
         ownerNode.appendChild<Node>(node as Node);
       }
     }

@@ -141,7 +141,6 @@ const DocumentBase = DocumentAndElementEventHandlers(
 export default class Document extends DocumentBase implements IDocument {
   public readonly URL: string;
   public readonly activeElement: IElement | null;
-  public body: IHTMLElement;
   public readonly characterSet: string;
   public readonly charset: string;
   public readonly compatMode: string;
@@ -197,6 +196,19 @@ export default class Document extends DocumentBase implements IDocument {
   public appendChild<T extends INode>(newChild: T): T {
     const node = super.appendChild<T>(newChild);
     return node;
+  }
+
+  public get body(): IHTMLElement | null {
+    if (!this.documentElement) return null;
+
+    for (let i = 0; i < this.documentElement.childNodes.length; i += 1) {
+      const node = this.documentElement.childNodes.item(i);
+      if (node.nodeType === NODE_TYPE.ELEMENT_NODE && node.nodeName === 'BODY') {
+        return node as HTMLElement;
+      }
+    }
+
+    return null;
   }
 
   public caretPositionFromPoint(_x: number, _y: number): ICaretPosition | null {
@@ -403,14 +415,14 @@ export default class Document extends DocumentBase implements IDocument {
     throw new Error('Method not implemented.');
   }
 
-  public get documentElement() {
+  public get documentElement(): IHTMLElement | null {
     for (let i = 0; i < this.childNodes.length; i += 1) {
-      const childNode = this.childNodes.item(i);
-      if (childNode.nodeType === NODE_TYPE.ELEMENT_NODE) {
-        return childNode as HTMLElement;
+      const node = this.childNodes.item(i);
+      if (node.nodeType === NODE_TYPE.ELEMENT_NODE) {
+        return node as HTMLElement;
       }
     }
-    return null as never;
+    return null;
   }
 
   public elementFromPoint(_x: number, _y: number): IElement | null {
@@ -437,6 +449,7 @@ export default class Document extends DocumentBase implements IDocument {
   }
 
   public getElementById(elementId: string): IHTMLElement | null {
+    if (!this.documentElement) return null;
     let rtv: IElement | null = null;
     _visitNode(this.documentElement, (node: INode) => {
       if (isElement(node)) {

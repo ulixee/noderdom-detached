@@ -4962,7 +4962,7 @@ export interface Document
   /**
    * Specifies the beginning and end of the document body.
    */
-  body: HTMLElement;
+  body: HTMLElement | null; // modified: added null as an option
   /**
    * Returns document's encoding.
    */
@@ -5009,7 +5009,7 @@ export interface Document
   /**
    * Gets a reference to the root node of the document.
    */
-  readonly documentElement: HTMLElement;
+  readonly documentElement: HTMLElement | null; // modified: added null as an option
   /**
    * Returns document's URL.
    */

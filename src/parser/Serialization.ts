@@ -37,6 +37,7 @@ export function fragmentSerialization(node: INode, options: IOptions) {
     }
     return serialized;
   } catch (e) {
+    console.log(e);
     throw new DOMException(e.message, 'InvalidStateError');
   }
 }

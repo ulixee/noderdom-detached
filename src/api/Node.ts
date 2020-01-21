@@ -163,6 +163,7 @@ export default class Node extends EventTarget implements INode {
     // parentNode and parentElement must be set on all
     const parentElement = findParentElement(this);
     for (const childNode of nodesToAdd) {
+      console.log(childNode.nodeName, ' -> ', this.nodeName);
       (childNode as IMutable<ChildNode>).parentNode = (this as unknown) as INode & IParentNode;
       (childNode as IMutable<ChildNode>).parentElement = parentElement;
     }

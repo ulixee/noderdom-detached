@@ -91,7 +91,7 @@ function createParser(rootNode: IElement, ownerDocument: IDocument, saxesOptions
   const openStack: IElement[] = [rootNode];
 
   parser.ontext = (data: string) => {
-    if (saxesOptions.fragment || openStack.length > 1) {
+    if (saxesOptions.fragment || openStack.length > 0) {
       appendChild(openStack[openStack.length - 1], ownerDocument.createTextNode(data));
     }
   };
