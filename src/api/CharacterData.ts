@@ -1,21 +1,12 @@
-import { ICharacterData } from '../interfaces';
-import ChildishNode from './ChildishNode';
-import NonDocumentTypeChildNode from './NonDocumentTypeChildNode';
-import DOMNode, { IInit as INodeInit } from './Node';
+import BaseCharacterData from '../../base/classes/CharacterData';
+import { ICharacterData } from '../../base/interfaces';
 
-// tslint:disable-next-line:variable-name
-const CharacterDataBase = ChildishNode(NonDocumentTypeChildNode(DOMNode));
-
-export default class CharacterData extends CharacterDataBase implements ICharacterData {
+export default class CharacterData extends BaseCharacterData implements ICharacterData {
   public data: string = '';
   protected _length: number = 0;
 
   public get length() {
     return this._length;
-  }
-
-  constructor(props: INodeInit) {
-    super(props);
   }
 
   public appendData(data: string): void {

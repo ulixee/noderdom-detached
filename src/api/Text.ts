@@ -1,17 +1,14 @@
-import Slotable from './Slotable';
-import CharacterData from './CharacterData';
+import BaseText, { setTextRps } from '../../base/classes/Text';
 import NODE_TYPE from '../constants/NodeType';
-import { IText, IHTMLSlotElement } from '../interfaces';
+import { IText, IHTMLSlotElement } from '../../base/interfaces';
 
-// tslint:disable-next-line:variable-name
-const TextBase = Slotable(CharacterData);
-
-export default class Text extends TextBase implements IText {
+export default class Text extends BaseText implements IText {
   public readonly assignedSlot: IHTMLSlotElement | null;
   public readonly wholeText: string;
 
   constructor(data?: string) {
-    super({
+    super();
+    setTextRps(this, {
       nodeName: '#text',
       nodeType: NODE_TYPE.TEXT_NODE,
     });
@@ -23,7 +20,6 @@ export default class Text extends TextBase implements IText {
     const newText = text.substring(offset);
     text = text.substring(0, offset);
     this.data = this.nodeValue = text;
-    this._length = text.length;
     const newTextNode = this.ownerDocument!.createTextNode(newText);
     if (this.parentNode) {
       this.parentNode.insertBefore(newTextNode, this.nextSibling);
@@ -31,3 +27,5 @@ export default class Text extends TextBase implements IText {
     return newTextNode;
   }
 }
+
+export { setTextRps };

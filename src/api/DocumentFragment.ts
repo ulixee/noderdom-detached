@@ -1,21 +1,15 @@
-import DOMNode from './Node';
-import { IDocumentFragment, IHTMLElement } from '../interfaces';
-import ParentNode from './ParentNode';
-import NonElementParentNode from './NonElementParentNode';
+import BaseDocumentFragment, { setDocumentFragmentRps } from '../../base/classes/DocumentFragment';
+import { IDocumentFragment } from '../../base/interfaces';
 import NODE_TYPE from '../constants/NodeType';
 
-// tslint:disable-next-line:variable-name
-const DocumentFragmentBase = ParentNode(NonElementParentNode(DOMNode));
-
-export default class DocumentFragment extends DocumentFragmentBase implements IDocumentFragment {
+export default class DocumentFragment extends BaseDocumentFragment implements IDocumentFragment {
   constructor() {
-    super({
+    super();
+    setDocumentFragmentRps(this, {
       nodeName: '#document-fragment',
       nodeType: NODE_TYPE.DOCUMENT_FRAGMENT_NODE,
     });
   }
-
-  public getElementById(_elementId: string): IHTMLElement | null {
-    throw new Error('Method not implemented.');
-  }
 }
+
+export { setDocumentFragmentRps };

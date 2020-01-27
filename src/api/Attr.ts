@@ -1,17 +1,11 @@
-import Node from './Node';
-import { IElement, IAttr } from '../interfaces';
+import BaseAttr, { setAttrRps } from '../../base/classes/Attr';
+import { IAttr } from '../../base/interfaces';
 import NODE_TYPE from '../constants/NodeType';
 
-export default class Attr extends Node implements IAttr {
-  public readonly name: string;
-  public readonly localName: string;
-  public readonly namespaceURI: string | null = null;
-  public readonly ownerElement: IElement | null = null;
-  public readonly prefix: string | null = null;
-  public readonly specified: boolean;
-
+export default class Attr extends BaseAttr implements IAttr {
   constructor() {
-    super({
+    super();
+    setAttrRps(this, {
       nodeType: NODE_TYPE.ATTRIBUTE_NODE,
     });
   }
@@ -24,3 +18,5 @@ export default class Attr extends Node implements IAttr {
     this.nodeValue = value;
   }
 }
+
+export { setAttrRps };

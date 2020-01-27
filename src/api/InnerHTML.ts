@@ -11,8 +11,5 @@ export default function InnerHTML<TBase extends Constructor>(base: TBase) {
         requireWellFormed: true,
       });
     }
-    public set innerHTML(_html: string) {
-      throw new Error('Set property not implemented.');
-    }
   };
 }

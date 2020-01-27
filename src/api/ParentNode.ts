@@ -1,10 +1,7 @@
 import {
   IElement,
-  IHTMLElementTagNameMap,
   INode,
-  INodeListOf,
   IParentNode,
-  ISVGElementTagNameMap,
 } from '../interfaces';
 import HTMLCollection from './HTMLCollection';
 import Node from './Node';
@@ -48,26 +45,6 @@ export default function ParentNode<TBase extends Constructor>(base: TBase) {
         console.log('APPENDING ', node.nodeName);
         ownerNode.appendChild<Node>(node as Node);
       }
-    }
-
-    public prepend(..._nodes: (INode | string)[]): void {
-      throw new Error('Method not implemented.');
-    }
-
-    public querySelector<K extends keyof IHTMLElementTagNameMap>(_selectors: K): IHTMLElementTagNameMap[K] | null;
-    public querySelector<K extends keyof ISVGElementTagNameMap>(_selectors: K): ISVGElementTagNameMap[K] | null;
-    public querySelector<E extends IElement = IElement>(_selectors: string): E | null {
-      throw new Error('Method not implemented.');
-    }
-
-    public querySelectorAll<K extends keyof IHTMLElementTagNameMap>(
-      _selectors: K,
-    ): INodeListOf<IHTMLElementTagNameMap[K]>;
-    public querySelectorAll<K extends keyof ISVGElementTagNameMap>(
-      _selectors: K,
-    ): INodeListOf<ISVGElementTagNameMap[K]>;
-    public querySelectorAll<E extends IElement = IElement>(_selectors: string): INodeListOf<E> {
-      throw new Error('Method not implemented.');
     }
   };
 }

@@ -128,18 +128,6 @@ export default class Node extends EventTarget implements INode {
     return (cloneNode(this.ownerDocument!, this, deep) as unknown) as T;
   }
 
-  public compareDocumentPosition(_other: INode): number {
-    throw new Error('Method not implemented.');
-  }
-
-  public contains(_other: INode | null): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  public getRootNode(_options?: IGetRootNodeOptions | undefined): INode {
-    throw new Error('Method not implemented.');
-  }
-
   public hasChildNodes(): boolean {
     return this.firstChild != null;
   }
@@ -177,14 +165,6 @@ export default class Node extends EventTarget implements INode {
   public isDefaultNamespace(namespace: string | null): boolean {
     const prefix = this.lookupPrefix(namespace || '');
     return prefix == null;
-  }
-
-  public isEqualNode(_otherNode: INode | null): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  public isSameNode(_otherNode: INode | null): boolean {
-    throw new Error('Method not implemented.');
   }
 
   public lookupNamespaceURI(prefix: string): string | null {
