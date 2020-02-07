@@ -1,20 +1,32 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IHTMLSlotElement, ISlotable } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  ISlotable,
+  ISlotableProperties,
+  ISlotableReadonlyProperties
+>('Slotable');
+export const internalHandler = new InternalHandler<ISlotable>('Slotable', getState, setState);
 
-export default function Slotable<TBase extends Constructor>(base: TBase) {
-  return class extends base implements ISlotable {
-    public get assignedSlot(): IHTMLSlotElement | null {
-      return InternalHandler.get<Slotable, IHTMLSlotElement | null>(this, 'assignedSlot');
-    }
-  };
+export default class Slotable implements ISlotable {
+  public get assignedSlot(): IHTMLSlotElement | null {
+    return internalHandler.get<IHTMLSlotElement | null>(this, 'assignedSlot', true);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpSlotableKeys: Set<string> = new Set([]);
-
-export interface ISlotableRps {
-  readonly assignedSlot?: IHTMLSlotElement | null;
+export interface ISlotableProperties {
+  assignedSlot?: IHTMLSlotElement | null;
 }
+
+export interface ISlotableReadonlyProperties {
+  assignedSlot?: IHTMLSlotElement | null;
+}
+
+// tslint:disable-next-line:variable-name
+export const SlotablePropertyKeys = ['assignedSlot'];
+
+// tslint:disable-next-line:variable-name
+export const SlotableConstantKeys = [];

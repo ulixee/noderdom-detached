@@ -1,42 +1,54 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLDataListElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLDataListElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLDataListElement extends HTMLElement implements IHTMLDataListElement {
-  protected readonly _: IHTMLDataListElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLDataListElement } = StateMachine<
+  IHTMLDataListElement,
+  IHTMLDataListElementProperties,
+  IHTMLDataListElementReadonlyProperties
+>('HTMLDataListElement');
+export const internalHandler = new InternalHandler<IHTMLDataListElement>('HTMLDataListElement', getState, setState);
 
-  // properties
-
-  public get options(): IHTMLCollection {
-    return InternalHandler.get<HTMLDataListElement, IHTMLCollection>(this, 'options');
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDataListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLDataListElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDataListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLDataListElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLDataListElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLDataListElementRps extends IHTMLElementRps {
-  readonly options?: IHTMLCollection;
-}
-
-export function setHTMLDataListElementRps(instance: IHTMLDataListElement, data: IHTMLDataListElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLDataListElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLDataListElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLDataListElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLDataListElement extends HTMLElement implements IHTMLDataListElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLDataListElement>(HTMLDataListElement, this, internalHandler, HTMLDataListElementConstantKeys, HTMLDataListElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get options(): IHTMLCollection {
+      return internalHandler.get<IHTMLCollection>(this, 'options', false);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDataListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDataListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLDataListElementProperties extends IHTMLElementProperties {
+  options?: IHTMLCollection;
+}
+
+export interface IHTMLDataListElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  options?: IHTMLCollection;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLDataListElementPropertyKeys = [...HTMLElementPropertyKeys, 'options'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLDataListElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,54 +1,65 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IVideoTrack } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfVideoTrack } = StateMachine<
+  IVideoTrack,
+  IVideoTrackProperties,
+  IVideoTrackReadonlyProperties
+>('VideoTrack');
+export const internalHandler = new InternalHandler<IVideoTrack>('VideoTrack', getState, setState);
+
 export default class VideoTrack implements IVideoTrack {
-  protected readonly _: IVideoTrackRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<VideoTrack>(VideoTrack, this, internalHandler, VideoTrackConstantKeys, VideoTrackPropertyKeys);
+  }
 
   // properties
 
   public get id(): string {
-    return InternalHandler.get<VideoTrack, string>(this, 'id');
+    return internalHandler.get<string>(this, 'id', false);
   }
 
   public get kind(): string {
-    return InternalHandler.get<VideoTrack, string>(this, 'kind');
+    return internalHandler.get<string>(this, 'kind', false);
   }
 
   public get label(): string {
-    return InternalHandler.get<VideoTrack, string>(this, 'label');
+    return internalHandler.get<string>(this, 'label', false);
   }
 
   public get language(): string {
-    return InternalHandler.get<VideoTrack, string>(this, 'language');
+    return internalHandler.get<string>(this, 'language', false);
   }
 
   public get selected(): boolean {
-    return InternalHandler.get<VideoTrack, boolean>(this, 'selected');
+    return internalHandler.get<boolean>(this, 'selected', false);
   }
 
   public set selected(value: boolean) {
-    InternalHandler.set<VideoTrack, boolean>(this, 'selected', value);
+    internalHandler.set<boolean>(this, 'selected', value);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpVideoTrackKeys: Set<string> = new Set([]);
-
-export interface IVideoTrackRps {
-  readonly id?: string;
-  readonly kind?: string;
-  readonly label?: string;
-  readonly language?: string;
+export interface IVideoTrackProperties {
+  id?: string;
+  kind?: string;
+  label?: string;
+  language?: string;
+  selected?: boolean;
 }
 
-export function setVideoTrackRps(instance: IVideoTrack, data: IVideoTrackRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpVideoTrackKeys.has(key)) {
-      throw new Error(`${key} is not a property of VideoTrack`);
-    }
-    properties[key] = value;
-  });
+export interface IVideoTrackReadonlyProperties {
+  id?: string;
+  kind?: string;
+  label?: string;
+  language?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const VideoTrackPropertyKeys = ['id', 'kind', 'label', 'language', 'selected'];
+
+// tslint:disable-next-line:variable-name
+export const VideoTrackConstantKeys = [];

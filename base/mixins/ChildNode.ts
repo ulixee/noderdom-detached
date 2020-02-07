@@ -1,30 +1,40 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { INode, IChildNode } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  IChildNode,
+  IChildNodeProperties,
+  IChildNodeReadonlyProperties
+>('ChildNode');
+export const internalHandler = new InternalHandler<IChildNode>('ChildNode', getState, setState);
 
-export default function ChildNode<TBase extends Constructor>(base: TBase) {
-  return class extends base implements IChildNode {
-    public after(...nodes: (INode | string)[]): void {
-      InternalHandler.run<ChildNode, void>(this, 'after', [nodes]);
-    }
+export default class ChildNode implements IChildNode {
+  public after(...nodes: (INode | string)[]): void {
+    internalHandler.run<void>(this, 'after', [nodes]);
+  }
 
-    public before(...nodes: (INode | string)[]): void {
-      InternalHandler.run<ChildNode, void>(this, 'before', [nodes]);
-    }
+  public before(...nodes: (INode | string)[]): void {
+    internalHandler.run<void>(this, 'before', [nodes]);
+  }
 
-    public remove(): void {
-      InternalHandler.run<ChildNode, void>(this, 'remove', []);
-    }
+  public remove(): void {
+    internalHandler.run<void>(this, 'remove', []);
+  }
 
-    public replaceWith(...nodes: (INode | string)[]): void {
-      InternalHandler.run<ChildNode, void>(this, 'replaceWith', [nodes]);
-    }
-  };
+  public replaceWith(...nodes: (INode | string)[]): void {
+    internalHandler.run<void>(this, 'replaceWith', [nodes]);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpChildNodeKeys: Set<string> = new Set([]);
+export interface IChildNodeProperties {}
 
-export interface IChildNodeRps {}
+export interface IChildNodeReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const ChildNodePropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const ChildNodeConstantKeys = [];

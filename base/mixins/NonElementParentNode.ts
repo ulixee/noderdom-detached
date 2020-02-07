@@ -1,18 +1,28 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IElement, INonElementParentNode } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  INonElementParentNode,
+  INonElementParentNodeProperties,
+  INonElementParentNodeReadonlyProperties
+>('NonElementParentNode');
+export const internalHandler = new InternalHandler<INonElementParentNode>('NonElementParentNode', getState, setState);
 
-export default function NonElementParentNode<TBase extends Constructor>(base: TBase) {
-  return class extends base implements INonElementParentNode {
-    public getElementById(elementId: string): IElement | null {
-      return InternalHandler.run<NonElementParentNode, IElement | null>(this, 'getElementById', [elementId]);
-    }
-  };
+export default class NonElementParentNode implements INonElementParentNode {
+  public getElementById(elementId: string): IElement | null {
+    return internalHandler.run<IElement | null>(this, 'getElementById', [elementId]);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpNonElementParentNodeKeys: Set<string> = new Set([]);
+export interface INonElementParentNodeProperties {}
 
-export interface INonElementParentNodeRps {}
+export interface INonElementParentNodeReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const NonElementParentNodePropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const NonElementParentNodeConstantKeys = [];

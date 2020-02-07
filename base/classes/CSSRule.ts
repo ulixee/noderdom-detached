@@ -1,5 +1,13 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ICSSRule, ICSSStyleSheet } from '../interfaces';
+
+export const { getState, setState, setReadonlyOfCSSRule } = StateMachine<
+  ICSSRule,
+  ICSSRuleProperties,
+  ICSSRuleReadonlyProperties
+>('CSSRule');
+export const internalHandler = new InternalHandler<ICSSRule>('CSSRule', getState, setState);
 
 export default class CSSRule implements ICSSRule {
   public static readonly CHARSET_RULE: number = 2;
@@ -20,50 +28,50 @@ export default class CSSRule implements ICSSRule {
   public readonly PAGE_RULE: number = 6;
   public readonly STYLE_RULE: number = 1;
 
-  // store readonly properties
-
-  protected readonly _: ICSSRuleRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<CSSRule>(CSSRule, this, internalHandler, CSSRuleConstantKeys, CSSRulePropertyKeys);
+  }
 
   // properties
 
   public get cssText(): string {
-    return InternalHandler.get<CSSRule, string>(this, 'cssText');
+    return internalHandler.get<string>(this, 'cssText', false);
   }
 
   public set cssText(value: string) {
-    InternalHandler.set<CSSRule, string>(this, 'cssText', value);
+    internalHandler.set<string>(this, 'cssText', value);
   }
 
   public get parentRule(): ICSSRule | null {
-    return InternalHandler.get<CSSRule, ICSSRule | null>(this, 'parentRule');
+    return internalHandler.get<ICSSRule | null>(this, 'parentRule', true);
   }
 
   public get parentStyleSheet(): ICSSStyleSheet | null {
-    return InternalHandler.get<CSSRule, ICSSStyleSheet | null>(this, 'parentStyleSheet');
+    return internalHandler.get<ICSSStyleSheet | null>(this, 'parentStyleSheet', true);
   }
 
   public get type(): number {
-    return InternalHandler.get<CSSRule, number>(this, 'type');
+    return internalHandler.get<number>(this, 'type', false);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpCSSRuleKeys: Set<string> = new Set([]);
-
-export interface ICSSRuleRps {
-  readonly parentRule?: ICSSRule | null;
-  readonly parentStyleSheet?: ICSSStyleSheet | null;
-  readonly type?: number;
+export interface ICSSRuleProperties {
+  cssText?: string;
+  parentRule?: ICSSRule | null;
+  parentStyleSheet?: ICSSStyleSheet | null;
+  type?: number;
 }
 
-export function setCSSRuleRps(instance: ICSSRule, data: ICSSRuleRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpCSSRuleKeys.has(key)) {
-      throw new Error(`${key} is not a property of CSSRule`);
-    }
-    properties[key] = value;
-  });
+export interface ICSSRuleReadonlyProperties {
+  parentRule?: ICSSRule | null;
+  parentStyleSheet?: ICSSStyleSheet | null;
+  type?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const CSSRulePropertyKeys = ['cssText', 'parentRule', 'parentStyleSheet', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const CSSRuleConstantKeys = ['STYLE_RULE', 'CHARSET_RULE', 'IMPORT_RULE', 'MEDIA_RULE', 'FONT_FACE_RULE', 'PAGE_RULE', 'MARGIN_RULE', 'NAMESPACE_RULE'];

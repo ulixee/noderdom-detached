@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLQuoteElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLQuoteElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLQuoteElement extends HTMLElement implements IHTMLQuoteElement {
-  public get cite(): string {
-    return InternalHandler.get<HTMLQuoteElement, string>(this, 'cite');
-  }
+export const { getState, setState, setReadonlyOfHTMLQuoteElement } = StateMachine<
+  IHTMLQuoteElement,
+  IHTMLQuoteElementProperties,
+  IHTMLQuoteElementReadonlyProperties
+>('HTMLQuoteElement');
+export const internalHandler = new InternalHandler<IHTMLQuoteElement>('HTMLQuoteElement', getState, setState);
 
-  public set cite(value: string) {
-    InternalHandler.set<HTMLQuoteElement, string>(this, 'cite', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLQuoteElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLQuoteElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLQuoteElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLQuoteElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLQuoteElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLQuoteElementRps extends IHTMLElementRps {}
-
-export function setHTMLQuoteElementRps(instance: IHTMLQuoteElement, data: IHTMLQuoteElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLQuoteElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLQuoteElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLQuoteElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLQuoteElement extends HTMLElement implements IHTMLQuoteElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLQuoteElement>(HTMLQuoteElement, this, internalHandler, HTMLQuoteElementConstantKeys, HTMLQuoteElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get cite(): string {
+      return internalHandler.get<string>(this, 'cite', false);
+    }
+
+    public set cite(value: string) {
+      internalHandler.set<string>(this, 'cite', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLQuoteElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLQuoteElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLQuoteElementProperties extends IHTMLElementProperties {
+  cite?: string;
+}
+
+export interface IHTMLQuoteElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLQuoteElementPropertyKeys = [...HTMLElementPropertyKeys, 'cite'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLQuoteElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,30 +1,46 @@
-import InternalHandler from '../InternalHandler';
-import { IRadioNodeList } from '../interfaces';
-import NodeList, { INodeListRps, rpNodeListKeys } from './NodeList';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { INodeList, IRadioNodeList } from '../interfaces';
+import { INodeListProperties, INodeListReadonlyProperties, NodeListPropertyKeys, NodeListConstantKeys } from './NodeList';
 
-export default class RadioNodeList extends NodeList implements IRadioNodeList {
-  public get value(): string {
-    return InternalHandler.get<RadioNodeList, string>(this, 'value');
-  }
+export const { getState, setState, setReadonlyOfRadioNodeList } = StateMachine<
+  IRadioNodeList,
+  IRadioNodeListProperties,
+  IRadioNodeListReadonlyProperties
+>('RadioNodeList');
+export const internalHandler = new InternalHandler<IRadioNodeList>('RadioNodeList', getState, setState);
 
-  public set value(value: string) {
-    InternalHandler.set<RadioNodeList, string>(this, 'value', value);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpRadioNodeListKeys: Set<string> = new Set([...rpNodeListKeys]);
-
-export interface IRadioNodeListRps extends INodeListRps {}
-
-export function setRadioNodeListRps(instance: IRadioNodeList, data: IRadioNodeListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpRadioNodeListKeys.has(key)) {
-      throw new Error(`${key} is not a property of RadioNodeList`);
+// tslint:disable-next-line:variable-name
+export function RadioNodeListGenerator(NodeList: Constructable<INodeList>) {
+  return class RadioNodeList extends NodeList implements IRadioNodeList {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<RadioNodeList>(RadioNodeList, this, internalHandler, RadioNodeListConstantKeys, RadioNodeListPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get value(): string {
+      return internalHandler.get<string>(this, 'value', false);
+    }
+
+    public set value(value: string) {
+      internalHandler.set<string>(this, 'value', value);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IRadioNodeListProperties extends INodeListProperties {
+  value?: string;
+}
+
+export interface IRadioNodeListReadonlyProperties extends INodeListReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const RadioNodeListPropertyKeys = [...NodeListPropertyKeys, 'value'];
+
+// tslint:disable-next-line:variable-name
+export const RadioNodeListConstantKeys = [...NodeListConstantKeys];

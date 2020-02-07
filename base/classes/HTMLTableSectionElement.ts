@@ -1,84 +1,100 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLElement, IHTMLTableSectionElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLTableSectionElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLTableSectionElement extends HTMLElement implements IHTMLTableSectionElement {
-  protected readonly _: IHTMLTableSectionElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLTableSectionElement } = StateMachine<
+  IHTMLTableSectionElement,
+  IHTMLTableSectionElementProperties,
+  IHTMLTableSectionElementReadonlyProperties
+>('HTMLTableSectionElement');
+export const internalHandler = new InternalHandler<IHTMLTableSectionElement>('HTMLTableSectionElement', getState, setState);
 
-  // properties
-
-  public get align(): string {
-    return InternalHandler.get<HTMLTableSectionElement, string>(this, 'align');
-  }
-
-  public set align(value: string) {
-    InternalHandler.set<HTMLTableSectionElement, string>(this, 'align', value);
-  }
-
-  public get ch(): string {
-    return InternalHandler.get<HTMLTableSectionElement, string>(this, 'ch');
-  }
-
-  public set ch(value: string) {
-    InternalHandler.set<HTMLTableSectionElement, string>(this, 'ch', value);
-  }
-
-  public get chOff(): string {
-    return InternalHandler.get<HTMLTableSectionElement, string>(this, 'chOff');
-  }
-
-  public set chOff(value: string) {
-    InternalHandler.set<HTMLTableSectionElement, string>(this, 'chOff', value);
-  }
-
-  public get rows(): IHTMLCollection {
-    return InternalHandler.get<HTMLTableSectionElement, IHTMLCollection>(this, 'rows');
-  }
-
-  public get vAlign(): string {
-    return InternalHandler.get<HTMLTableSectionElement, string>(this, 'vAlign');
-  }
-
-  public set vAlign(value: string) {
-    InternalHandler.set<HTMLTableSectionElement, string>(this, 'vAlign', value);
-  }
-
-  // methods
-
-  public deleteRow(index: number): void {
-    InternalHandler.run<HTMLTableSectionElement, void>(this, 'deleteRow', [index]);
-  }
-
-  public insertRow(index?: number): IHTMLElement {
-    return InternalHandler.run<HTMLTableSectionElement, IHTMLElement>(this, 'insertRow', [index]);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableSectionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLTableSectionElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableSectionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLTableSectionElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLTableSectionElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLTableSectionElementRps extends IHTMLElementRps {
-  readonly rows?: IHTMLCollection;
-}
-
-export function setHTMLTableSectionElementRps(instance: IHTMLTableSectionElement, data: IHTMLTableSectionElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLTableSectionElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLTableSectionElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLTableSectionElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLTableSectionElement extends HTMLElement implements IHTMLTableSectionElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLTableSectionElement>(HTMLTableSectionElement, this, internalHandler, HTMLTableSectionElementConstantKeys, HTMLTableSectionElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get align(): string {
+      return internalHandler.get<string>(this, 'align', false);
+    }
+
+    public set align(value: string) {
+      internalHandler.set<string>(this, 'align', value);
+    }
+
+    public get ch(): string {
+      return internalHandler.get<string>(this, 'ch', false);
+    }
+
+    public set ch(value: string) {
+      internalHandler.set<string>(this, 'ch', value);
+    }
+
+    public get chOff(): string {
+      return internalHandler.get<string>(this, 'chOff', false);
+    }
+
+    public set chOff(value: string) {
+      internalHandler.set<string>(this, 'chOff', value);
+    }
+
+    public get rows(): IHTMLCollection {
+      return internalHandler.get<IHTMLCollection>(this, 'rows', false);
+    }
+
+    public get vAlign(): string {
+      return internalHandler.get<string>(this, 'vAlign', false);
+    }
+
+    public set vAlign(value: string) {
+      internalHandler.set<string>(this, 'vAlign', value);
+    }
+
+    // methods
+
+    public deleteRow(index: number): void {
+      internalHandler.run<void>(this, 'deleteRow', [index]);
+    }
+
+    public insertRow(index?: number): IHTMLElement {
+      return internalHandler.run<IHTMLElement>(this, 'insertRow', [index]);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableSectionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableSectionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLTableSectionElementProperties extends IHTMLElementProperties {
+  align?: string;
+  ch?: string;
+  chOff?: string;
+  rows?: IHTMLCollection;
+  vAlign?: string;
+}
+
+export interface IHTMLTableSectionElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  rows?: IHTMLCollection;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLTableSectionElementPropertyKeys = [...HTMLElementPropertyKeys, 'align', 'ch', 'chOff', 'rows', 'vAlign'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLTableSectionElementConstantKeys = [...HTMLElementConstantKeys];

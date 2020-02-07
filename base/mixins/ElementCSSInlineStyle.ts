@@ -1,20 +1,32 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ICSSStyleDeclaration, IElementCSSInlineStyle } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  IElementCSSInlineStyle,
+  IElementCSSInlineStyleProperties,
+  IElementCSSInlineStyleReadonlyProperties
+>('ElementCSSInlineStyle');
+export const internalHandler = new InternalHandler<IElementCSSInlineStyle>('ElementCSSInlineStyle', getState, setState);
 
-export default function ElementCSSInlineStyle<TBase extends Constructor>(base: TBase) {
-  return class extends base implements IElementCSSInlineStyle {
-    public get style(): ICSSStyleDeclaration {
-      return InternalHandler.get<ElementCSSInlineStyle, ICSSStyleDeclaration>(this, 'style');
-    }
-  };
+export default class ElementCSSInlineStyle implements IElementCSSInlineStyle {
+  public get style(): ICSSStyleDeclaration {
+    return internalHandler.get<ICSSStyleDeclaration>(this, 'style', false);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpElementCSSInlineStyleKeys: Set<string> = new Set([]);
-
-export interface IElementCSSInlineStyleRps {
-  readonly style?: ICSSStyleDeclaration;
+export interface IElementCSSInlineStyleProperties {
+  style?: ICSSStyleDeclaration;
 }
+
+export interface IElementCSSInlineStyleReadonlyProperties {
+  style?: ICSSStyleDeclaration;
+}
+
+// tslint:disable-next-line:variable-name
+export const ElementCSSInlineStylePropertyKeys = ['style'];
+
+// tslint:disable-next-line:variable-name
+export const ElementCSSInlineStyleConstantKeys = [];

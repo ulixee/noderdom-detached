@@ -1,18 +1,18 @@
-import BaseText, { setTextRps } from '../../base/classes/Text';
+import { TextGenerator, setState, internalHandler } from '../../base/classes/Text';
 import NODE_TYPE from '../constants/NodeType';
-import { IText, IHTMLSlotElement } from '../../base/interfaces';
+import { IText } from '../../base/interfaces';
+import CharacterData from './CharacterData';
+import Slotable from '../../base/mixins/Slotable';
 
-export default class Text extends BaseText implements IText {
-  public readonly assignedSlot: IHTMLSlotElement | null;
-  public readonly wholeText: string;
-
+export default class Text extends TextGenerator(CharacterData, Slotable) implements IText {
   constructor(data?: string) {
     super();
-    setTextRps(this, {
+    setState(this, {
       nodeName: '#text',
       nodeType: NODE_TYPE.TEXT_NODE,
+      nodeValue: data || '',
+      data: data || '',
     });
-    this.wholeText = data || '';
   }
 
   public splitText(offset: number): IText {
@@ -28,4 +28,4 @@ export default class Text extends BaseText implements IText {
   }
 }
 
-export { setTextRps };
+internalHandler.handle();

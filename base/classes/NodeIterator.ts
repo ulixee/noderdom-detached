@@ -1,65 +1,76 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { INode, INodeFilter, INodeIterator } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfNodeIterator } = StateMachine<
+  INodeIterator,
+  INodeIteratorProperties,
+  INodeIteratorReadonlyProperties
+>('NodeIterator');
+export const internalHandler = new InternalHandler<INodeIterator>('NodeIterator', getState, setState);
+
 export default class NodeIterator implements INodeIterator {
-  protected readonly _: INodeIteratorRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<NodeIterator>(NodeIterator, this, internalHandler, NodeIteratorConstantKeys, NodeIteratorPropertyKeys);
+  }
 
   // properties
 
   public get filter(): INodeFilter | null {
-    return InternalHandler.get<NodeIterator, INodeFilter | null>(this, 'filter');
+    return internalHandler.get<INodeFilter | null>(this, 'filter', true);
   }
 
   public get pointerBeforeReferenceNode(): boolean {
-    return InternalHandler.get<NodeIterator, boolean>(this, 'pointerBeforeReferenceNode');
+    return internalHandler.get<boolean>(this, 'pointerBeforeReferenceNode', false);
   }
 
   public get referenceNode(): INode {
-    return InternalHandler.get<NodeIterator, INode>(this, 'referenceNode');
+    return internalHandler.get<INode>(this, 'referenceNode', false);
   }
 
   public get root(): INode {
-    return InternalHandler.get<NodeIterator, INode>(this, 'root');
+    return internalHandler.get<INode>(this, 'root', false);
   }
 
   public get whatToShow(): number {
-    return InternalHandler.get<NodeIterator, number>(this, 'whatToShow');
+    return internalHandler.get<number>(this, 'whatToShow', false);
   }
 
   // methods
 
   public detach(): void {
-    InternalHandler.run<NodeIterator, void>(this, 'detach', []);
+    internalHandler.run<void>(this, 'detach', []);
   }
 
   public nextNode(): INode | null {
-    return InternalHandler.run<NodeIterator, INode | null>(this, 'nextNode', []);
+    return internalHandler.run<INode | null>(this, 'nextNode', []);
   }
 
   public previousNode(): INode | null {
-    return InternalHandler.run<NodeIterator, INode | null>(this, 'previousNode', []);
+    return internalHandler.run<INode | null>(this, 'previousNode', []);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpNodeIteratorKeys: Set<string> = new Set([]);
-
-export interface INodeIteratorRps {
-  readonly filter?: INodeFilter | null;
-  readonly pointerBeforeReferenceNode?: boolean;
-  readonly referenceNode?: INode;
-  readonly root?: INode;
-  readonly whatToShow?: number;
+export interface INodeIteratorProperties {
+  filter?: INodeFilter | null;
+  pointerBeforeReferenceNode?: boolean;
+  referenceNode?: INode;
+  root?: INode;
+  whatToShow?: number;
 }
 
-export function setNodeIteratorRps(instance: INodeIterator, data: INodeIteratorRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpNodeIteratorKeys.has(key)) {
-      throw new Error(`${key} is not a property of NodeIterator`);
-    }
-    properties[key] = value;
-  });
+export interface INodeIteratorReadonlyProperties {
+  filter?: INodeFilter | null;
+  pointerBeforeReferenceNode?: boolean;
+  referenceNode?: INode;
+  root?: INode;
+  whatToShow?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const NodeIteratorPropertyKeys = ['filter', 'pointerBeforeReferenceNode', 'referenceNode', 'root', 'whatToShow'];
+
+// tslint:disable-next-line:variable-name
+export const NodeIteratorConstantKeys = [];

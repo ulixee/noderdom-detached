@@ -1,82 +1,90 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IDOMRectInit, IDOMRectReadOnly } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfDOMRectReadOnly } = StateMachine<
+  IDOMRectReadOnly,
+  IDOMRectReadOnlyProperties,
+  IDOMRectReadOnlyReadonlyProperties
+>('DOMRectReadOnly');
+export const internalHandler = new InternalHandler<IDOMRectReadOnly>('DOMRectReadOnly', getState, setState);
+
 export default class DOMRectReadOnly implements IDOMRectReadOnly {
-  protected readonly _: IDOMRectReadOnlyRps = {};
-
-  // constructor required for this class
-
-  constructor(x?: number, y?: number, width?: number, height?: number) {
-    InternalHandler.construct(this, [x, y, width, height]);
+  constructor(_x?: number, _y?: number, _width?: number, _height?: number) {
+    initializeConstantsAndPrototypes<DOMRectReadOnly>(DOMRectReadOnly, this, internalHandler, DOMRectReadOnlyConstantKeys, DOMRectReadOnlyPropertyKeys);
   }
 
   // properties
 
   public get bottom(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'bottom');
+    return internalHandler.get<number>(this, 'bottom', false);
   }
 
   public get height(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'height');
+    return internalHandler.get<number>(this, 'height', false);
   }
 
   public get left(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'left');
+    return internalHandler.get<number>(this, 'left', false);
   }
 
   public get right(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'right');
+    return internalHandler.get<number>(this, 'right', false);
   }
 
   public get top(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'top');
+    return internalHandler.get<number>(this, 'top', false);
   }
 
   public get width(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'width');
+    return internalHandler.get<number>(this, 'width', false);
   }
 
   public get x(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'x');
+    return internalHandler.get<number>(this, 'x', false);
   }
 
   public get y(): number {
-    return InternalHandler.get<DOMRectReadOnly, number>(this, 'y');
+    return internalHandler.get<number>(this, 'y', false);
   }
 
   // methods
 
   public fromRect(other?: IDOMRectInit): IDOMRectReadOnly {
-    return InternalHandler.run<DOMRectReadOnly, IDOMRectReadOnly>(this, 'fromRect', [other]);
+    return internalHandler.run<IDOMRectReadOnly>(this, 'fromRect', [other]);
   }
 
   public toJSON(): any {
-    InternalHandler.run<DOMRectReadOnly, any>(this, 'toJSON', []);
+    internalHandler.run<any>(this, 'toJSON', []);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpDOMRectReadOnlyKeys: Set<string> = new Set([]);
-
-export interface IDOMRectReadOnlyRps {
-  readonly bottom?: number;
-  readonly height?: number;
-  readonly left?: number;
-  readonly right?: number;
-  readonly top?: number;
-  readonly width?: number;
-  readonly x?: number;
-  readonly y?: number;
+export interface IDOMRectReadOnlyProperties {
+  bottom?: number;
+  height?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  width?: number;
+  x?: number;
+  y?: number;
 }
 
-export function setDOMRectReadOnlyRps(instance: IDOMRectReadOnly, data: IDOMRectReadOnlyRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpDOMRectReadOnlyKeys.has(key)) {
-      throw new Error(`${key} is not a property of DOMRectReadOnly`);
-    }
-    properties[key] = value;
-  });
+export interface IDOMRectReadOnlyReadonlyProperties {
+  bottom?: number;
+  height?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  width?: number;
+  x?: number;
+  y?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const DOMRectReadOnlyPropertyKeys = ['bottom', 'height', 'left', 'right', 'top', 'width', 'x', 'y'];
+
+// tslint:disable-next-line:variable-name
+export const DOMRectReadOnlyConstantKeys = [];

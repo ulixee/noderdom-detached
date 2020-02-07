@@ -1,49 +1,64 @@
-import InternalHandler from '../InternalHandler';
-import { IShadowRootMode, IElement, IShadowRoot } from '../interfaces';
-import DocumentFragment, { IDocumentFragmentRps, rpDocumentFragmentKeys } from './DocumentFragment';
-import DocumentOrShadowRoot, { IDocumentOrShadowRootRps, rpDocumentOrShadowRootKeys } from '../mixins/DocumentOrShadowRoot';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IDocumentFragment, IDocumentOrShadowRoot, IShadowRootMode, IElement, IShadowRoot } from '../interfaces';
+import { IDocumentFragmentProperties, IDocumentFragmentReadonlyProperties, DocumentFragmentPropertyKeys, DocumentFragmentConstantKeys } from './DocumentFragment';
+import { IDocumentOrShadowRootProperties, IDocumentOrShadowRootReadonlyProperties, DocumentOrShadowRootPropertyKeys, DocumentOrShadowRootConstantKeys } from '../mixins/DocumentOrShadowRoot';
+
+export const { getState, setState, setReadonlyOfShadowRoot } = StateMachine<
+  IShadowRoot,
+  IShadowRootProperties,
+  IShadowRootReadonlyProperties
+>('ShadowRoot');
+export const internalHandler = new InternalHandler<IShadowRoot>('ShadowRoot', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const ShadowRootBase = DocumentOrShadowRoot(DocumentFragment);
+export function ShadowRootGenerator(DocumentFragment: Constructable<IDocumentFragment>, DocumentOrShadowRoot: Constructable<IDocumentOrShadowRoot>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(DocumentFragment, [DocumentOrShadowRoot]) as unknown) as Constructable<IDocumentFragment & IDocumentOrShadowRoot>;
 
-export default class ShadowRoot extends ShadowRootBase implements IShadowRoot {
-  protected readonly _: IShadowRootRps = {};
-
-  // properties
-
-  public get host(): IElement {
-    return InternalHandler.get<ShadowRoot, IElement>(this, 'host');
-  }
-
-  public get innerHTML(): string {
-    return InternalHandler.get<ShadowRoot, string>(this, 'innerHTML');
-  }
-
-  public set innerHTML(value: string) {
-    InternalHandler.set<ShadowRoot, string>(this, 'innerHTML', value);
-  }
-
-  public get mode(): IShadowRootMode {
-    return InternalHandler.get<ShadowRoot, IShadowRootMode>(this, 'mode');
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpShadowRootKeys: Set<string> = new Set([...rpDocumentFragmentKeys, ...rpDocumentOrShadowRootKeys]);
-
-export interface IShadowRootRps extends IDocumentFragmentRps, IDocumentOrShadowRootRps {
-  readonly host?: IElement;
-  readonly mode?: IShadowRootMode;
-}
-
-export function setShadowRootRps(instance: IShadowRoot, data: IShadowRootRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpShadowRootKeys.has(key)) {
-      throw new Error(`${key} is not a property of ShadowRoot`);
+  return class ShadowRoot extends Parent implements IShadowRoot {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<ShadowRoot>(ShadowRoot, this, internalHandler, ShadowRootConstantKeys, ShadowRootPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get host(): IElement {
+      return internalHandler.get<IElement>(this, 'host', false);
+    }
+
+    public get innerHTML(): string {
+      return internalHandler.get<string>(this, 'innerHTML', false);
+    }
+
+    public set innerHTML(value: string) {
+      internalHandler.set<string>(this, 'innerHTML', value);
+    }
+
+    public get mode(): IShadowRootMode {
+      return internalHandler.get<IShadowRootMode>(this, 'mode', false);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IShadowRootProperties extends IDocumentFragmentProperties, IDocumentOrShadowRootProperties {
+  host?: IElement;
+  innerHTML?: string;
+  mode?: IShadowRootMode;
+}
+
+export interface IShadowRootReadonlyProperties extends IDocumentFragmentReadonlyProperties, IDocumentOrShadowRootReadonlyProperties {
+  host?: IElement;
+  mode?: IShadowRootMode;
+}
+
+// tslint:disable-next-line:variable-name
+export const ShadowRootPropertyKeys = [...DocumentFragmentPropertyKeys, ...DocumentOrShadowRootPropertyKeys, 'host', 'innerHTML', 'mode'];
+
+// tslint:disable-next-line:variable-name
+export const ShadowRootConstantKeys = [...DocumentFragmentConstantKeys, ...DocumentOrShadowRootConstantKeys];

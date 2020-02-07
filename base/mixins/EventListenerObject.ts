@@ -1,18 +1,28 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IEvent, IEventListenerObject } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  IEventListenerObject,
+  IEventListenerObjectProperties,
+  IEventListenerObjectReadonlyProperties
+>('EventListenerObject');
+export const internalHandler = new InternalHandler<IEventListenerObject>('EventListenerObject', getState, setState);
 
-export default function EventListenerObject<TBase extends Constructor>(base: TBase) {
-  return class extends base implements IEventListenerObject {
-    public handleEvent(evt: IEvent): void {
-      InternalHandler.run<EventListenerObject, void>(this, 'handleEvent', [evt]);
-    }
-  };
+export default class EventListenerObject implements IEventListenerObject {
+  public handleEvent(evt: IEvent): void {
+    internalHandler.run<void>(this, 'handleEvent', [evt]);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpEventListenerObjectKeys: Set<string> = new Set([]);
+export interface IEventListenerObjectProperties {}
 
-export interface IEventListenerObjectRps {}
+export interface IEventListenerObjectReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const EventListenerObjectPropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const EventListenerObjectConstantKeys = [];

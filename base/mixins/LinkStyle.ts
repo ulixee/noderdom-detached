@@ -1,20 +1,32 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IStyleSheet, ILinkStyle } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  ILinkStyle,
+  ILinkStyleProperties,
+  ILinkStyleReadonlyProperties
+>('LinkStyle');
+export const internalHandler = new InternalHandler<ILinkStyle>('LinkStyle', getState, setState);
 
-export default function LinkStyle<TBase extends Constructor>(base: TBase) {
-  return class extends base implements ILinkStyle {
-    public get sheet(): IStyleSheet | null {
-      return InternalHandler.get<LinkStyle, IStyleSheet | null>(this, 'sheet');
-    }
-  };
+export default class LinkStyle implements ILinkStyle {
+  public get sheet(): IStyleSheet | null {
+    return internalHandler.get<IStyleSheet | null>(this, 'sheet', true);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpLinkStyleKeys: Set<string> = new Set([]);
-
-export interface ILinkStyleRps {
-  readonly sheet?: IStyleSheet | null;
+export interface ILinkStyleProperties {
+  sheet?: IStyleSheet | null;
 }
+
+export interface ILinkStyleReadonlyProperties {
+  sheet?: IStyleSheet | null;
+}
+
+// tslint:disable-next-line:variable-name
+export const LinkStylePropertyKeys = ['sheet'];
+
+// tslint:disable-next-line:variable-name
+export const LinkStyleConstantKeys = [];

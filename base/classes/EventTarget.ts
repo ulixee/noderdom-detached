@@ -1,22 +1,42 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IEventListenerOrEventListenerObject, IAddEventListenerOptions, IEventListenerOptions, IEvent, IEventTarget } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfEventTarget } = StateMachine<
+  IEventTarget,
+  IEventTargetProperties,
+  IEventTargetReadonlyProperties
+>('EventTarget');
+export const internalHandler = new InternalHandler<IEventTarget>('EventTarget', getState, setState);
+
 export default class EventTarget implements IEventTarget {
+  constructor() {
+    initializeConstantsAndPrototypes<EventTarget>(EventTarget, this, internalHandler, EventTargetConstantKeys, EventTargetPropertyKeys);
+  }
+
+  // methods
+
   public addEventListener(type: string, callback: IEventListenerOrEventListenerObject | null, options?: IAddEventListenerOptions | boolean): void {
-    InternalHandler.run<EventTarget, void>(this, 'addEventListener', [type, callback, options]);
+    internalHandler.run<void>(this, 'addEventListener', [type, callback, options]);
   }
 
   public dispatchEvent(event: IEvent): boolean {
-    return InternalHandler.run<EventTarget, boolean>(this, 'dispatchEvent', [event]);
+    return internalHandler.run<boolean>(this, 'dispatchEvent', [event]);
   }
 
   public removeEventListener(type: string, callback: IEventListenerOrEventListenerObject | null, options?: IEventListenerOptions | boolean): void {
-    InternalHandler.run<EventTarget, void>(this, 'removeEventListener', [type, callback, options]);
+    internalHandler.run<void>(this, 'removeEventListener', [type, callback, options]);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpEventTargetKeys: Set<string> = new Set([]);
+export interface IEventTargetProperties {}
 
-export interface IEventTargetRps {}
+export interface IEventTargetReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const EventTargetPropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const EventTargetConstantKeys = [];

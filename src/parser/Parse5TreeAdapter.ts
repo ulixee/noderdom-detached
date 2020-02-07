@@ -3,20 +3,22 @@ import {
   IDOMImplementation,
   IElement,
   INode,
-  IMutable,
   IParentNode,
   IDocumentFragment,
   IText,
   IComment,
-  IDocumentType,
-} from '../interfaces';
+  IDocumentType, IChildNode,
+} from '../../base/interfaces';
 import Document from '../api/Document';
 import './PatchedOpenElementStack';
 import ITreeAdapter, { IAttribute, IDocumentMode } from './ITreeAdapter';
 import NODE_TYPE from '../constants/NodeType';
 import DocumentType from '../api/DocumentType';
+import { setReadonlyOfDocumentType } from '../../base/classes/DocumentType';
+import { setReadonlyOfElement } from '../../base/classes/Element';
+import { setReadonlyOfDocument } from '../../base/classes/Document';
+import { setReadonlyOfAttr } from '../../base/classes/Attr';
 import Text from '../api/Text';
-import Attr from '../api/Attr';
 import Node from '../api/Node';
 
 export default class Parse5TreeAdapter implements ITreeAdapter {
@@ -29,7 +31,6 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   constructor(domImplementation: IDOMImplementation, document: IDocument) {
     this.implementation = domImplementation;
     this.document = document;
-    (document as any).testing = true;
   }
 
   public createDocument() {
@@ -43,7 +44,7 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   public createElement(tagName: string, namespaceURI: string, attrs: IAttribute[]) {
     const ownerDocument = this.ownerDocument();
     const element = ownerDocument.createElement(tagName as any);
-    element.namespaceURI = namespaceURI;
+    setReadonlyOfElement(element, { namespaceURI: namespaceURI });
     this.adoptAttributes(element, attrs);
     return element;
   }
@@ -85,15 +86,17 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < document.childNodes.length; i += 1) {
       if (document.childNodes[i].nodeType === NODE_TYPE.DOCUMENT_TYPE_NODE) {
-        documentType = document.childNodes[i] as IMutable<DocumentType>;
+        documentType = document.childNodes[i] as DocumentType;
         break;
       }
     }
 
     if (documentType) {
-      documentType.name = name;
-      documentType.publicId = publicId;
-      documentType.systemId = systemId;
+      setReadonlyOfDocumentType(documentType, {
+        name: name,
+        publicId: publicId,
+        systemId: systemId,
+      });
     } else {
       documentType = this.implementation.createDocumentType(name, publicId, systemId);
       this.appendChild(document, documentType);
@@ -101,11 +104,9 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   }
 
   public setDocumentMode(document: IDocument, mode: IDocumentMode) {
-    if (mode === 'quirks') {
-      (document as IMutable<Document>).compatMode = 'BackCompat';
-    } else {
-      (document as IMutable<Document>).compatMode = 'CSS1Compat';
-    }
+    setReadonlyOfDocument(document, {
+      compatMode: mode === 'quirks' ? 'BackCompat' : 'CSS1Compat',
+    });
   }
 
   public getDocumentMode(document: IDocument) {
@@ -144,24 +145,26 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   public adoptAttributes(element: IElement, attrs: IAttribute[]) {
     for (const attr of attrs) {
       const prefix = attr.prefix === '' ? null : attr.prefix;
-      const attribute = element.ownerDocument!.createAttribute(attr.name) as IMutable<Attr>;
+      const attribute = element.ownerDocument!.createAttribute(attr.name);
       attribute.value = attribute.nodeValue = attr.value;
-      attribute.prefix = prefix === undefined ? null : prefix;
-      attribute.namespaceURI = attr.namespace === undefined ? null : attr.namespace;
+      setReadonlyOfAttr(attribute, {
+        prefix: prefix === undefined ? null : prefix,
+        namespaceURI: attr.namespace === undefined ? null : attr.namespace,
+      });
       element.setAttributeNode(attribute);
     }
   }
 
   public getFirstChild(node: INode) {
-    return node.firstChild;
+    return node.firstChild as INode & IChildNode;
   }
 
   public getChildNodes(node: INode) {
-    return Array.from(node.childNodes);
+    return Array.from(node.childNodes) as (INode & IChildNode)[];
   }
 
   public getParentNode(node: INode) {
-    return node.parentNode;
+    return node.parentNode as INode & IParentNode;
   }
 
   public getAttrList(node: IElement) {
@@ -177,7 +180,7 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   }
 
   public getTextNodeContent(node: IText) {
-    return node.wholeText;
+    return node.nodeValue || '';
   }
 
   public getCommentNodeContent(node: IComment) {

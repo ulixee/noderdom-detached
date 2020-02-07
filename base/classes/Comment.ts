@@ -1,27 +1,34 @@
-import InternalHandler from '../InternalHandler';
-import { IComment } from '../interfaces';
-import CharacterData, { ICharacterDataRps, rpCharacterDataKeys } from './CharacterData';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { ICharacterData, IComment } from '../interfaces';
+import { ICharacterDataProperties, ICharacterDataReadonlyProperties, CharacterDataPropertyKeys, CharacterDataConstantKeys } from './CharacterData';
 
-export default class Comment extends CharacterData implements IComment {
-  constructor(data?: string) {
-    super();
-    InternalHandler.construct(this, [data]);
-  }
-}
+export const { getState, setState, setReadonlyOfComment } = StateMachine<
+  IComment,
+  ICommentProperties,
+  ICommentReadonlyProperties
+>('Comment');
+export const internalHandler = new InternalHandler<IComment>('Comment', getState, setState);
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpCommentKeys: Set<string> = new Set([...rpCharacterDataKeys]);
-
-export interface ICommentRps extends ICharacterDataRps {}
-
-export function setCommentRps(instance: IComment, data: ICommentRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpCommentKeys.has(key)) {
-      throw new Error(`${key} is not a property of Comment`);
+// tslint:disable-next-line:variable-name
+export function CommentGenerator(CharacterData: Constructable<ICharacterData>) {
+  return class Comment extends CharacterData implements IComment {
+    constructor(_data?: string) {
+      super();
+      initializeConstantsAndPrototypes<Comment>(Comment, this, internalHandler, CommentConstantKeys, CommentPropertyKeys);
     }
-    properties[key] = value;
-  });
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface ICommentProperties extends ICharacterDataProperties {}
+
+export interface ICommentReadonlyProperties extends ICharacterDataReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const CommentPropertyKeys = [...CharacterDataPropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const CommentConstantKeys = [...CharacterDataConstantKeys];

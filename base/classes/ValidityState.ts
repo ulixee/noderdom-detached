@@ -1,81 +1,98 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IValidityState } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfValidityState } = StateMachine<
+  IValidityState,
+  IValidityStateProperties,
+  IValidityStateReadonlyProperties
+>('ValidityState');
+export const internalHandler = new InternalHandler<IValidityState>('ValidityState', getState, setState);
+
 export default class ValidityState implements IValidityState {
-  protected readonly _: IValidityStateRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<ValidityState>(ValidityState, this, internalHandler, ValidityStateConstantKeys, ValidityStatePropertyKeys);
+  }
 
   // properties
 
   public get badInput(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'badInput');
+    return internalHandler.get<boolean>(this, 'badInput', false);
   }
 
   public get customError(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'customError');
+    return internalHandler.get<boolean>(this, 'customError', false);
   }
 
   public get patternMismatch(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'patternMismatch');
+    return internalHandler.get<boolean>(this, 'patternMismatch', false);
   }
 
   public get rangeOverflow(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'rangeOverflow');
+    return internalHandler.get<boolean>(this, 'rangeOverflow', false);
   }
 
   public get rangeUnderflow(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'rangeUnderflow');
+    return internalHandler.get<boolean>(this, 'rangeUnderflow', false);
   }
 
   public get stepMismatch(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'stepMismatch');
+    return internalHandler.get<boolean>(this, 'stepMismatch', false);
   }
 
   public get tooLong(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'tooLong');
+    return internalHandler.get<boolean>(this, 'tooLong', false);
   }
 
   public get tooShort(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'tooShort');
+    return internalHandler.get<boolean>(this, 'tooShort', false);
   }
 
   public get typeMismatch(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'typeMismatch');
+    return internalHandler.get<boolean>(this, 'typeMismatch', false);
   }
 
   public get valid(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'valid');
+    return internalHandler.get<boolean>(this, 'valid', false);
   }
 
   public get valueMissing(): boolean {
-    return InternalHandler.get<ValidityState, boolean>(this, 'valueMissing');
+    return internalHandler.get<boolean>(this, 'valueMissing', false);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpValidityStateKeys: Set<string> = new Set([]);
-
-export interface IValidityStateRps {
-  readonly badInput?: boolean;
-  readonly customError?: boolean;
-  readonly patternMismatch?: boolean;
-  readonly rangeOverflow?: boolean;
-  readonly rangeUnderflow?: boolean;
-  readonly stepMismatch?: boolean;
-  readonly tooLong?: boolean;
-  readonly tooShort?: boolean;
-  readonly typeMismatch?: boolean;
-  readonly valid?: boolean;
-  readonly valueMissing?: boolean;
+export interface IValidityStateProperties {
+  badInput?: boolean;
+  customError?: boolean;
+  patternMismatch?: boolean;
+  rangeOverflow?: boolean;
+  rangeUnderflow?: boolean;
+  stepMismatch?: boolean;
+  tooLong?: boolean;
+  tooShort?: boolean;
+  typeMismatch?: boolean;
+  valid?: boolean;
+  valueMissing?: boolean;
 }
 
-export function setValidityStateRps(instance: IValidityState, data: IValidityStateRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpValidityStateKeys.has(key)) {
-      throw new Error(`${key} is not a property of ValidityState`);
-    }
-    properties[key] = value;
-  });
+export interface IValidityStateReadonlyProperties {
+  badInput?: boolean;
+  customError?: boolean;
+  patternMismatch?: boolean;
+  rangeOverflow?: boolean;
+  rangeUnderflow?: boolean;
+  stepMismatch?: boolean;
+  tooLong?: boolean;
+  tooShort?: boolean;
+  typeMismatch?: boolean;
+  valid?: boolean;
+  valueMissing?: boolean;
 }
+
+// tslint:disable-next-line:variable-name
+export const ValidityStatePropertyKeys = ['badInput', 'customError', 'patternMismatch', 'rangeOverflow', 'rangeUnderflow', 'stepMismatch', 'tooLong', 'tooShort', 'typeMismatch', 'valid', 'valueMissing'];
+
+// tslint:disable-next-line:variable-name
+export const ValidityStateConstantKeys = [];

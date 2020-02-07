@@ -1,39 +1,50 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ICSSRule, ICSSRuleList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfCSSRuleList } = StateMachine<
+  ICSSRuleList,
+  ICSSRuleListProperties,
+  ICSSRuleListReadonlyProperties
+>('CSSRuleList');
+export const internalHandler = new InternalHandler<ICSSRuleList>('CSSRuleList', getState, setState);
+
 export default class CSSRuleList implements ICSSRuleList {
-  protected readonly _: ICSSRuleListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<CSSRuleList>(CSSRuleList, this, internalHandler, CSSRuleListConstantKeys, CSSRuleListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<CSSRuleList, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public item(index: number): ICSSRule | null {
-    return InternalHandler.run<CSSRuleList, ICSSRule | null>(this, 'item', [index]);
+    return internalHandler.run<ICSSRule | null>(this, 'item', [index]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<ICSSRule> {
+    return internalHandler.run<IterableIterator<ICSSRule>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: ICSSRule;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpCSSRuleListKeys: Set<string> = new Set([]);
-
-export interface ICSSRuleListRps {
-  readonly length?: number;
+export interface ICSSRuleListProperties {
+  length?: number;
 }
 
-export function setCSSRuleListRps(instance: ICSSRuleList, data: ICSSRuleListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpCSSRuleListKeys.has(key)) {
-      throw new Error(`${key} is not a property of CSSRuleList`);
-    }
-    properties[key] = value;
-  });
+export interface ICSSRuleListReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const CSSRuleListPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const CSSRuleListConstantKeys = [];

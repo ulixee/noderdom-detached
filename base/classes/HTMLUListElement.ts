@@ -1,48 +1,65 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLUListElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLUListElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLUListElement extends HTMLElement implements IHTMLUListElement {
-  public get compact(): boolean {
-    return InternalHandler.get<HTMLUListElement, boolean>(this, 'compact');
-  }
+export const { getState, setState, setReadonlyOfHTMLUListElement } = StateMachine<
+  IHTMLUListElement,
+  IHTMLUListElementProperties,
+  IHTMLUListElementReadonlyProperties
+>('HTMLUListElement');
+export const internalHandler = new InternalHandler<IHTMLUListElement>('HTMLUListElement', getState, setState);
 
-  public set compact(value: boolean) {
-    InternalHandler.set<HTMLUListElement, boolean>(this, 'compact', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLUListElement, string>(this, 'type');
-  }
-
-  public set type(value: string) {
-    InternalHandler.set<HTMLUListElement, string>(this, 'type', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLUListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLUListElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLUListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLUListElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLUListElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLUListElementRps extends IHTMLElementRps {}
-
-export function setHTMLUListElementRps(instance: IHTMLUListElement, data: IHTMLUListElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLUListElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLUListElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLUListElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLUListElement extends HTMLElement implements IHTMLUListElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLUListElement>(HTMLUListElement, this, internalHandler, HTMLUListElementConstantKeys, HTMLUListElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get compact(): boolean {
+      return internalHandler.get<boolean>(this, 'compact', false);
+    }
+
+    public set compact(value: boolean) {
+      internalHandler.set<boolean>(this, 'compact', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLUListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLUListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLUListElementProperties extends IHTMLElementProperties {
+  compact?: boolean;
+  type?: string;
+}
+
+export interface IHTMLUListElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLUListElementPropertyKeys = [...HTMLElementPropertyKeys, 'compact', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLUListElementConstantKeys = [...HTMLElementConstantKeys];

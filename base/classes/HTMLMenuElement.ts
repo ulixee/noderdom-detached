@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLMenuElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLMenuElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLMenuElement extends HTMLElement implements IHTMLMenuElement {
-  public get compact(): boolean {
-    return InternalHandler.get<HTMLMenuElement, boolean>(this, 'compact');
-  }
+export const { getState, setState, setReadonlyOfHTMLMenuElement } = StateMachine<
+  IHTMLMenuElement,
+  IHTMLMenuElementProperties,
+  IHTMLMenuElementReadonlyProperties
+>('HTMLMenuElement');
+export const internalHandler = new InternalHandler<IHTMLMenuElement>('HTMLMenuElement', getState, setState);
 
-  public set compact(value: boolean) {
-    InternalHandler.set<HTMLMenuElement, boolean>(this, 'compact', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMenuElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLMenuElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMenuElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLMenuElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLMenuElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLMenuElementRps extends IHTMLElementRps {}
-
-export function setHTMLMenuElementRps(instance: IHTMLMenuElement, data: IHTMLMenuElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLMenuElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLMenuElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLMenuElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLMenuElement extends HTMLElement implements IHTMLMenuElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLMenuElement>(HTMLMenuElement, this, internalHandler, HTMLMenuElementConstantKeys, HTMLMenuElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get compact(): boolean {
+      return internalHandler.get<boolean>(this, 'compact', false);
+    }
+
+    public set compact(value: boolean) {
+      internalHandler.set<boolean>(this, 'compact', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMenuElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMenuElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLMenuElementProperties extends IHTMLElementProperties {
+  compact?: boolean;
+}
+
+export interface IHTMLMenuElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLMenuElementPropertyKeys = [...HTMLElementPropertyKeys, 'compact'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLMenuElementConstantKeys = [...HTMLElementConstantKeys];

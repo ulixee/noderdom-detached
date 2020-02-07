@@ -1,13 +1,15 @@
 import { IElementContentEditable } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export default class ElementContentEditable implements IElementContentEditable {}
 
-export default function ElementContentEditable<TBase extends Constructor>(base: TBase) {
-  return class extends base implements IElementContentEditable {};
-}
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+export interface IElementContentEditableProperties {}
 
-export const rpElementContentEditableKeys: Set<string> = new Set([]);
+export interface IElementContentEditableReadonlyProperties {}
 
-export interface IElementContentEditableRps {}
+// tslint:disable-next-line:variable-name
+export const ElementContentEditablePropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const ElementContentEditableConstantKeys = [];

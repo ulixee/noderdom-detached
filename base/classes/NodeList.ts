@@ -1,43 +1,66 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { INode, INodeList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfNodeList } = StateMachine<
+  INodeList,
+  INodeListProperties,
+  INodeListReadonlyProperties
+>('NodeList');
+export const internalHandler = new InternalHandler<INodeList>('NodeList', getState, setState);
+
 export default class NodeList<T extends INode = INode> implements INodeList<T> {
-  protected readonly _: INodeListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<NodeList>(NodeList, this, internalHandler, NodeListConstantKeys, NodeListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<NodeList<T>, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public item(index: number): T | null {
-    return InternalHandler.run<NodeList<T>, T | null>(this, 'item', [index]);
+    return internalHandler.run<T | null>(this, 'item', [index]);
   }
 
   public forEach(callbackfn: (value: INode, key: number, parent: INodeList<T>) => void, thisArg?: any): void {
-    InternalHandler.run<NodeList<T>, void>(this, 'forEach', [callbackfn, thisArg]);
+    internalHandler.run<void>(this, 'forEach', [callbackfn, thisArg]);
+  }
+
+  public entries(): IterableIterator<[number, INode]> {
+    return internalHandler.run<IterableIterator<[number, INode]>>(this, 'entries', []);
+  }
+
+  public keys(): IterableIterator<number> {
+    return internalHandler.run<IterableIterator<number>>(this, 'keys', []);
+  }
+
+  public values(): IterableIterator<INode> {
+    return internalHandler.run<IterableIterator<INode>>(this, 'values', []);
+  }
+
+  public [Symbol.iterator](): IterableIterator<INode> {
+    return internalHandler.run<IterableIterator<INode>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: T;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpNodeListKeys: Set<string> = new Set([]);
-
-export interface INodeListRps {
-  readonly length?: number;
+export interface INodeListProperties {
+  length?: number;
 }
 
-export function setNodeListRps(instance: INodeList<INode>, data: INodeListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpNodeListKeys.has(key)) {
-      throw new Error(`${key} is not a property of NodeList`);
-    }
-    properties[key] = value;
-  });
+export interface INodeListReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const NodeListPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const NodeListConstantKeys = [];

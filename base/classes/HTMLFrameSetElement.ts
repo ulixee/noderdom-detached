@@ -1,52 +1,70 @@
-import InternalHandler from '../InternalHandler';
-import { IHTMLFrameSetElementEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFrameSetElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
-import WindowEventHandlers, { IWindowEventHandlersRps, rpWindowEventHandlersKeys } from '../mixins/WindowEventHandlers';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IWindowEventHandlers, IHTMLFrameSetElementEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFrameSetElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
+import { IWindowEventHandlersProperties, IWindowEventHandlersReadonlyProperties, WindowEventHandlersPropertyKeys, WindowEventHandlersConstantKeys } from '../mixins/WindowEventHandlers';
+
+export const { getState, setState, setReadonlyOfHTMLFrameSetElement } = StateMachine<
+  IHTMLFrameSetElement,
+  IHTMLFrameSetElementProperties,
+  IHTMLFrameSetElementReadonlyProperties
+>('HTMLFrameSetElement');
+export const internalHandler = new InternalHandler<IHTMLFrameSetElement>('HTMLFrameSetElement', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const HTMLFrameSetElementBase = WindowEventHandlers(HTMLElement);
+export function HTMLFrameSetElementGenerator(HTMLElement: Constructable<IHTMLElement>, WindowEventHandlers: Constructable<IWindowEventHandlers>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(HTMLElement, [WindowEventHandlers]) as unknown) as Constructable<IHTMLElement & IWindowEventHandlers>;
 
-export default class HTMLFrameSetElement extends HTMLFrameSetElementBase implements IHTMLFrameSetElement {
-  public get cols(): string {
-    return InternalHandler.get<HTMLFrameSetElement, string>(this, 'cols');
-  }
-
-  public set cols(value: string) {
-    InternalHandler.set<HTMLFrameSetElement, string>(this, 'cols', value);
-  }
-
-  public get rows(): string {
-    return InternalHandler.get<HTMLFrameSetElement, string>(this, 'rows');
-  }
-
-  public set rows(value: string) {
-    InternalHandler.set<HTMLFrameSetElement, string>(this, 'rows', value);
-  }
-
-  public addEventListener<K extends keyof IHTMLFrameSetElementEventMap>(type: K, listener: (this: IHTMLFrameSetElement, ev: IHTMLFrameSetElementEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLFrameSetElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IHTMLFrameSetElementEventMap>(type: K, listener: (this: IHTMLFrameSetElement, ev: IHTMLFrameSetElementEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLFrameSetElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLFrameSetElementKeys: Set<string> = new Set([...rpHTMLElementKeys, ...rpWindowEventHandlersKeys]);
-
-export interface IHTMLFrameSetElementRps extends IHTMLElementRps, IWindowEventHandlersRps {}
-
-export function setHTMLFrameSetElementRps(instance: IHTMLFrameSetElement, data: IHTMLFrameSetElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLFrameSetElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLFrameSetElement`);
+  return class HTMLFrameSetElement extends Parent implements IHTMLFrameSetElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLFrameSetElement>(HTMLFrameSetElement, this, internalHandler, HTMLFrameSetElementConstantKeys, HTMLFrameSetElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get cols(): string {
+      return internalHandler.get<string>(this, 'cols', false);
+    }
+
+    public set cols(value: string) {
+      internalHandler.set<string>(this, 'cols', value);
+    }
+
+    public get rows(): string {
+      return internalHandler.get<string>(this, 'rows', false);
+    }
+
+    public set rows(value: string) {
+      internalHandler.set<string>(this, 'rows', value);
+    }
+
+    public addEventListener<K extends keyof IHTMLFrameSetElementEventMap>(type: K, listener: (this: IHTMLFrameSetElement, ev: IHTMLFrameSetElementEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IHTMLFrameSetElementEventMap>(type: K, listener: (this: IHTMLFrameSetElement, ev: IHTMLFrameSetElementEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLFrameSetElementProperties extends IHTMLElementProperties, IWindowEventHandlersProperties {
+  cols?: string;
+  rows?: string;
+}
+
+export interface IHTMLFrameSetElementReadonlyProperties extends IHTMLElementReadonlyProperties, IWindowEventHandlersReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLFrameSetElementPropertyKeys = [...HTMLElementPropertyKeys, ...WindowEventHandlersPropertyKeys, 'cols', 'rows'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLFrameSetElementConstantKeys = [...HTMLElementConstantKeys, ...WindowEventHandlersConstantKeys];

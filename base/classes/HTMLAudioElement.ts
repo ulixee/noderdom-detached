@@ -1,31 +1,43 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLAudioElement } from '../interfaces';
-import HTMLMediaElement, { IHTMLMediaElementRps, rpHTMLMediaElementKeys } from './HTMLMediaElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLMediaElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLAudioElement } from '../interfaces';
+import { IHTMLMediaElementProperties, IHTMLMediaElementReadonlyProperties, HTMLMediaElementPropertyKeys, HTMLMediaElementConstantKeys } from './HTMLMediaElement';
 
-export default class HTMLAudioElement extends HTMLMediaElement implements IHTMLAudioElement {public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAudioElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLAudioElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
+export const { getState, setState, setReadonlyOfHTMLAudioElement } = StateMachine<
+  IHTMLAudioElement,
+  IHTMLAudioElementProperties,
+  IHTMLAudioElementReadonlyProperties
+>('HTMLAudioElement');
+export const internalHandler = new InternalHandler<IHTMLAudioElement>('HTMLAudioElement', getState, setState);
 
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAudioElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLAudioElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLAudioElementKeys: Set<string> = new Set([...rpHTMLMediaElementKeys]);
-
-export interface IHTMLAudioElementRps extends IHTMLMediaElementRps {}
-
-export function setHTMLAudioElementRps(instance: IHTMLAudioElement, data: IHTMLAudioElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLAudioElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLAudioElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLAudioElementGenerator(HTMLMediaElement: Constructable<IHTMLMediaElement>) {
+  return class HTMLAudioElement extends HTMLMediaElement implements IHTMLAudioElement {constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLAudioElement>(HTMLAudioElement, this, internalHandler, HTMLAudioElementConstantKeys, HTMLAudioElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAudioElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAudioElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLAudioElementProperties extends IHTMLMediaElementProperties {}
+
+export interface IHTMLAudioElementReadonlyProperties extends IHTMLMediaElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLAudioElementPropertyKeys = [...HTMLMediaElementPropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const HTMLAudioElementConstantKeys = [...HTMLMediaElementConstantKeys];

@@ -1,113 +1,128 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ILocation } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfLocation } = StateMachine<
+  ILocation,
+  ILocationProperties,
+  ILocationReadonlyProperties
+>('Location');
+export const internalHandler = new InternalHandler<ILocation>('Location', getState, setState);
+
 export default class Location implements ILocation {
-  protected readonly _: ILocationRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<Location>(Location, this, internalHandler, LocationConstantKeys, LocationPropertyKeys);
+  }
 
   // properties
 
   public get hash(): string {
-    return InternalHandler.get<Location, string>(this, 'hash');
+    return internalHandler.get<string>(this, 'hash', false);
   }
 
   public set hash(value: string) {
-    InternalHandler.set<Location, string>(this, 'hash', value);
+    internalHandler.set<string>(this, 'hash', value);
   }
 
   public get host(): string {
-    return InternalHandler.get<Location, string>(this, 'host');
+    return internalHandler.get<string>(this, 'host', false);
   }
 
   public set host(value: string) {
-    InternalHandler.set<Location, string>(this, 'host', value);
+    internalHandler.set<string>(this, 'host', value);
   }
 
   public get hostname(): string {
-    return InternalHandler.get<Location, string>(this, 'hostname');
+    return internalHandler.get<string>(this, 'hostname', false);
   }
 
   public set hostname(value: string) {
-    InternalHandler.set<Location, string>(this, 'hostname', value);
+    internalHandler.set<string>(this, 'hostname', value);
   }
 
   public get href(): string {
-    return InternalHandler.get<Location, string>(this, 'href');
+    return internalHandler.get<string>(this, 'href', false);
   }
 
   public set href(value: string) {
-    InternalHandler.set<Location, string>(this, 'href', value);
+    internalHandler.set<string>(this, 'href', value);
   }
 
   public get origin(): string {
-    return InternalHandler.get<Location, string>(this, 'origin');
+    return internalHandler.get<string>(this, 'origin', false);
   }
 
   public get pathname(): string {
-    return InternalHandler.get<Location, string>(this, 'pathname');
+    return internalHandler.get<string>(this, 'pathname', false);
   }
 
   public set pathname(value: string) {
-    InternalHandler.set<Location, string>(this, 'pathname', value);
+    internalHandler.set<string>(this, 'pathname', value);
   }
 
   public get port(): string {
-    return InternalHandler.get<Location, string>(this, 'port');
+    return internalHandler.get<string>(this, 'port', false);
   }
 
   public set port(value: string) {
-    InternalHandler.set<Location, string>(this, 'port', value);
+    internalHandler.set<string>(this, 'port', value);
   }
 
   public get protocol(): string {
-    return InternalHandler.get<Location, string>(this, 'protocol');
+    return internalHandler.get<string>(this, 'protocol', false);
   }
 
   public set protocol(value: string) {
-    InternalHandler.set<Location, string>(this, 'protocol', value);
+    internalHandler.set<string>(this, 'protocol', value);
   }
 
   public get search(): string {
-    return InternalHandler.get<Location, string>(this, 'search');
+    return internalHandler.get<string>(this, 'search', false);
   }
 
   public set search(value: string) {
-    InternalHandler.set<Location, string>(this, 'search', value);
+    internalHandler.set<string>(this, 'search', value);
   }
 
   // methods
 
   public assign(url: string): void {
-    InternalHandler.run<Location, void>(this, 'assign', [url]);
+    internalHandler.run<void>(this, 'assign', [url]);
   }
 
   public reload(): void {
-    InternalHandler.run<Location, void>(this, 'reload', []);
+    internalHandler.run<void>(this, 'reload', []);
   }
 
   public replace(url: string): void {
-    InternalHandler.run<Location, void>(this, 'replace', [url]);
+    internalHandler.run<void>(this, 'replace', [url]);
   }
 
   public toString(): string {
-    return InternalHandler.run<Location, string>(this, 'string', []);
+    return internalHandler.run<string>(this, 'string', []);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpLocationKeys: Set<string> = new Set([]);
-
-export interface ILocationRps {
-  readonly origin?: string;
+export interface ILocationProperties {
+  hash?: string;
+  host?: string;
+  hostname?: string;
+  href?: string;
+  origin?: string;
+  pathname?: string;
+  port?: string;
+  protocol?: string;
+  search?: string;
 }
 
-export function setLocationRps(instance: ILocation, data: ILocationRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpLocationKeys.has(key)) {
-      throw new Error(`${key} is not a property of Location`);
-    }
-    properties[key] = value;
-  });
+export interface ILocationReadonlyProperties {
+  origin?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const LocationPropertyKeys = ['hash', 'host', 'hostname', 'href', 'origin', 'pathname', 'port', 'protocol', 'search'];
+
+// tslint:disable-next-line:variable-name
+export const LocationConstantKeys = [];

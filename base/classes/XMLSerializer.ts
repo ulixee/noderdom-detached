@@ -1,14 +1,34 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { INode, IXMLSerializer } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfXMLSerializer } = StateMachine<
+  IXMLSerializer,
+  IXMLSerializerProperties,
+  IXMLSerializerReadonlyProperties
+>('XMLSerializer');
+export const internalHandler = new InternalHandler<IXMLSerializer>('XMLSerializer', getState, setState);
+
 export default class XMLSerializer implements IXMLSerializer {
+  constructor() {
+    initializeConstantsAndPrototypes<XMLSerializer>(XMLSerializer, this, internalHandler, XMLSerializerConstantKeys, XMLSerializerPropertyKeys);
+  }
+
+  // methods
+
   public serializeToString(root: INode): string {
-    return InternalHandler.run<XMLSerializer, string>(this, 'serializeToString', [root]);
+    return internalHandler.run<string>(this, 'serializeToString', [root]);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpXMLSerializerKeys: Set<string> = new Set([]);
+export interface IXMLSerializerProperties {}
 
-export interface IXMLSerializerRps {}
+export interface IXMLSerializerReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const XMLSerializerPropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const XMLSerializerConstantKeys = [];

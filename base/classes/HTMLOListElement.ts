@@ -1,64 +1,83 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLOListElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLOListElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLOListElement extends HTMLElement implements IHTMLOListElement {
-  public get compact(): boolean {
-    return InternalHandler.get<HTMLOListElement, boolean>(this, 'compact');
-  }
+export const { getState, setState, setReadonlyOfHTMLOListElement } = StateMachine<
+  IHTMLOListElement,
+  IHTMLOListElementProperties,
+  IHTMLOListElementReadonlyProperties
+>('HTMLOListElement');
+export const internalHandler = new InternalHandler<IHTMLOListElement>('HTMLOListElement', getState, setState);
 
-  public set compact(value: boolean) {
-    InternalHandler.set<HTMLOListElement, boolean>(this, 'compact', value);
-  }
-
-  public get reversed(): boolean {
-    return InternalHandler.get<HTMLOListElement, boolean>(this, 'reversed');
-  }
-
-  public set reversed(value: boolean) {
-    InternalHandler.set<HTMLOListElement, boolean>(this, 'reversed', value);
-  }
-
-  public get start(): number {
-    return InternalHandler.get<HTMLOListElement, number>(this, 'start');
-  }
-
-  public set start(value: number) {
-    InternalHandler.set<HTMLOListElement, number>(this, 'start', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLOListElement, string>(this, 'type');
-  }
-
-  public set type(value: string) {
-    InternalHandler.set<HTMLOListElement, string>(this, 'type', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLOListElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLOListElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLOListElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLOListElementRps extends IHTMLElementRps {}
-
-export function setHTMLOListElementRps(instance: IHTMLOListElement, data: IHTMLOListElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLOListElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLOListElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLOListElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLOListElement extends HTMLElement implements IHTMLOListElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLOListElement>(HTMLOListElement, this, internalHandler, HTMLOListElementConstantKeys, HTMLOListElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get compact(): boolean {
+      return internalHandler.get<boolean>(this, 'compact', false);
+    }
+
+    public set compact(value: boolean) {
+      internalHandler.set<boolean>(this, 'compact', value);
+    }
+
+    public get reversed(): boolean {
+      return internalHandler.get<boolean>(this, 'reversed', false);
+    }
+
+    public set reversed(value: boolean) {
+      internalHandler.set<boolean>(this, 'reversed', value);
+    }
+
+    public get start(): number {
+      return internalHandler.get<number>(this, 'start', false);
+    }
+
+    public set start(value: number) {
+      internalHandler.set<number>(this, 'start', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOListElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLOListElementProperties extends IHTMLElementProperties {
+  compact?: boolean;
+  reversed?: boolean;
+  start?: number;
+  type?: string;
+}
+
+export interface IHTMLOListElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLOListElementPropertyKeys = [...HTMLElementPropertyKeys, 'compact', 'reversed', 'start', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLOListElementConstantKeys = [...HTMLElementConstantKeys];

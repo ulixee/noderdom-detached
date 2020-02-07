@@ -5,11 +5,10 @@ import {
   IElement,
   INode,
   IParentNode,
-  IChildNode,
   INamedNodeMap,
   IText,
-  IDocumentType,
-} from '../interfaces';
+  IDocumentType, IChildNode,
+} from '../../base/interfaces';
 
 // @ts-ignore
 import { Attribute as IAttribute, DocumentMode as IDocumentMode } from '@types/parse5';
@@ -33,8 +32,8 @@ export default interface ITreeAdapter {
   insertTextBefore(parentNode: INode & IParentNode, text: string, referenceNode: INode): void;
   adoptAttributes(recipient: IElement, attrs: IAttribute[]): void;
 
-  getFirstChild(node: INode): IChildNode | null;
-  getChildNodes(node: INode): IChildNode[];
+  getFirstChild(node: INode): (INode & IChildNode) | null;
+  getChildNodes(node: INode): (INode & IChildNode)[];
   getParentNode(node: INode): (INode & IParentNode) | null;
   getAttrList(element: IElement): INamedNodeMap;
   getTagName(element: IElement): string;

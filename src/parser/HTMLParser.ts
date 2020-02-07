@@ -1,6 +1,6 @@
 import parse5, { TreeAdapter } from 'parse5';
 import Parse5TreeAdapter from './Parse5TreeAdapter';
-import { IDocument, IDOMImplementation } from '../interfaces';
+import { IDocument, IDOMImplementation } from '../../base/interfaces';
 
 export default class HTMLParser {
   public static parseFragment(markup: string, domImplementation: IDOMImplementation, document: IDocument) {

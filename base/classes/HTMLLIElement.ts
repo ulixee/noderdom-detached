@@ -1,48 +1,65 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLLIElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLLIElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLLIElement extends HTMLElement implements IHTMLLIElement {
-  public get type(): string {
-    return InternalHandler.get<HTMLLIElement, string>(this, 'type');
-  }
+export const { getState, setState, setReadonlyOfHTMLLIElement } = StateMachine<
+  IHTMLLIElement,
+  IHTMLLIElementProperties,
+  IHTMLLIElementReadonlyProperties
+>('HTMLLIElement');
+export const internalHandler = new InternalHandler<IHTMLLIElement>('HTMLLIElement', getState, setState);
 
-  public set type(value: string) {
-    InternalHandler.set<HTMLLIElement, string>(this, 'type', value);
-  }
-
-  public get value(): number {
-    return InternalHandler.get<HTMLLIElement, number>(this, 'value');
-  }
-
-  public set value(value: number) {
-    InternalHandler.set<HTMLLIElement, number>(this, 'value', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLIElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLLIElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLIElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLLIElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLLIElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLLIElementRps extends IHTMLElementRps {}
-
-export function setHTMLLIElementRps(instance: IHTMLLIElement, data: IHTMLLIElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLLIElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLLIElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLLIElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLLIElement extends HTMLElement implements IHTMLLIElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLLIElement>(HTMLLIElement, this, internalHandler, HTMLLIElementConstantKeys, HTMLLIElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public get value(): number {
+      return internalHandler.get<number>(this, 'value', false);
+    }
+
+    public set value(value: number) {
+      internalHandler.set<number>(this, 'value', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLIElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLIElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLLIElementProperties extends IHTMLElementProperties {
+  type?: string;
+  value?: number;
+}
+
+export interface IHTMLLIElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLLIElementPropertyKeys = [...HTMLElementPropertyKeys, 'type', 'value'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLLIElementConstantKeys = [...HTMLElementConstantKeys];

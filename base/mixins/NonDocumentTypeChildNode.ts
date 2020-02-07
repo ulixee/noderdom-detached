@@ -1,25 +1,38 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IElement, INonDocumentTypeChildNode } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  INonDocumentTypeChildNode,
+  INonDocumentTypeChildNodeProperties,
+  INonDocumentTypeChildNodeReadonlyProperties
+>('NonDocumentTypeChildNode');
+export const internalHandler = new InternalHandler<INonDocumentTypeChildNode>('NonDocumentTypeChildNode', getState, setState);
 
-export default function NonDocumentTypeChildNode<TBase extends Constructor>(base: TBase) {
-  return class extends base implements INonDocumentTypeChildNode {
-    public get nextElementSibling(): IElement | null {
-      return InternalHandler.get<NonDocumentTypeChildNode, IElement | null>(this, 'nextElementSibling');
-    }
+export default class NonDocumentTypeChildNode implements INonDocumentTypeChildNode {
+  public get nextElementSibling(): IElement | null {
+    return internalHandler.get<IElement | null>(this, 'nextElementSibling', true);
+  }
 
-    public get previousElementSibling(): IElement | null {
-      return InternalHandler.get<NonDocumentTypeChildNode, IElement | null>(this, 'previousElementSibling');
-    }
-  };
+  public get previousElementSibling(): IElement | null {
+    return internalHandler.get<IElement | null>(this, 'previousElementSibling', true);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpNonDocumentTypeChildNodeKeys: Set<string> = new Set([]);
-
-export interface INonDocumentTypeChildNodeRps {
-  readonly nextElementSibling?: IElement | null;
-  readonly previousElementSibling?: IElement | null;
+export interface INonDocumentTypeChildNodeProperties {
+  nextElementSibling?: IElement | null;
+  previousElementSibling?: IElement | null;
 }
+
+export interface INonDocumentTypeChildNodeReadonlyProperties {
+  nextElementSibling?: IElement | null;
+  previousElementSibling?: IElement | null;
+}
+
+// tslint:disable-next-line:variable-name
+export const NonDocumentTypeChildNodePropertyKeys = ['nextElementSibling', 'previousElementSibling'];
+
+// tslint:disable-next-line:variable-name
+export const NonDocumentTypeChildNodeConstantKeys = [];

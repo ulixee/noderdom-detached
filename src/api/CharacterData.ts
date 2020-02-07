@@ -1,18 +1,31 @@
-import BaseCharacterData from '../../base/classes/CharacterData';
+import { CharacterDataGenerator, getState, setState } from '../../base/classes/CharacterData';
 import { ICharacterData } from '../../base/interfaces';
+import Node from './Node';
+import ChildNode from '../../base/mixins/ChildNode';
+import NonDocumentTypeChildNode from '../mixins/NonDocumentTypeChildNode';
 
-export default class CharacterData extends BaseCharacterData implements ICharacterData {
-  public data: string = '';
-  protected _length: number = 0;
+// tslint:disable-next-line:variable-name
+const GeneratedCharacterData = CharacterDataGenerator(Node, ChildNode, NonDocumentTypeChildNode);
 
-  public get length() {
-    return this._length;
+export default class CharacterData extends GeneratedCharacterData implements ICharacterData {
+  public get data(): string {
+    return getState(this).data || '';
   }
+
+  public set data(value: string) {
+    setState(this, { data: value });
+  }
+
+  public get length(): number {
+    return getState(this).length || 0;
+  }
+
+  // methods
 
   public appendData(data: string): void {
     const appendedData = this.data + data;
     this.nodeValue = this.data = appendedData;
-    this._length = appendedData.length;
+    setState(this, { length: appendedData.length });
   }
 
   public deleteData(offset: number, count: number): void {
@@ -28,7 +41,7 @@ export default class CharacterData extends BaseCharacterData implements ICharact
     const end = this.data.substring(offset + count);
     const replacedData = start + data + end;
     this.nodeValue = this.data = replacedData;
-    this._length = replacedData.length;
+    setState(this, { length: replacedData.length });
   }
 
   public substringData(offset: number, count: number): string {

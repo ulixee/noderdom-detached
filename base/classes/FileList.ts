@@ -1,39 +1,50 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IFile, IFileList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfFileList } = StateMachine<
+  IFileList,
+  IFileListProperties,
+  IFileListReadonlyProperties
+>('FileList');
+export const internalHandler = new InternalHandler<IFileList>('FileList', getState, setState);
+
 export default class FileList implements IFileList {
-  protected readonly _: IFileListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<FileList>(FileList, this, internalHandler, FileListConstantKeys, FileListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<FileList, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public item(index: number): IFile | null {
-    return InternalHandler.run<FileList, IFile | null>(this, 'item', [index]);
+    return internalHandler.run<IFile | null>(this, 'item', [index]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<IFile> {
+    return internalHandler.run<IterableIterator<IFile>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: IFile;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpFileListKeys: Set<string> = new Set([]);
-
-export interface IFileListRps {
-  readonly length?: number;
+export interface IFileListProperties {
+  length?: number;
 }
 
-export function setFileListRps(instance: IFileList, data: IFileListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpFileListKeys.has(key)) {
-      throw new Error(`${key} is not a property of FileList`);
-    }
-    properties[key] = value;
-  });
+export interface IFileListReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const FileListPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const FileListConstantKeys = [];

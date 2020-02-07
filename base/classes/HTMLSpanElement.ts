@@ -1,31 +1,43 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLSpanElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLSpanElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLSpanElement extends HTMLElement implements IHTMLSpanElement {public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSpanElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLSpanElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
+export const { getState, setState, setReadonlyOfHTMLSpanElement } = StateMachine<
+  IHTMLSpanElement,
+  IHTMLSpanElementProperties,
+  IHTMLSpanElementReadonlyProperties
+>('HTMLSpanElement');
+export const internalHandler = new InternalHandler<IHTMLSpanElement>('HTMLSpanElement', getState, setState);
 
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSpanElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLSpanElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLSpanElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLSpanElementRps extends IHTMLElementRps {}
-
-export function setHTMLSpanElementRps(instance: IHTMLSpanElement, data: IHTMLSpanElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLSpanElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLSpanElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLSpanElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLSpanElement extends HTMLElement implements IHTMLSpanElement {constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLSpanElement>(HTMLSpanElement, this, internalHandler, HTMLSpanElementConstantKeys, HTMLSpanElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSpanElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSpanElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLSpanElementProperties extends IHTMLElementProperties {}
+
+export interface IHTMLSpanElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLSpanElementPropertyKeys = [...HTMLElementPropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const HTMLSpanElementConstantKeys = [...HTMLElementConstantKeys];

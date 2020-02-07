@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHtmlElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHtmlElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLHtmlElement extends HTMLElement implements IHTMLHtmlElement {
-  public get version(): string {
-    return InternalHandler.get<HTMLHtmlElement, string>(this, 'version');
-  }
+export const { getState, setState, setReadonlyOfHTMLHtmlElement } = StateMachine<
+  IHTMLHtmlElement,
+  IHTMLHtmlElementProperties,
+  IHTMLHtmlElementReadonlyProperties
+>('HTMLHtmlElement');
+export const internalHandler = new InternalHandler<IHTMLHtmlElement>('HTMLHtmlElement', getState, setState);
 
-  public set version(value: string) {
-    InternalHandler.set<HTMLHtmlElement, string>(this, 'version', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHtmlElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLHtmlElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHtmlElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLHtmlElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLHtmlElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLHtmlElementRps extends IHTMLElementRps {}
-
-export function setHTMLHtmlElementRps(instance: IHTMLHtmlElement, data: IHTMLHtmlElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLHtmlElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLHtmlElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLHtmlElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLHtmlElement extends HTMLElement implements IHTMLHtmlElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLHtmlElement>(HTMLHtmlElement, this, internalHandler, HTMLHtmlElementConstantKeys, HTMLHtmlElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get version(): string {
+      return internalHandler.get<string>(this, 'version', false);
+    }
+
+    public set version(value: string) {
+      internalHandler.set<string>(this, 'version', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHtmlElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHtmlElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLHtmlElementProperties extends IHTMLElementProperties {
+  version?: string;
+}
+
+export interface IHTMLHtmlElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLHtmlElementPropertyKeys = [...HTMLElementPropertyKeys, 'version'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLHtmlElementConstantKeys = [...HTMLElementConstantKeys];

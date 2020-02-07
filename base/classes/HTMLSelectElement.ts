@@ -1,181 +1,213 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLOptionsCollection, IHTMLCollection, IValidityState, INodeList, IElement, IHTMLOptionElement, IHTMLOptGroupElement, IHTMLElement, IHTMLSelectElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLOptionsCollection, IHTMLCollection, IValidityState, INodeList, IElement, IHTMLOptionElement, IHTMLOptGroupElement, IHTMLSelectElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLSelectElement extends HTMLElement implements IHTMLSelectElement {
-  protected readonly _: IHTMLSelectElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLSelectElement } = StateMachine<
+  IHTMLSelectElement,
+  IHTMLSelectElementProperties,
+  IHTMLSelectElementReadonlyProperties
+>('HTMLSelectElement');
+export const internalHandler = new InternalHandler<IHTMLSelectElement>('HTMLSelectElement', getState, setState);
 
-  // properties
-
-  public get autocomplete(): string {
-    return InternalHandler.get<HTMLSelectElement, string>(this, 'autocomplete');
-  }
-
-  public set autocomplete(value: string) {
-    InternalHandler.set<HTMLSelectElement, string>(this, 'autocomplete', value);
-  }
-
-  public get disabled(): boolean {
-    return InternalHandler.get<HTMLSelectElement, boolean>(this, 'disabled');
-  }
-
-  public set disabled(value: boolean) {
-    InternalHandler.set<HTMLSelectElement, boolean>(this, 'disabled', value);
-  }
-
-  public get form(): IHTMLFormElement | null {
-    return InternalHandler.get<HTMLSelectElement, IHTMLFormElement | null>(this, 'form');
-  }
-
-  public get labels(): INodeList {
-    return InternalHandler.get<HTMLSelectElement, INodeList>(this, 'labels');
-  }
-
-  public get length(): number {
-    return InternalHandler.get<HTMLSelectElement, number>(this, 'length');
-  }
-
-  public set length(value: number) {
-    InternalHandler.set<HTMLSelectElement, number>(this, 'length', value);
-  }
-
-  public get multiple(): boolean {
-    return InternalHandler.get<HTMLSelectElement, boolean>(this, 'multiple');
-  }
-
-  public set multiple(value: boolean) {
-    InternalHandler.set<HTMLSelectElement, boolean>(this, 'multiple', value);
-  }
-
-  public get name(): string {
-    return InternalHandler.get<HTMLSelectElement, string>(this, 'name');
-  }
-
-  public set name(value: string) {
-    InternalHandler.set<HTMLSelectElement, string>(this, 'name', value);
-  }
-
-  public get options(): IHTMLOptionsCollection {
-    return InternalHandler.get<HTMLSelectElement, IHTMLOptionsCollection>(this, 'options');
-  }
-
-  public get required(): boolean {
-    return InternalHandler.get<HTMLSelectElement, boolean>(this, 'required');
-  }
-
-  public set required(value: boolean) {
-    InternalHandler.set<HTMLSelectElement, boolean>(this, 'required', value);
-  }
-
-  public get selectedIndex(): number {
-    return InternalHandler.get<HTMLSelectElement, number>(this, 'selectedIndex');
-  }
-
-  public set selectedIndex(value: number) {
-    InternalHandler.set<HTMLSelectElement, number>(this, 'selectedIndex', value);
-  }
-
-  public get selectedOptions(): IHTMLCollection {
-    return InternalHandler.get<HTMLSelectElement, IHTMLCollection>(this, 'selectedOptions');
-  }
-
-  public get size(): number {
-    return InternalHandler.get<HTMLSelectElement, number>(this, 'size');
-  }
-
-  public set size(value: number) {
-    InternalHandler.set<HTMLSelectElement, number>(this, 'size', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLSelectElement, string>(this, 'type');
-  }
-
-  public get validationMessage(): string {
-    return InternalHandler.get<HTMLSelectElement, string>(this, 'validationMessage');
-  }
-
-  public get validity(): IValidityState {
-    return InternalHandler.get<HTMLSelectElement, IValidityState>(this, 'validity');
-  }
-
-  public get value(): string {
-    return InternalHandler.get<HTMLSelectElement, string>(this, 'value');
-  }
-
-  public set value(value: string) {
-    InternalHandler.set<HTMLSelectElement, string>(this, 'value', value);
-  }
-
-  public get willValidate(): boolean {
-    return InternalHandler.get<HTMLSelectElement, boolean>(this, 'willValidate');
-  }
-
-  // methods
-
-  public add(element: IHTMLOptionElement | IHTMLOptGroupElement, before?: IHTMLElement | number | null): void {
-    InternalHandler.run<HTMLSelectElement, void>(this, 'add', [element, before]);
-  }
-
-  public checkValidity(): boolean {
-    return InternalHandler.run<HTMLSelectElement, boolean>(this, 'checkValidity', []);
-  }
-
-  public item(index: number): IElement | null {
-    return InternalHandler.run<HTMLSelectElement, IElement | null>(this, 'item', [index]);
-  }
-
-  public namedItem(name: string): IHTMLOptionElement | null {
-    return InternalHandler.run<HTMLSelectElement, IHTMLOptionElement | null>(this, 'namedItem', [name]);
-  }
-
-  public remove(index?: number): void {
-    InternalHandler.run<HTMLSelectElement, void>(this, 'remove', [index]);
-  }
-
-  public reportValidity(): boolean {
-    return InternalHandler.run<HTMLSelectElement, boolean>(this, 'reportValidity', []);
-  }
-
-  public setCustomValidity(error: string): void {
-    InternalHandler.run<HTMLSelectElement, void>(this, 'setCustomValidity', [error]);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSelectElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLSelectElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSelectElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLSelectElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-
-  [index: number]: IElement;
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLSelectElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLSelectElementRps extends IHTMLElementRps {
-  readonly form?: IHTMLFormElement | null;
-  readonly labels?: INodeList;
-  readonly options?: IHTMLOptionsCollection;
-  readonly selectedOptions?: IHTMLCollection;
-  readonly type?: string;
-  readonly validationMessage?: string;
-  readonly validity?: IValidityState;
-  readonly willValidate?: boolean;
-}
-
-export function setHTMLSelectElementRps(instance: IHTMLSelectElement, data: IHTMLSelectElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLSelectElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLSelectElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLSelectElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLSelectElement extends HTMLElement implements IHTMLSelectElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLSelectElement>(HTMLSelectElement, this, internalHandler, HTMLSelectElementConstantKeys, HTMLSelectElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get autocomplete(): string {
+      return internalHandler.get<string>(this, 'autocomplete', false);
+    }
+
+    public set autocomplete(value: string) {
+      internalHandler.set<string>(this, 'autocomplete', value);
+    }
+
+    public get disabled(): boolean {
+      return internalHandler.get<boolean>(this, 'disabled', false);
+    }
+
+    public set disabled(value: boolean) {
+      internalHandler.set<boolean>(this, 'disabled', value);
+    }
+
+    public get form(): IHTMLFormElement | null {
+      return internalHandler.get<IHTMLFormElement | null>(this, 'form', true);
+    }
+
+    public get labels(): INodeList {
+      return internalHandler.get<INodeList>(this, 'labels', false);
+    }
+
+    public get length(): number {
+      return internalHandler.get<number>(this, 'length', false);
+    }
+
+    public set length(value: number) {
+      internalHandler.set<number>(this, 'length', value);
+    }
+
+    public get multiple(): boolean {
+      return internalHandler.get<boolean>(this, 'multiple', false);
+    }
+
+    public set multiple(value: boolean) {
+      internalHandler.set<boolean>(this, 'multiple', value);
+    }
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public set name(value: string) {
+      internalHandler.set<string>(this, 'name', value);
+    }
+
+    public get options(): IHTMLOptionsCollection {
+      return internalHandler.get<IHTMLOptionsCollection>(this, 'options', false);
+    }
+
+    public get required(): boolean {
+      return internalHandler.get<boolean>(this, 'required', false);
+    }
+
+    public set required(value: boolean) {
+      internalHandler.set<boolean>(this, 'required', value);
+    }
+
+    public get selectedIndex(): number {
+      return internalHandler.get<number>(this, 'selectedIndex', false);
+    }
+
+    public set selectedIndex(value: number) {
+      internalHandler.set<number>(this, 'selectedIndex', value);
+    }
+
+    public get selectedOptions(): IHTMLCollection {
+      return internalHandler.get<IHTMLCollection>(this, 'selectedOptions', false);
+    }
+
+    public get size(): number {
+      return internalHandler.get<number>(this, 'size', false);
+    }
+
+    public set size(value: number) {
+      internalHandler.set<number>(this, 'size', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public get validationMessage(): string {
+      return internalHandler.get<string>(this, 'validationMessage', false);
+    }
+
+    public get validity(): IValidityState {
+      return internalHandler.get<IValidityState>(this, 'validity', false);
+    }
+
+    public get value(): string {
+      return internalHandler.get<string>(this, 'value', false);
+    }
+
+    public set value(value: string) {
+      internalHandler.set<string>(this, 'value', value);
+    }
+
+    public get willValidate(): boolean {
+      return internalHandler.get<boolean>(this, 'willValidate', false);
+    }
+
+    // methods
+
+    public add(element: IHTMLOptionElement | IHTMLOptGroupElement, before?: IHTMLElement | number | null): void {
+      internalHandler.run<void>(this, 'add', [element, before]);
+    }
+
+    public checkValidity(): boolean {
+      return internalHandler.run<boolean>(this, 'checkValidity', []);
+    }
+
+    public item(index: number): IElement | null {
+      return internalHandler.run<IElement | null>(this, 'item', [index]);
+    }
+
+    public namedItem(name: string): IHTMLOptionElement | null {
+      return internalHandler.run<IHTMLOptionElement | null>(this, 'namedItem', [name]);
+    }
+
+    public remove(index?: number): void {
+      internalHandler.run<void>(this, 'remove', [index]);
+    }
+
+    public reportValidity(): boolean {
+      return internalHandler.run<boolean>(this, 'reportValidity', []);
+    }
+
+    public setCustomValidity(error: string): void {
+      internalHandler.run<void>(this, 'setCustomValidity', [error]);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSelectElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLSelectElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+
+    public [Symbol.iterator](): IterableIterator<IElement> {
+      return internalHandler.run<IterableIterator<IElement>>(this, '[Symbol.iterator]', []);
+    }
+
+    [index: number]: IElement;
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLSelectElementProperties extends IHTMLElementProperties {
+  autocomplete?: string;
+  disabled?: boolean;
+  form?: IHTMLFormElement | null;
+  labels?: INodeList;
+  length?: number;
+  multiple?: boolean;
+  name?: string;
+  options?: IHTMLOptionsCollection;
+  required?: boolean;
+  selectedIndex?: number;
+  selectedOptions?: IHTMLCollection;
+  size?: number;
+  type?: string;
+  validationMessage?: string;
+  validity?: IValidityState;
+  value?: string;
+  willValidate?: boolean;
+}
+
+export interface IHTMLSelectElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  form?: IHTMLFormElement | null;
+  labels?: INodeList;
+  options?: IHTMLOptionsCollection;
+  selectedOptions?: IHTMLCollection;
+  type?: string;
+  validationMessage?: string;
+  validity?: IValidityState;
+  willValidate?: boolean;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLSelectElementPropertyKeys = [...HTMLElementPropertyKeys, 'autocomplete', 'disabled', 'form', 'labels', 'length', 'multiple', 'name', 'options', 'required', 'selectedIndex', 'selectedOptions', 'size', 'type', 'validationMessage', 'validity', 'value', 'willValidate'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLSelectElementConstantKeys = [...HTMLElementConstantKeys];

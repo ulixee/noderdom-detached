@@ -1,53 +1,68 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IHTMLCollection, IElement, INode, INodeList, IParentNode } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  IParentNode,
+  IParentNodeProperties,
+  IParentNodeReadonlyProperties
+>('ParentNode');
+export const internalHandler = new InternalHandler<IParentNode>('ParentNode', getState, setState);
 
-export default function ParentNode<TBase extends Constructor>(base: TBase) {
-  return class extends base implements IParentNode {
-    public get childElementCount(): number {
-      return InternalHandler.get<ParentNode, number>(this, 'childElementCount');
-    }
+export default class ParentNode implements IParentNode {
+  public get childElementCount(): number {
+    return internalHandler.get<number>(this, 'childElementCount', false);
+  }
 
-    public get children(): IHTMLCollection {
-      return InternalHandler.get<ParentNode, IHTMLCollection>(this, 'children');
-    }
+  public get children(): IHTMLCollection {
+    return internalHandler.get<IHTMLCollection>(this, 'children', false);
+  }
 
-    public get firstElementChild(): IElement | null {
-      return InternalHandler.get<ParentNode, IElement | null>(this, 'firstElementChild');
-    }
+  public get firstElementChild(): IElement | null {
+    return internalHandler.get<IElement | null>(this, 'firstElementChild', true);
+  }
 
-    public get lastElementChild(): IElement | null {
-      return InternalHandler.get<ParentNode, IElement | null>(this, 'lastElementChild');
-    }
+  public get lastElementChild(): IElement | null {
+    return internalHandler.get<IElement | null>(this, 'lastElementChild', true);
+  }
 
-    // methods
+  // methods
 
-    public append(...nodes: (INode | string)[]): void {
-      InternalHandler.run<ParentNode, void>(this, 'append', [nodes]);
-    }
+  public append(...nodes: (INode | string)[]): void {
+    internalHandler.run<void>(this, 'append', [nodes]);
+  }
 
-    public prepend(...nodes: (INode | string)[]): void {
-      InternalHandler.run<ParentNode, void>(this, 'prepend', [nodes]);
-    }
+  public prepend(...nodes: (INode | string)[]): void {
+    internalHandler.run<void>(this, 'prepend', [nodes]);
+  }
 
-    public querySelector(selectors: string): IElement | null {
-      return InternalHandler.run<ParentNode, IElement | null>(this, 'querySelector', [selectors]);
-    }
+  public querySelector(selectors: string): IElement | null {
+    return internalHandler.run<IElement | null>(this, 'querySelector', [selectors]);
+  }
 
-    public querySelectorAll(selectors: string): INodeList {
-      return InternalHandler.run<ParentNode, INodeList>(this, 'querySelectorAll', [selectors]);
-    }
-  };
+  public querySelectorAll(selectors: string): INodeList {
+    return internalHandler.run<INodeList>(this, 'querySelectorAll', [selectors]);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpParentNodeKeys: Set<string> = new Set([]);
-
-export interface IParentNodeRps {
-  readonly childElementCount?: number;
-  readonly children?: IHTMLCollection;
-  readonly firstElementChild?: IElement | null;
-  readonly lastElementChild?: IElement | null;
+export interface IParentNodeProperties {
+  childElementCount?: number;
+  children?: IHTMLCollection;
+  firstElementChild?: IElement | null;
+  lastElementChild?: IElement | null;
 }
+
+export interface IParentNodeReadonlyProperties {
+  childElementCount?: number;
+  children?: IHTMLCollection;
+  firstElementChild?: IElement | null;
+  lastElementChild?: IElement | null;
+}
+
+// tslint:disable-next-line:variable-name
+export const ParentNodePropertyKeys = ['childElementCount', 'children', 'firstElementChild', 'lastElementChild'];
+
+// tslint:disable-next-line:variable-name
+export const ParentNodeConstantKeys = [];

@@ -3,14 +3,14 @@ import {
   IDOMImplementation,
   IElement,
   IHTMLTemplateElement,
-  IMutable,
   INode,
   IXMLDocument,
-} from '../interfaces';
+} from '../../base/interfaces';
 import { SaxesParser } from 'saxes';
 import DOMException from '../api/DOMException';
 import { HTML_NS } from '../constants/namespaces';
-import XMLDocument from '../api/XMLDocument';
+import { setReadonlyOfElement } from '../../base/classes/Element';
+import { setReadonlyOfDocument } from '../../base/classes/Document';
 
 const HTML5_DOCTYPE = /<!doctype html>/i;
 const PUBLIC_DOCTYPE = /<!doctype\s+([^\s]+)\s+public\s+"([^"]+)"\s+"([^"]+)"/i;
@@ -43,10 +43,11 @@ export default class XMLParser {
     parser.write(markup);
     const encoding = parser.xmlDecl.encoding;
     if (encoding) {
-      const mutableDocument = document as IMutable<XMLDocument>;
-      mutableDocument.characterSet = encoding;
-      mutableDocument.charset = encoding;
-      mutableDocument.inputEncoding = encoding;
+      setReadonlyOfDocument(document, {
+        characterSet: encoding,
+        charset: encoding,
+        inputEncoding: encoding,
+      });
     }
     parser.close();
     return document;
@@ -103,13 +104,15 @@ function createParser(rootNode: IElement, ownerDocument: IDocument, saxesOptions
   parser.onopentag = (tag: any) => {
     const { name: tagName, local: tagLocal, uri: tagURI, prefix: tagPrefix, attributes: tagAttributes } = tag;
 
-    let elem: IMutable<IElement>;
+    let elem: IElement;
     if (tagURI) {
-      elem = ownerDocument.createElementNS(tagURI, tagLocal) as IMutable<IElement>;
+      elem = ownerDocument.createElementNS(tagURI, tagLocal);
     } else {
-      elem = ownerDocument.createElement(tagName) as IMutable<IElement>;
+      elem = ownerDocument.createElement(tagName);
     }
-    elem.prefix = tagPrefix || null;
+    setReadonlyOfElement(elem, {
+      prefix: tagPrefix || null,
+    });
 
     for (const key of Object.keys(tagAttributes)) {
       const { name, uri, value } = tagAttributes[key];
@@ -119,7 +122,6 @@ function createParser(rootNode: IElement, ownerDocument: IDocument, saxesOptions
         elem.setAttribute(name, value);
       }
     }
-
     appendChild(openStack[openStack.length - 1], elem);
     openStack.push(elem);
   };

@@ -1,55 +1,69 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLElement, IHTMLLabelElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLLabelElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLLabelElement extends HTMLElement implements IHTMLLabelElement {
-  protected readonly _: IHTMLLabelElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLLabelElement } = StateMachine<
+  IHTMLLabelElement,
+  IHTMLLabelElementProperties,
+  IHTMLLabelElementReadonlyProperties
+>('HTMLLabelElement');
+export const internalHandler = new InternalHandler<IHTMLLabelElement>('HTMLLabelElement', getState, setState);
 
-  // properties
-
-  public get control(): IHTMLElement | null {
-    return InternalHandler.get<HTMLLabelElement, IHTMLElement | null>(this, 'control');
-  }
-
-  public get form(): IHTMLFormElement | null {
-    return InternalHandler.get<HTMLLabelElement, IHTMLFormElement | null>(this, 'form');
-  }
-
-  public get htmlFor(): string {
-    return InternalHandler.get<HTMLLabelElement, string>(this, 'htmlFor');
-  }
-
-  public set htmlFor(value: string) {
-    InternalHandler.set<HTMLLabelElement, string>(this, 'htmlFor', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLabelElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLLabelElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLabelElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLLabelElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLLabelElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLLabelElementRps extends IHTMLElementRps {
-  readonly control?: IHTMLElement | null;
-  readonly form?: IHTMLFormElement | null;
-}
-
-export function setHTMLLabelElementRps(instance: IHTMLLabelElement, data: IHTMLLabelElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLLabelElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLLabelElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLLabelElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLLabelElement extends HTMLElement implements IHTMLLabelElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLLabelElement>(HTMLLabelElement, this, internalHandler, HTMLLabelElementConstantKeys, HTMLLabelElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get control(): IHTMLElement | null {
+      return internalHandler.get<IHTMLElement | null>(this, 'control', true);
+    }
+
+    public get form(): IHTMLFormElement | null {
+      return internalHandler.get<IHTMLFormElement | null>(this, 'form', true);
+    }
+
+    public get htmlFor(): string {
+      return internalHandler.get<string>(this, 'htmlFor', false);
+    }
+
+    public set htmlFor(value: string) {
+      internalHandler.set<string>(this, 'htmlFor', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLabelElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLLabelElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLLabelElementProperties extends IHTMLElementProperties {
+  control?: IHTMLElement | null;
+  form?: IHTMLFormElement | null;
+  htmlFor?: string;
+}
+
+export interface IHTMLLabelElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  control?: IHTMLElement | null;
+  form?: IHTMLFormElement | null;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLLabelElementPropertyKeys = [...HTMLElementPropertyKeys, 'control', 'form', 'htmlFor'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLLabelElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,63 +1,74 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IAttr, INamedNodeMap } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfNamedNodeMap } = StateMachine<
+  INamedNodeMap,
+  INamedNodeMapProperties,
+  INamedNodeMapReadonlyProperties
+>('NamedNodeMap');
+export const internalHandler = new InternalHandler<INamedNodeMap>('NamedNodeMap', getState, setState);
+
 export default class NamedNodeMap implements INamedNodeMap {
-  protected readonly _: INamedNodeMapRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<NamedNodeMap>(NamedNodeMap, this, internalHandler, NamedNodeMapConstantKeys, NamedNodeMapPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<NamedNodeMap, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public getNamedItem(qualifiedName: string): IAttr | null {
-    return InternalHandler.run<NamedNodeMap, IAttr | null>(this, 'getNamedItem', [qualifiedName]);
+    return internalHandler.run<IAttr | null>(this, 'getNamedItem', [qualifiedName]);
   }
 
   public getNamedItemNS(namespace: string | null, localName: string): IAttr | null {
-    return InternalHandler.run<NamedNodeMap, IAttr | null>(this, 'getNamedItemNS', [namespace, localName]);
+    return internalHandler.run<IAttr | null>(this, 'getNamedItemNS', [namespace, localName]);
   }
 
   public item(index: number): IAttr | null {
-    return InternalHandler.run<NamedNodeMap, IAttr | null>(this, 'item', [index]);
+    return internalHandler.run<IAttr | null>(this, 'item', [index]);
   }
 
   public removeNamedItem(qualifiedName: string): IAttr {
-    return InternalHandler.run<NamedNodeMap, IAttr>(this, 'removeNamedItem', [qualifiedName]);
+    return internalHandler.run<IAttr>(this, 'removeNamedItem', [qualifiedName]);
   }
 
   public removeNamedItemNS(namespace: string | null, localName: string): IAttr {
-    return InternalHandler.run<NamedNodeMap, IAttr>(this, 'removeNamedItemNS', [namespace, localName]);
+    return internalHandler.run<IAttr>(this, 'removeNamedItemNS', [namespace, localName]);
   }
 
   public setNamedItem(attr: IAttr): IAttr | null {
-    return InternalHandler.run<NamedNodeMap, IAttr | null>(this, 'setNamedItem', [attr]);
+    return internalHandler.run<IAttr | null>(this, 'setNamedItem', [attr]);
   }
 
   public setNamedItemNS(attr: IAttr): IAttr | null {
-    return InternalHandler.run<NamedNodeMap, IAttr | null>(this, 'setNamedItemNS', [attr]);
+    return internalHandler.run<IAttr | null>(this, 'setNamedItemNS', [attr]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<IAttr> {
+    return internalHandler.run<IterableIterator<IAttr>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: IAttr;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpNamedNodeMapKeys: Set<string> = new Set([]);
-
-export interface INamedNodeMapRps {
-  readonly length?: number;
+export interface INamedNodeMapProperties {
+  length?: number;
 }
 
-export function setNamedNodeMapRps(instance: INamedNodeMap, data: INamedNodeMapRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpNamedNodeMapKeys.has(key)) {
-      throw new Error(`${key} is not a property of NamedNodeMap`);
-    }
-    properties[key] = value;
-  });
+export interface INamedNodeMapReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const NamedNodeMapPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const NamedNodeMapConstantKeys = [];

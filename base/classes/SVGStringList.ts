@@ -1,68 +1,80 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ISVGStringList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfSVGStringList } = StateMachine<
+  ISVGStringList,
+  ISVGStringListProperties,
+  ISVGStringListReadonlyProperties
+>('SVGStringList');
+export const internalHandler = new InternalHandler<ISVGStringList>('SVGStringList', getState, setState);
+
 export default class SVGStringList implements ISVGStringList {
-  protected readonly _: ISVGStringListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<SVGStringList>(SVGStringList, this, internalHandler, SVGStringListConstantKeys, SVGStringListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<SVGStringList, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   public get numberOfItems(): number {
-    return InternalHandler.get<SVGStringList, number>(this, 'numberOfItems');
+    return internalHandler.get<number>(this, 'numberOfItems', false);
   }
 
   // methods
 
   public appendItem(newItem: string): string {
-    return InternalHandler.run<SVGStringList, string>(this, 'appendItem', [newItem]);
+    return internalHandler.run<string>(this, 'appendItem', [newItem]);
   }
 
   public clear(): void {
-    InternalHandler.run<SVGStringList, void>(this, 'clear', []);
+    internalHandler.run<void>(this, 'clear', []);
   }
 
   public getItem(index: number): string {
-    return InternalHandler.run<SVGStringList, string>(this, 'getItem', [index]);
+    return internalHandler.run<string>(this, 'getItem', [index]);
   }
 
   public initialize(newItem: string): string {
-    return InternalHandler.run<SVGStringList, string>(this, 'initialize', [newItem]);
+    return internalHandler.run<string>(this, 'initialize', [newItem]);
   }
 
   public insertItemBefore(newItem: string, index: number): string {
-    return InternalHandler.run<SVGStringList, string>(this, 'insertItemBefore', [newItem, index]);
+    return internalHandler.run<string>(this, 'insertItemBefore', [newItem, index]);
   }
 
   public removeItem(index: number): string {
-    return InternalHandler.run<SVGStringList, string>(this, 'removeItem', [index]);
+    return internalHandler.run<string>(this, 'removeItem', [index]);
   }
 
   public replaceItem(newItem: string, index: number): string {
-    return InternalHandler.run<SVGStringList, string>(this, 'replaceItem', [newItem, index]);
+    return internalHandler.run<string>(this, 'replaceItem', [newItem, index]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<string> {
+    return internalHandler.run<IterableIterator<string>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: string;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpSVGStringListKeys: Set<string> = new Set([]);
-
-export interface ISVGStringListRps {
-  readonly length?: number;
-  readonly numberOfItems?: number;
+export interface ISVGStringListProperties {
+  length?: number;
+  numberOfItems?: number;
 }
 
-export function setSVGStringListRps(instance: ISVGStringList, data: ISVGStringListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpSVGStringListKeys.has(key)) {
-      throw new Error(`${key} is not a property of SVGStringList`);
-    }
-    properties[key] = value;
-  });
+export interface ISVGStringListReadonlyProperties {
+  length?: number;
+  numberOfItems?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const SVGStringListPropertyKeys = ['length', 'numberOfItems'];
+
+// tslint:disable-next-line:variable-name
+export const SVGStringListConstantKeys = [];

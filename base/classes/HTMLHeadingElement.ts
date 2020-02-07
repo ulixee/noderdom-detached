@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHeadingElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHeadingElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLHeadingElement extends HTMLElement implements IHTMLHeadingElement {
-  public get align(): string {
-    return InternalHandler.get<HTMLHeadingElement, string>(this, 'align');
-  }
+export const { getState, setState, setReadonlyOfHTMLHeadingElement } = StateMachine<
+  IHTMLHeadingElement,
+  IHTMLHeadingElementProperties,
+  IHTMLHeadingElementReadonlyProperties
+>('HTMLHeadingElement');
+export const internalHandler = new InternalHandler<IHTMLHeadingElement>('HTMLHeadingElement', getState, setState);
 
-  public set align(value: string) {
-    InternalHandler.set<HTMLHeadingElement, string>(this, 'align', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadingElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLHeadingElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadingElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLHeadingElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLHeadingElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLHeadingElementRps extends IHTMLElementRps {}
-
-export function setHTMLHeadingElementRps(instance: IHTMLHeadingElement, data: IHTMLHeadingElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLHeadingElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLHeadingElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLHeadingElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLHeadingElement extends HTMLElement implements IHTMLHeadingElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLHeadingElement>(HTMLHeadingElement, this, internalHandler, HTMLHeadingElementConstantKeys, HTMLHeadingElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get align(): string {
+      return internalHandler.get<string>(this, 'align', false);
+    }
+
+    public set align(value: string) {
+      internalHandler.set<string>(this, 'align', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadingElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadingElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLHeadingElementProperties extends IHTMLElementProperties {
+  align?: string;
+}
+
+export interface IHTMLHeadingElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLHeadingElementPropertyKeys = [...HTMLElementPropertyKeys, 'align'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLHeadingElementConstantKeys = [...HTMLElementConstantKeys];

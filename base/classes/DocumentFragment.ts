@@ -1,26 +1,39 @@
-import { IDocumentFragment } from '../interfaces';
-import Node, { INodeRps, rpNodeKeys } from './Node';
-import NonElementParentNode, { INonElementParentNodeRps, rpNonElementParentNodeKeys } from '../mixins/NonElementParentNode';
-import ParentNode, { IParentNodeRps, rpParentNodeKeys } from '../mixins/ParentNode';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { INode, INonElementParentNode, IParentNode, IDocumentFragment } from '../interfaces';
+import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstantKeys } from './Node';
+import { INonElementParentNodeProperties, INonElementParentNodeReadonlyProperties, NonElementParentNodePropertyKeys, NonElementParentNodeConstantKeys } from '../mixins/NonElementParentNode';
+import { IParentNodeProperties, IParentNodeReadonlyProperties, ParentNodePropertyKeys, ParentNodeConstantKeys } from '../mixins/ParentNode';
+
+export const { getState, setState, setReadonlyOfDocumentFragment } = StateMachine<
+  IDocumentFragment,
+  IDocumentFragmentProperties,
+  IDocumentFragmentReadonlyProperties
+>('DocumentFragment');
+export const internalHandler = new InternalHandler<IDocumentFragment>('DocumentFragment', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const DocumentFragmentBase = NonElementParentNode(ParentNode(Node));
+export function DocumentFragmentGenerator(Node: Constructable<INode>, NonElementParentNode: Constructable<INonElementParentNode>, ParentNode: Constructable<IParentNode>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(Node, [NonElementParentNode, ParentNode]) as unknown) as Constructable<INode & INonElementParentNode & IParentNode>;
 
-export default class DocumentFragment extends DocumentFragmentBase implements IDocumentFragment {}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpDocumentFragmentKeys: Set<string> = new Set([...rpNodeKeys, ...rpNonElementParentNodeKeys, ...rpParentNodeKeys]);
-
-export interface IDocumentFragmentRps extends INodeRps, INonElementParentNodeRps, IParentNodeRps {}
-
-export function setDocumentFragmentRps(instance: IDocumentFragment, data: IDocumentFragmentRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpDocumentFragmentKeys.has(key)) {
-      throw new Error(`${key} is not a property of DocumentFragment`);
+  return class DocumentFragment extends Parent implements IDocumentFragment {constructor() {
+      super();
+      initializeConstantsAndPrototypes<DocumentFragment>(DocumentFragment, this, internalHandler, DocumentFragmentConstantKeys, DocumentFragmentPropertyKeys);
     }
-    properties[key] = value;
-  });
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IDocumentFragmentProperties extends INodeProperties, INonElementParentNodeProperties, IParentNodeProperties {}
+
+export interface IDocumentFragmentReadonlyProperties extends INodeReadonlyProperties, INonElementParentNodeReadonlyProperties, IParentNodeReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const DocumentFragmentPropertyKeys = [...NodePropertyKeys, ...NonElementParentNodePropertyKeys, ...ParentNodePropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const DocumentFragmentConstantKeys = [...NodeConstantKeys, ...NonElementParentNodeConstantKeys, ...ParentNodeConstantKeys];

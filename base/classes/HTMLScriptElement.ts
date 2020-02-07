@@ -1,96 +1,119 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLScriptElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLScriptElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLScriptElement extends HTMLElement implements IHTMLScriptElement {
-  public get charset(): string {
-    return InternalHandler.get<HTMLScriptElement, string>(this, 'charset');
-  }
+export const { getState, setState, setReadonlyOfHTMLScriptElement } = StateMachine<
+  IHTMLScriptElement,
+  IHTMLScriptElementProperties,
+  IHTMLScriptElementReadonlyProperties
+>('HTMLScriptElement');
+export const internalHandler = new InternalHandler<IHTMLScriptElement>('HTMLScriptElement', getState, setState);
 
-  public set charset(value: string) {
-    InternalHandler.set<HTMLScriptElement, string>(this, 'charset', value);
-  }
-
-  public get crossOrigin(): string | null {
-    return InternalHandler.get<HTMLScriptElement, string | null>(this, 'crossOrigin');
-  }
-
-  public set crossOrigin(value: string | null) {
-    InternalHandler.set<HTMLScriptElement, string | null>(this, 'crossOrigin', value);
-  }
-
-  public get defer(): boolean {
-    return InternalHandler.get<HTMLScriptElement, boolean>(this, 'defer');
-  }
-
-  public set defer(value: boolean) {
-    InternalHandler.set<HTMLScriptElement, boolean>(this, 'defer', value);
-  }
-
-  public get event(): string {
-    return InternalHandler.get<HTMLScriptElement, string>(this, 'event');
-  }
-
-  public set event(value: string) {
-    InternalHandler.set<HTMLScriptElement, string>(this, 'event', value);
-  }
-
-  public get htmlFor(): string {
-    return InternalHandler.get<HTMLScriptElement, string>(this, 'htmlFor');
-  }
-
-  public set htmlFor(value: string) {
-    InternalHandler.set<HTMLScriptElement, string>(this, 'htmlFor', value);
-  }
-
-  public get src(): string {
-    return InternalHandler.get<HTMLScriptElement, string>(this, 'src');
-  }
-
-  public set src(value: string) {
-    InternalHandler.set<HTMLScriptElement, string>(this, 'src', value);
-  }
-
-  public get text(): string {
-    return InternalHandler.get<HTMLScriptElement, string>(this, 'text');
-  }
-
-  public set text(value: string) {
-    InternalHandler.set<HTMLScriptElement, string>(this, 'text', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLScriptElement, string>(this, 'type');
-  }
-
-  public set type(value: string) {
-    InternalHandler.set<HTMLScriptElement, string>(this, 'type', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLScriptElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLScriptElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLScriptElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLScriptElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLScriptElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLScriptElementRps extends IHTMLElementRps {}
-
-export function setHTMLScriptElementRps(instance: IHTMLScriptElement, data: IHTMLScriptElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLScriptElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLScriptElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLScriptElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLScriptElement extends HTMLElement implements IHTMLScriptElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLScriptElement>(HTMLScriptElement, this, internalHandler, HTMLScriptElementConstantKeys, HTMLScriptElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get charset(): string {
+      return internalHandler.get<string>(this, 'charset', false);
+    }
+
+    public set charset(value: string) {
+      internalHandler.set<string>(this, 'charset', value);
+    }
+
+    public get crossOrigin(): string | null {
+      return internalHandler.get<string | null>(this, 'crossOrigin', true);
+    }
+
+    public set crossOrigin(value: string | null) {
+      internalHandler.set<string | null>(this, 'crossOrigin', value);
+    }
+
+    public get defer(): boolean {
+      return internalHandler.get<boolean>(this, 'defer', false);
+    }
+
+    public set defer(value: boolean) {
+      internalHandler.set<boolean>(this, 'defer', value);
+    }
+
+    public get event(): string {
+      return internalHandler.get<string>(this, 'event', false);
+    }
+
+    public set event(value: string) {
+      internalHandler.set<string>(this, 'event', value);
+    }
+
+    public get htmlFor(): string {
+      return internalHandler.get<string>(this, 'htmlFor', false);
+    }
+
+    public set htmlFor(value: string) {
+      internalHandler.set<string>(this, 'htmlFor', value);
+    }
+
+    public get src(): string {
+      return internalHandler.get<string>(this, 'src', false);
+    }
+
+    public set src(value: string) {
+      internalHandler.set<string>(this, 'src', value);
+    }
+
+    public get text(): string {
+      return internalHandler.get<string>(this, 'text', false);
+    }
+
+    public set text(value: string) {
+      internalHandler.set<string>(this, 'text', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLScriptElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLScriptElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLScriptElementProperties extends IHTMLElementProperties {
+  charset?: string;
+  crossOrigin?: string | null;
+  defer?: boolean;
+  event?: string;
+  htmlFor?: string;
+  src?: string;
+  text?: string;
+  type?: string;
+}
+
+export interface IHTMLScriptElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLScriptElementPropertyKeys = [...HTMLElementPropertyKeys, 'charset', 'crossOrigin', 'defer', 'event', 'htmlFor', 'src', 'text', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLScriptElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,48 +1,65 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLModElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLModElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLModElement extends HTMLElement implements IHTMLModElement {
-  public get cite(): string {
-    return InternalHandler.get<HTMLModElement, string>(this, 'cite');
-  }
+export const { getState, setState, setReadonlyOfHTMLModElement } = StateMachine<
+  IHTMLModElement,
+  IHTMLModElementProperties,
+  IHTMLModElementReadonlyProperties
+>('HTMLModElement');
+export const internalHandler = new InternalHandler<IHTMLModElement>('HTMLModElement', getState, setState);
 
-  public set cite(value: string) {
-    InternalHandler.set<HTMLModElement, string>(this, 'cite', value);
-  }
-
-  public get dateTime(): string {
-    return InternalHandler.get<HTMLModElement, string>(this, 'dateTime');
-  }
-
-  public set dateTime(value: string) {
-    InternalHandler.set<HTMLModElement, string>(this, 'dateTime', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLModElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLModElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLModElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLModElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLModElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLModElementRps extends IHTMLElementRps {}
-
-export function setHTMLModElementRps(instance: IHTMLModElement, data: IHTMLModElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLModElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLModElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLModElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLModElement extends HTMLElement implements IHTMLModElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLModElement>(HTMLModElement, this, internalHandler, HTMLModElementConstantKeys, HTMLModElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get cite(): string {
+      return internalHandler.get<string>(this, 'cite', false);
+    }
+
+    public set cite(value: string) {
+      internalHandler.set<string>(this, 'cite', value);
+    }
+
+    public get dateTime(): string {
+      return internalHandler.get<string>(this, 'dateTime', false);
+    }
+
+    public set dateTime(value: string) {
+      internalHandler.set<string>(this, 'dateTime', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLModElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLModElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLModElementProperties extends IHTMLElementProperties {
+  cite?: string;
+  dateTime?: string;
+}
+
+export interface IHTMLModElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLModElementPropertyKeys = [...HTMLElementPropertyKeys, 'cite', 'dateTime'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLModElementConstantKeys = [...HTMLElementConstantKeys];

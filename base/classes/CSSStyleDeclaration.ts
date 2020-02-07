@@ -1,76 +1,90 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ICSSRule, ICSSStyleDeclaration } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfCSSStyleDeclaration } = StateMachine<
+  ICSSStyleDeclaration,
+  ICSSStyleDeclarationProperties,
+  ICSSStyleDeclarationReadonlyProperties
+>('CSSStyleDeclaration');
+export const internalHandler = new InternalHandler<ICSSStyleDeclaration>('CSSStyleDeclaration', getState, setState);
+
 export default class CSSStyleDeclaration implements ICSSStyleDeclaration {
-  protected readonly _: ICSSStyleDeclarationRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<CSSStyleDeclaration>(CSSStyleDeclaration, this, internalHandler, CSSStyleDeclarationConstantKeys, CSSStyleDeclarationPropertyKeys);
+  }
 
   // properties
 
   public get cssFloat(): string {
-    return InternalHandler.get<CSSStyleDeclaration, string>(this, 'cssFloat');
+    return internalHandler.get<string>(this, 'cssFloat', false);
   }
 
   public set cssFloat(value: string) {
-    InternalHandler.set<CSSStyleDeclaration, string>(this, 'cssFloat', value);
+    internalHandler.set<string>(this, 'cssFloat', value);
   }
 
   public get cssText(): string {
-    return InternalHandler.get<CSSStyleDeclaration, string>(this, 'cssText');
+    return internalHandler.get<string>(this, 'cssText', false);
   }
 
   public set cssText(value: string) {
-    InternalHandler.set<CSSStyleDeclaration, string>(this, 'cssText', value);
+    internalHandler.set<string>(this, 'cssText', value);
   }
 
   public get length(): number {
-    return InternalHandler.get<CSSStyleDeclaration, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   public get parentRule(): ICSSRule | null {
-    return InternalHandler.get<CSSStyleDeclaration, ICSSRule | null>(this, 'parentRule');
+    return internalHandler.get<ICSSRule | null>(this, 'parentRule', true);
   }
 
   // methods
 
   public getPropertyPriority(property: string): string {
-    return InternalHandler.run<CSSStyleDeclaration, string>(this, 'getPropertyPriority', [property]);
+    return internalHandler.run<string>(this, 'getPropertyPriority', [property]);
   }
 
   public getPropertyValue(property: string): string {
-    return InternalHandler.run<CSSStyleDeclaration, string>(this, 'getPropertyValue', [property]);
+    return internalHandler.run<string>(this, 'getPropertyValue', [property]);
   }
 
   public item(index: number): string {
-    return InternalHandler.run<CSSStyleDeclaration, string>(this, 'item', [index]);
+    return internalHandler.run<string>(this, 'item', [index]);
   }
 
   public removeProperty(property: string): string {
-    return InternalHandler.run<CSSStyleDeclaration, string>(this, 'removeProperty', [property]);
+    return internalHandler.run<string>(this, 'removeProperty', [property]);
   }
 
   public setProperty(property: string, value: string, priority?: string): void {
-    InternalHandler.run<CSSStyleDeclaration, void>(this, 'setProperty', [property, value, priority]);
+    internalHandler.run<void>(this, 'setProperty', [property, value, priority]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<string> {
+    return internalHandler.run<IterableIterator<string>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: string;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpCSSStyleDeclarationKeys: Set<string> = new Set([]);
-
-export interface ICSSStyleDeclarationRps {
-  readonly length?: number;
-  readonly parentRule?: ICSSRule | null;
+export interface ICSSStyleDeclarationProperties {
+  cssFloat?: string;
+  cssText?: string;
+  length?: number;
+  parentRule?: ICSSRule | null;
 }
 
-export function setCSSStyleDeclarationRps(instance: ICSSStyleDeclaration, data: ICSSStyleDeclarationRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpCSSStyleDeclarationKeys.has(key)) {
-      throw new Error(`${key} is not a property of CSSStyleDeclaration`);
-    }
-    properties[key] = value;
-  });
+export interface ICSSStyleDeclarationReadonlyProperties {
+  length?: number;
+  parentRule?: ICSSRule | null;
 }
+
+// tslint:disable-next-line:variable-name
+export const CSSStyleDeclarationPropertyKeys = ['cssFloat', 'cssText', 'length', 'parentRule'];
+
+// tslint:disable-next-line:variable-name
+export const CSSStyleDeclarationConstantKeys = [];

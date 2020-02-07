@@ -1,15 +1,14 @@
-import BaseCDATASection, { setCDATASectionRps } from '../../base/classes/CDATASection';
+import { CDATASectionGenerator, setState } from '../../base/classes/CDATASection';
 import { ICDATASection } from '../../base/interfaces';
+import Text from './Text';
 import NODE_TYPE from '../constants/NodeType';
 
-export default class CDATASection extends BaseCDATASection implements ICDATASection {
+export default class CDATASection extends CDATASectionGenerator(Text) implements ICDATASection {
   constructor() {
     super();
-    setCDATASectionRps(this, {
+    setState(this, {
       nodeName: '#cdata-section',
       nodeType: NODE_TYPE.CDATA_SECTION_NODE,
     });
   }
 }
-
-export { setCDATASectionRps };

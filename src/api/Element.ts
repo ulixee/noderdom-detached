@@ -1,37 +1,48 @@
-import {
-  IAttr,
-  IElement,
-  IHTMLElement,
-  IHTMLElementTagNameMap,
-  ISVGElement,
-  ISVGElementTagNameMap,
-  IHTMLCollection,
-} from '../../base/interfaces';
-import BaseElement, { setElementRps } from '../../base/classes/Element';
+import { IAttr, IElement, IHTMLElement, ISVGElement, IHTMLCollection } from '../../base/interfaces';
+import { ElementGenerator, setState, internalHandler } from '../../base/classes/Element';
 import NODE_TYPE from '../constants/NodeType';
-
+import ChildNode from '../../base/mixins/ChildNode';
+import NonDocumentTypeChildNode from '../mixins/NonDocumentTypeChildNode';
+import ParentNode from '../mixins/ParentNode';
+import Slotable from '../../base/mixins/Slotable';
 import { fragmentSerialization } from '../parser/Serialization';
-import { isElement } from '../lib/utils';
 import DOMException from './DOMException';
-import { _visitNode } from '../lib/document-utils';
-import HTMLCollectionOf from './HTMLCollectionOf';
+import { isElement } from '../utils/utils';
+import { _visitNode } from '../utils/document-utils';
+import HTMLCollection, { setReadonlyOfHTMLCollection } from './HTMLCollection';
 import HTMLElement from './HTMLElement';
-import NamedNodeMap from './NamedNodeMap';
+import NamedNodeMap, { setReadonlyOfNamedNodeMap } from './NamedNodeMap';
+import Node from './Node';
+import Document from './Document';
 
-export default class Element extends BaseElement implements IElement {
-  public get outerHTML(): string {
-    return fragmentSerialization(this, {
-      requireWellFormed: true,
-      serializeFullNode: true,
+// tslint:disable-next-line:variable-name
+const GeneratedElement = ElementGenerator(Node, ChildNode, NonDocumentTypeChildNode, ParentNode, Slotable);
+
+export default class Element extends GeneratedElement implements IElement {
+  constructor() {
+    super();
+    const namedNodeMap = new NamedNodeMap();
+    setReadonlyOfNamedNodeMap(namedNodeMap, {
+      ownerElement: this,
+    });
+    setState(this, {
+      nodeType: NODE_TYPE.ELEMENT_NODE,
+      attributes: namedNodeMap,
     });
   }
 
-  constructor() {
-    super();
-    setElementRps(this, {
-      nodeType: NODE_TYPE.ELEMENT_NODE,
-      attributes: new NamedNodeMap(this),
-    });
+  public get id(): string {
+    return this.getAttribute('id') || '';
+  }
+
+  public get outerHTML(): string {
+    const document = (this.nodeType === NODE_TYPE.DOCUMENT_NODE ? this : this.ownerDocument) as Document;
+    return fragmentSerialization(document, { childNodes: [this] }, { requireWellFormed: false });
+  }
+
+  public get innerHTML(): string {
+    const document = (this.nodeType === NODE_TYPE.DOCUMENT_NODE ? this : this.ownerDocument) as Document;
+    return fragmentSerialization(document, this, { requireWellFormed: true });
   }
 
   public getAttribute(qualifiedName: string): string | null {
@@ -53,28 +64,34 @@ export default class Element extends BaseElement implements IElement {
   }
 
   public getElementsByTagName(qualifiedName: string): IHTMLCollection<IElement | any> {
-    const ls: Element[] = [];
+    qualifiedName = qualifiedName.toUpperCase();
+    const items: Element[] = [];
     _visitNode(this, node => {
-      if (node !== this && isElement(node) && (qualifiedName === '*' || node.tagName === qualifiedName)) {
-        ls.push(node as Element);
+      if (node !== this && isElement(node) && (qualifiedName === '*' || (node as IElement).tagName === qualifiedName)) {
+        items.push(node as Element);
       }
     });
-    return new HTMLCollectionOf<Element>(...ls);
+    const htmlCollection = new HTMLCollection<Element>();
+    setReadonlyOfHTMLCollection(htmlCollection, { items });
+    return htmlCollection;
   }
 
   public getElementsByTagNameNS(namespaceURI: string, localName: string): IHTMLCollection<IHTMLElement | ISVGElement> {
-    const ls: HTMLElement[] = [];
+    localName = localName.toLowerCase();
+    const items: HTMLElement[] = [];
     _visitNode(this, node => {
       if (
         node !== this &&
         isElement(node) &&
-        (namespaceURI === '*' || node.namespaceURI === namespaceURI) &&
-        (localName === '*' || node.localName === localName)
+        (namespaceURI === '*' || (node as IElement).namespaceURI === namespaceURI) &&
+        (localName === '*' || (node as IElement).localName === localName)
       ) {
-        ls.push(node as HTMLElement);
+        items.push(node as HTMLElement);
       }
     });
-    return new HTMLCollectionOf<HTMLElement>(...ls);
+    const htmlCollection = new HTMLCollection<IHTMLElement>();
+    setReadonlyOfHTMLCollection(htmlCollection, { items });
+    return htmlCollection;
   }
 
   public hasAttribute(qualifiedName: string): boolean {
@@ -134,4 +151,4 @@ export default class Element extends BaseElement implements IElement {
   }
 }
 
-export { setElementRps };
+internalHandler.handle('attributes', 'tagName', 'localName', 'namespaceURI', 'prefix');

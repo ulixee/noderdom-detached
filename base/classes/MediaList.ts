@@ -1,59 +1,71 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IMediaList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfMediaList } = StateMachine<
+  IMediaList,
+  IMediaListProperties,
+  IMediaListReadonlyProperties
+>('MediaList');
+export const internalHandler = new InternalHandler<IMediaList>('MediaList', getState, setState);
+
 export default class MediaList implements IMediaList {
-  protected readonly _: IMediaListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<MediaList>(MediaList, this, internalHandler, MediaListConstantKeys, MediaListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<MediaList, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   public get mediaText(): string {
-    return InternalHandler.get<MediaList, string>(this, 'mediaText');
+    return internalHandler.get<string>(this, 'mediaText', false);
   }
 
   public set mediaText(value: string) {
-    InternalHandler.set<MediaList, string>(this, 'mediaText', value);
+    internalHandler.set<string>(this, 'mediaText', value);
   }
 
   // methods
 
   public appendMedium(medium: string): void {
-    InternalHandler.run<MediaList, void>(this, 'appendMedium', [medium]);
+    internalHandler.run<void>(this, 'appendMedium', [medium]);
   }
 
   public deleteMedium(medium: string): void {
-    InternalHandler.run<MediaList, void>(this, 'deleteMedium', [medium]);
+    internalHandler.run<void>(this, 'deleteMedium', [medium]);
   }
 
   public item(index: number): string | null {
-    return InternalHandler.run<MediaList, string | null>(this, 'item', [index]);
+    return internalHandler.run<string | null>(this, 'item', [index]);
   }
 
   public toString(): string {
-    return InternalHandler.run<MediaList, string>(this, 'string', []);
+    return internalHandler.run<string>(this, 'string', []);
+  }
+
+  public [Symbol.iterator](): IterableIterator<string> {
+    return internalHandler.run<IterableIterator<string>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: string;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpMediaListKeys: Set<string> = new Set([]);
-
-export interface IMediaListRps {
-  readonly length?: number;
+export interface IMediaListProperties {
+  length?: number;
+  mediaText?: string;
 }
 
-export function setMediaListRps(instance: IMediaList, data: IMediaListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpMediaListKeys.has(key)) {
-      throw new Error(`${key} is not a property of MediaList`);
-    }
-    properties[key] = value;
-  });
+export interface IMediaListReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const MediaListPropertyKeys = ['length', 'mediaText'];
+
+// tslint:disable-next-line:variable-name
+export const MediaListConstantKeys = [];

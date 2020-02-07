@@ -1,3 +1,4 @@
-import { IEventTarget } from '../interfaces';
+import { IEventTarget } from '../../base/interfaces';
+import GeneratedEventTarget from '../../base/classes/EventTarget';
 
-export default class EventTarget implements IEventTarget {}
+export default class EventTarget extends GeneratedEventTarget implements IEventTarget {}

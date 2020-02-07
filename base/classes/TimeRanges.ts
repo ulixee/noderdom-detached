@@ -1,41 +1,48 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ITimeRanges } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfTimeRanges } = StateMachine<
+  ITimeRanges,
+  ITimeRangesProperties,
+  ITimeRangesReadonlyProperties
+>('TimeRanges');
+export const internalHandler = new InternalHandler<ITimeRanges>('TimeRanges', getState, setState);
+
 export default class TimeRanges implements ITimeRanges {
-  protected readonly _: ITimeRangesRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<TimeRanges>(TimeRanges, this, internalHandler, TimeRangesConstantKeys, TimeRangesPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<TimeRanges, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public end(index: number): number {
-    return InternalHandler.run<TimeRanges, number>(this, 'end', [index]);
+    return internalHandler.run<number>(this, 'end', [index]);
   }
 
   public start(index: number): number {
-    return InternalHandler.run<TimeRanges, number>(this, 'start', [index]);
+    return internalHandler.run<number>(this, 'start', [index]);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpTimeRangesKeys: Set<string> = new Set([]);
-
-export interface ITimeRangesRps {
-  readonly length?: number;
+export interface ITimeRangesProperties {
+  length?: number;
 }
 
-export function setTimeRangesRps(instance: ITimeRanges, data: ITimeRangesRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpTimeRangesKeys.has(key)) {
-      throw new Error(`${key} is not a property of TimeRanges`);
-    }
-    properties[key] = value;
-  });
+export interface ITimeRangesReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const TimeRangesPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const TimeRangesConstantKeys = [];

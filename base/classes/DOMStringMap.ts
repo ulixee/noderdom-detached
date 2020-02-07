@@ -1,11 +1,30 @@
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IDOMStringMap } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfDOMStringMap } = StateMachine<
+  IDOMStringMap,
+  IDOMStringMapProperties,
+  IDOMStringMapReadonlyProperties
+>('DOMStringMap');
+export const internalHandler = new InternalHandler<IDOMStringMap>('DOMStringMap', getState, setState);
+
 export default class DOMStringMap implements IDOMStringMap {
+  constructor() {
+    initializeConstantsAndPrototypes<DOMStringMap>(DOMStringMap, this, internalHandler, DOMStringMapConstantKeys, DOMStringMapPropertyKeys);
+  }
+
   [name: string]: string;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpDOMStringMapKeys: Set<string> = new Set([]);
+export interface IDOMStringMapProperties {}
 
-export interface IDOMStringMapRps {}
+export interface IDOMStringMapReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const DOMStringMapPropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const DOMStringMapConstantKeys = [];

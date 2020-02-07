@@ -4,7 +4,7 @@ import XMLSerializer from '../../src/api/XMLSerializer';
 describe('Whitespace parse tests', () => {
   it('unclosed tag', () => {
     const doc = new DOMParser().parseFromString('<foo', 'text/xml');
-    const hasError = doc.documentElement.innerHTML.includes('document must contain a root element');
+    const hasError = doc.documentElement!.innerHTML.includes('document must contain a root element');
     expect(hasError).toBeTruthy();
   });
 

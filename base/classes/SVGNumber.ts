@@ -1,18 +1,40 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ISVGNumber } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfSVGNumber } = StateMachine<
+  ISVGNumber,
+  ISVGNumberProperties,
+  ISVGNumberReadonlyProperties
+>('SVGNumber');
+export const internalHandler = new InternalHandler<ISVGNumber>('SVGNumber', getState, setState);
+
 export default class SVGNumber implements ISVGNumber {
+  constructor() {
+    initializeConstantsAndPrototypes<SVGNumber>(SVGNumber, this, internalHandler, SVGNumberConstantKeys, SVGNumberPropertyKeys);
+  }
+
+  // properties
+
   public get value(): number {
-    return InternalHandler.get<SVGNumber, number>(this, 'value');
+    return internalHandler.get<number>(this, 'value', false);
   }
 
   public set value(value: number) {
-    InternalHandler.set<SVGNumber, number>(this, 'value', value);
+    internalHandler.set<number>(this, 'value', value);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpSVGNumberKeys: Set<string> = new Set([]);
+export interface ISVGNumberProperties {
+  value?: number;
+}
 
-export interface ISVGNumberRps {}
+export interface ISVGNumberReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const SVGNumberPropertyKeys = ['value'];
+
+// tslint:disable-next-line:variable-name
+export const SVGNumberConstantKeys = [];

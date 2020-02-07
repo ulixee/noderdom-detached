@@ -7,26 +7,49 @@ import {
   IHTMLElementTagNameMap,
   INode,
   IText,
-  IElementCreationOptions, IHTMLCollection,
+  IElementCreationOptions,
+  IHTMLCollection,
 } from '../../base/interfaces';
-import BaseDocument, { setDocumentRps } from '../../base/classes/Document';
-import { _visitNode } from '../lib/document-utils';
-import { isAttr, isElement } from '../lib/utils';
-import Attr, { setAttrRps } from './Attr';
-import CDATASection, { setCDATASectionRps } from './CDATASection';
-import Comment, { setCommentRps } from './Comment';
-import DocumentFragment, { setDocumentFragmentRps } from './DocumentFragment';
-import Element, { setElementRps } from './Element';
-import HTMLElement, { setHTMLElementRps } from './HTMLElement';
-import ProcessingInstruction, { setProcessingInstructionRps } from './ProcessingInstruction';
-import Text, { setTextRps } from './Text';
-import HTMLCollection from './HTMLCollection';
+import { DocumentGenerator, setReadonlyOfDocument, internalHandler } from '../../base/classes/Document';
+import { setReadonlyOfElement } from '../../base/classes/Element';
+import { setReadonlyOfAttr } from '../../base/classes/Attr';
+import { setReadonlyOfCDATASection } from '../../base/classes/CDATASection';
+import { setReadonlyOfComment } from '../../base/classes/Comment';
+import { setReadonlyOfDocumentFragment } from '../../base/classes/DocumentFragment';
+import { setReadonlyOfHTMLElement } from '../../base/classes/HTMLElement';
+import { setReadonlyOfProcessingInstruction } from '../../base/classes/ProcessingInstruction';
+import { setReadonlyOfText } from '../../base/classes/Text';
+import { _visitNode } from '../utils/document-utils';
+import { isElement } from '../utils/utils';
+import Attr from './Attr';
+import CDATASection from './CDATASection';
+import Comment from './Comment';
+import DocumentFragment from './DocumentFragment';
+import Element from './Element';
+import HTMLElement from './HTMLElement';
+import ProcessingInstruction from './ProcessingInstruction';
+import Text from './Text';
+import HTMLCollection, { setReadonlyOfHTMLCollection } from './HTMLCollection';
 import NODE_TYPE from '../constants/NodeType';
+import Node from './Node';
+import DocumentOrShadowRoot from '../../base/mixins/DocumentOrShadowRoot';
+import GlobalEventHandlers from '../../base/mixins/GlobalEventHandlers';
+import NonElementParentNode from '../../base/mixins/NonElementParentNode';
+import ParentNode from '../mixins/ParentNode';
 
-export default class Document extends BaseDocument implements IDocument {
+// tslint:disable-next-line:variable-name
+const GeneratedDocument = DocumentGenerator(
+  Node,
+  DocumentOrShadowRoot,
+  GlobalEventHandlers,
+  NonElementParentNode,
+  ParentNode,
+);
+
+export default class Document extends GeneratedDocument implements IDocument {
   constructor() {
     super();
-    setDocumentRps(this, {
+    setReadonlyOfDocument(this, {
       nodeName: '#document',
       nodeType: NODE_TYPE.DOCUMENT_NODE,
       contentType: 'text/html',
@@ -38,7 +61,7 @@ export default class Document extends BaseDocument implements IDocument {
     if (!this.documentElement) return null;
 
     for (let i = 0; i < this.documentElement.childNodes.length; i += 1) {
-      const node = this.documentElement.childNodes.item(i);
+      const node = this.documentElement.childNodes.item(i)!;
       if (node.nodeType === NODE_TYPE.ELEMENT_NODE && node.nodeName === 'BODY') {
         return node as HTMLElement;
       }
@@ -47,9 +70,19 @@ export default class Document extends BaseDocument implements IDocument {
     return null;
   }
 
+  public get documentElement(): IHTMLElement | null {
+    for (let i = 0; i < this.childNodes.length; i += 1) {
+      const node = this.childNodes.item(i)!;
+      if (node.nodeType === NODE_TYPE.ELEMENT_NODE) {
+        return node as HTMLElement;
+      }
+    }
+    return null;
+  }
+
   public createAttribute(localName: string): Attr {
     const attr = new Attr();
-    setAttrRps(attr, {
+    setReadonlyOfAttr(attr, {
       name: localName,
       nodeName: localName,
       localName: localName,
@@ -61,7 +94,7 @@ export default class Document extends BaseDocument implements IDocument {
   public createAttributeNS(namespace: string | null, qualifiedName: string): Attr {
     const pl = qualifiedName.split(':');
     const attr = new Attr();
-    setAttrRps(attr, {
+    setReadonlyOfAttr(attr, {
       name: qualifiedName,
       nodeName: qualifiedName,
       specified: true,
@@ -75,7 +108,7 @@ export default class Document extends BaseDocument implements IDocument {
 
   public createCDATASection(data: string): CDATASection {
     const cdataSection = new CDATASection();
-    setCDATASectionRps(cdataSection, {
+    setReadonlyOfCDATASection(cdataSection, {
       ownerDocument: this,
     });
     cdataSection.appendData(data);
@@ -84,7 +117,7 @@ export default class Document extends BaseDocument implements IDocument {
 
   public createComment(data: string): IComment {
     const comment = new Comment();
-    setCommentRps(comment, {
+    setReadonlyOfComment(comment, {
       ownerDocument: this,
     });
     comment.appendData(data);
@@ -93,10 +126,10 @@ export default class Document extends BaseDocument implements IDocument {
 
   public createDocumentFragment(): IDocumentFragment {
     const documentFragment = new DocumentFragment();
-    setDocumentFragmentRps(documentFragment, {
+    setReadonlyOfDocumentFragment(documentFragment, {
       ownerDocument: this,
     });
-    return documentFragment as DocumentFragment;
+    return documentFragment;
   }
 
   public createElement<K extends keyof IHTMLElementTagNameMap>(
@@ -106,7 +139,7 @@ export default class Document extends BaseDocument implements IDocument {
   public createElement(tagName: string, _options?: IElementCreationOptions): IHTMLElement {
     const htmlElement = new HTMLElement();
     const nodeName = tagName.toUpperCase();
-    setHTMLElementRps(htmlElement, {
+    setReadonlyOfHTMLElement(htmlElement, {
       ownerDocument: this,
       nodeName: nodeName,
       tagName: nodeName,
@@ -128,7 +161,7 @@ export default class Document extends BaseDocument implements IDocument {
     const pl = qualifiedName.split(':');
     const nodeName = qualifiedName.toUpperCase();
     const element = new Element();
-    setElementRps(element, {
+    setReadonlyOfElement(element, {
       ownerDocument: this,
       nodeName: nodeName,
       tagName: nodeName,
@@ -136,12 +169,12 @@ export default class Document extends BaseDocument implements IDocument {
       prefix: pl.length === 2 ? pl[0] : null,
       localName: pl.length === 2 ? pl[1].toLowerCase() : qualifiedName.toLowerCase(),
     });
-    return element as Element;
+    return element;
   }
 
   public createProcessingInstruction(target: string, data: string): ProcessingInstruction {
     const processingInstruction = new ProcessingInstruction();
-    setProcessingInstructionRps(processingInstruction, {
+    setReadonlyOfProcessingInstruction(processingInstruction, {
       nodeName: target,
       target: target,
       ownerDocument: this,
@@ -153,21 +186,11 @@ export default class Document extends BaseDocument implements IDocument {
 
   public createTextNode(data: string): IText {
     const text = new Text();
-    setTextRps(this, {
+    setReadonlyOfText(text, {
       ownerDocument: this,
     });
     text.appendData(data);
     return text as Text;
-  }
-
-  public get documentElement(): IHTMLElement | null {
-    for (let i = 0; i < this.childNodes.length; i += 1) {
-      const node = this.childNodes.item(i);
-      if (node.nodeType === NODE_TYPE.ELEMENT_NODE) {
-        return node as HTMLElement;
-      }
-    }
-    return null;
   }
 
   public getElementById(elementId: string): IHTMLElement | null {
@@ -185,52 +208,35 @@ export default class Document extends BaseDocument implements IDocument {
   }
 
   public getElementsByTagName(qualifiedName: string): IHTMLCollection {
-    const ls: IElement[] = [];
+    qualifiedName = qualifiedName.toUpperCase();
+    const items: IElement[] = [];
     _visitNode(this, node => {
-      if (node !== this && isElement(node) && (qualifiedName === '*' || node.tagName === qualifiedName)) {
-        ls.push(node);
+      if (node !== this && isElement(node) && (qualifiedName === '*' || (node as IElement).tagName === qualifiedName)) {
+        items.push(node as IElement);
       }
     });
-    return new HTMLCollection<IElement>(...ls);
+    const htmlCollection = new HTMLCollection<IElement>();
+    setReadonlyOfHTMLCollection(htmlCollection, { items });
+    return htmlCollection;
   }
 
   public getElementsByTagNameNS(namespaceURI: string, localName: string): IHTMLCollection<IElement> {
-    const ls: IElement[] = [];
+    localName = localName.toLowerCase();
+    const items: IElement[] = [];
     _visitNode(this, node => {
       if (
         node !== this &&
         isElement(node) &&
-        (namespaceURI === '*' || node.namespaceURI === namespaceURI) &&
-        (localName === '*' || node.localName === localName)
+        (namespaceURI === '*' || (node as IElement).namespaceURI === namespaceURI) &&
+        (localName === '*' || (node as IElement).localName === localName)
       ) {
-        ls.push(node);
+        items.push(node as IElement);
       }
     });
-    return new HTMLCollection<IElement>(...ls);
-  }
-
-  public importNode<T extends INode>(importedNode: T, deep: boolean): T {
-    let node2: IMutable<T> | undefined;
-
-    if (isElement(importedNode)) {
-      node2 = importedNode.cloneNode(false) as IMutable<T>;
-      node2.ownerDocument = this;
-    } else if (isAttr(importedNode)) {
-      deep = true;
-    }
-
-    if (!node2) {
-      node2 = importedNode.cloneNode(false) as IMutable<T>; // false
-    }
-    node2.ownerDocument = this;
-    node2.parentNode = null;
-    if (deep) {
-      let child = importedNode.firstChild;
-      while (child) {
-        node2.appendChild(this.importNode(child, deep));
-        child = child.nextSibling;
-      }
-    }
-    return node2;
+    const htmlCollection = new HTMLCollection<IElement>();
+    setReadonlyOfHTMLCollection(htmlCollection, { items });
+    return htmlCollection;
   }
 }
+
+internalHandler.handle('doctype', 'inputEncoding', 'implementation');

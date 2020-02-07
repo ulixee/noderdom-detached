@@ -1,95 +1,114 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLOptionElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLOptionElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLOptionElement extends HTMLElement implements IHTMLOptionElement {
-  protected readonly _: IHTMLOptionElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLOptionElement } = StateMachine<
+  IHTMLOptionElement,
+  IHTMLOptionElementProperties,
+  IHTMLOptionElementReadonlyProperties
+>('HTMLOptionElement');
+export const internalHandler = new InternalHandler<IHTMLOptionElement>('HTMLOptionElement', getState, setState);
 
-  // properties
-
-  public get defaultSelected(): boolean {
-    return InternalHandler.get<HTMLOptionElement, boolean>(this, 'defaultSelected');
-  }
-
-  public set defaultSelected(value: boolean) {
-    InternalHandler.set<HTMLOptionElement, boolean>(this, 'defaultSelected', value);
-  }
-
-  public get disabled(): boolean {
-    return InternalHandler.get<HTMLOptionElement, boolean>(this, 'disabled');
-  }
-
-  public set disabled(value: boolean) {
-    InternalHandler.set<HTMLOptionElement, boolean>(this, 'disabled', value);
-  }
-
-  public get form(): IHTMLFormElement | null {
-    return InternalHandler.get<HTMLOptionElement, IHTMLFormElement | null>(this, 'form');
-  }
-
-  public get index(): number {
-    return InternalHandler.get<HTMLOptionElement, number>(this, 'index');
-  }
-
-  public get label(): string {
-    return InternalHandler.get<HTMLOptionElement, string>(this, 'label');
-  }
-
-  public set label(value: string) {
-    InternalHandler.set<HTMLOptionElement, string>(this, 'label', value);
-  }
-
-  public get selected(): boolean {
-    return InternalHandler.get<HTMLOptionElement, boolean>(this, 'selected');
-  }
-
-  public set selected(value: boolean) {
-    InternalHandler.set<HTMLOptionElement, boolean>(this, 'selected', value);
-  }
-
-  public get text(): string {
-    return InternalHandler.get<HTMLOptionElement, string>(this, 'text');
-  }
-
-  public set text(value: string) {
-    InternalHandler.set<HTMLOptionElement, string>(this, 'text', value);
-  }
-
-  public get value(): string {
-    return InternalHandler.get<HTMLOptionElement, string>(this, 'value');
-  }
-
-  public set value(value: string) {
-    InternalHandler.set<HTMLOptionElement, string>(this, 'value', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLOptionElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLOptionElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLOptionElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLOptionElementRps extends IHTMLElementRps {
-  readonly form?: IHTMLFormElement | null;
-  readonly index?: number;
-}
-
-export function setHTMLOptionElementRps(instance: IHTMLOptionElement, data: IHTMLOptionElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLOptionElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLOptionElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLOptionElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLOptionElement extends HTMLElement implements IHTMLOptionElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLOptionElement>(HTMLOptionElement, this, internalHandler, HTMLOptionElementConstantKeys, HTMLOptionElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get defaultSelected(): boolean {
+      return internalHandler.get<boolean>(this, 'defaultSelected', false);
+    }
+
+    public set defaultSelected(value: boolean) {
+      internalHandler.set<boolean>(this, 'defaultSelected', value);
+    }
+
+    public get disabled(): boolean {
+      return internalHandler.get<boolean>(this, 'disabled', false);
+    }
+
+    public set disabled(value: boolean) {
+      internalHandler.set<boolean>(this, 'disabled', value);
+    }
+
+    public get form(): IHTMLFormElement | null {
+      return internalHandler.get<IHTMLFormElement | null>(this, 'form', true);
+    }
+
+    public get index(): number {
+      return internalHandler.get<number>(this, 'index', false);
+    }
+
+    public get label(): string {
+      return internalHandler.get<string>(this, 'label', false);
+    }
+
+    public set label(value: string) {
+      internalHandler.set<string>(this, 'label', value);
+    }
+
+    public get selected(): boolean {
+      return internalHandler.get<boolean>(this, 'selected', false);
+    }
+
+    public set selected(value: boolean) {
+      internalHandler.set<boolean>(this, 'selected', value);
+    }
+
+    public get text(): string {
+      return internalHandler.get<string>(this, 'text', false);
+    }
+
+    public set text(value: string) {
+      internalHandler.set<string>(this, 'text', value);
+    }
+
+    public get value(): string {
+      return internalHandler.get<string>(this, 'value', false);
+    }
+
+    public set value(value: string) {
+      internalHandler.set<string>(this, 'value', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLOptionElementProperties extends IHTMLElementProperties {
+  defaultSelected?: boolean;
+  disabled?: boolean;
+  form?: IHTMLFormElement | null;
+  index?: number;
+  label?: string;
+  selected?: boolean;
+  text?: string;
+  value?: string;
+}
+
+export interface IHTMLOptionElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  form?: IHTMLFormElement | null;
+  index?: number;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLOptionElementPropertyKeys = [...HTMLElementPropertyKeys, 'defaultSelected', 'disabled', 'form', 'index', 'label', 'selected', 'text', 'value'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLOptionElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,20 +1,32 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IElement, IDocumentOrShadowRoot } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  IDocumentOrShadowRoot,
+  IDocumentOrShadowRootProperties,
+  IDocumentOrShadowRootReadonlyProperties
+>('DocumentOrShadowRoot');
+export const internalHandler = new InternalHandler<IDocumentOrShadowRoot>('DocumentOrShadowRoot', getState, setState);
 
-export default function DocumentOrShadowRoot<TBase extends Constructor>(base: TBase) {
-  return class extends base implements IDocumentOrShadowRoot {
-    public get activeElement(): IElement | null {
-      return InternalHandler.get<DocumentOrShadowRoot, IElement | null>(this, 'activeElement');
-    }
-  };
+export default class DocumentOrShadowRoot implements IDocumentOrShadowRoot {
+  public get activeElement(): IElement | null {
+    return internalHandler.get<IElement | null>(this, 'activeElement', true);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpDocumentOrShadowRootKeys: Set<string> = new Set([]);
-
-export interface IDocumentOrShadowRootRps {
-  readonly activeElement?: IElement | null;
+export interface IDocumentOrShadowRootProperties {
+  activeElement?: IElement | null;
 }
+
+export interface IDocumentOrShadowRootReadonlyProperties {
+  activeElement?: IElement | null;
+}
+
+// tslint:disable-next-line:variable-name
+export const DocumentOrShadowRootPropertyKeys = ['activeElement'];
+
+// tslint:disable-next-line:variable-name
+export const DocumentOrShadowRootConstantKeys = [];

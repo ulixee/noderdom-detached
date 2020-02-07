@@ -1,4 +1,8 @@
-import { IHTMLDocument } from '../interfaces';
+import { IHTMLDocument } from '../../base/interfaces';
+import { HTMLDocumentGenerator } from '../../base/classes/HTMLDocument';
 import Document from './Document';
 
-export default class HTMLDocument extends Document implements IHTMLDocument {}
+// tslint:disable-next-line:variable-name
+const Parent = HTMLDocumentGenerator(Document);
+
+export default class HTMLDocument extends Parent implements IHTMLDocument {}

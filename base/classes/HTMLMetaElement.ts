@@ -1,64 +1,83 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLMetaElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLMetaElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLMetaElement extends HTMLElement implements IHTMLMetaElement {
-  public get content(): string {
-    return InternalHandler.get<HTMLMetaElement, string>(this, 'content');
-  }
+export const { getState, setState, setReadonlyOfHTMLMetaElement } = StateMachine<
+  IHTMLMetaElement,
+  IHTMLMetaElementProperties,
+  IHTMLMetaElementReadonlyProperties
+>('HTMLMetaElement');
+export const internalHandler = new InternalHandler<IHTMLMetaElement>('HTMLMetaElement', getState, setState);
 
-  public set content(value: string) {
-    InternalHandler.set<HTMLMetaElement, string>(this, 'content', value);
-  }
-
-  public get httpEquiv(): string {
-    return InternalHandler.get<HTMLMetaElement, string>(this, 'httpEquiv');
-  }
-
-  public set httpEquiv(value: string) {
-    InternalHandler.set<HTMLMetaElement, string>(this, 'httpEquiv', value);
-  }
-
-  public get name(): string {
-    return InternalHandler.get<HTMLMetaElement, string>(this, 'name');
-  }
-
-  public set name(value: string) {
-    InternalHandler.set<HTMLMetaElement, string>(this, 'name', value);
-  }
-
-  public get scheme(): string {
-    return InternalHandler.get<HTMLMetaElement, string>(this, 'scheme');
-  }
-
-  public set scheme(value: string) {
-    InternalHandler.set<HTMLMetaElement, string>(this, 'scheme', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMetaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLMetaElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMetaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLMetaElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLMetaElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLMetaElementRps extends IHTMLElementRps {}
-
-export function setHTMLMetaElementRps(instance: IHTMLMetaElement, data: IHTMLMetaElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLMetaElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLMetaElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLMetaElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLMetaElement extends HTMLElement implements IHTMLMetaElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLMetaElement>(HTMLMetaElement, this, internalHandler, HTMLMetaElementConstantKeys, HTMLMetaElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get content(): string {
+      return internalHandler.get<string>(this, 'content', false);
+    }
+
+    public set content(value: string) {
+      internalHandler.set<string>(this, 'content', value);
+    }
+
+    public get httpEquiv(): string {
+      return internalHandler.get<string>(this, 'httpEquiv', false);
+    }
+
+    public set httpEquiv(value: string) {
+      internalHandler.set<string>(this, 'httpEquiv', value);
+    }
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public set name(value: string) {
+      internalHandler.set<string>(this, 'name', value);
+    }
+
+    public get scheme(): string {
+      return internalHandler.get<string>(this, 'scheme', false);
+    }
+
+    public set scheme(value: string) {
+      internalHandler.set<string>(this, 'scheme', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMetaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMetaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLMetaElementProperties extends IHTMLElementProperties {
+  content?: string;
+  httpEquiv?: string;
+  name?: string;
+  scheme?: string;
+}
+
+export interface IHTMLMetaElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLMetaElementPropertyKeys = [...HTMLElementPropertyKeys, 'content', 'httpEquiv', 'name', 'scheme'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLMetaElementConstantKeys = [...HTMLElementConstantKeys];

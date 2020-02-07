@@ -1,32 +1,44 @@
-import InternalHandler from '../InternalHandler';
-import { IProcessingInstruction } from '../interfaces';
-import CharacterData, { ICharacterDataRps, rpCharacterDataKeys } from './CharacterData';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { ICharacterData, IProcessingInstruction } from '../interfaces';
+import { ICharacterDataProperties, ICharacterDataReadonlyProperties, CharacterDataPropertyKeys, CharacterDataConstantKeys } from './CharacterData';
 
-export default class ProcessingInstruction extends CharacterData implements IProcessingInstruction {
-  protected readonly _: IProcessingInstructionRps = {};
+export const { getState, setState, setReadonlyOfProcessingInstruction } = StateMachine<
+  IProcessingInstruction,
+  IProcessingInstructionProperties,
+  IProcessingInstructionReadonlyProperties
+>('ProcessingInstruction');
+export const internalHandler = new InternalHandler<IProcessingInstruction>('ProcessingInstruction', getState, setState);
 
-  // properties
-
-  public get target(): string {
-    return InternalHandler.get<ProcessingInstruction, string>(this, 'target');
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpProcessingInstructionKeys: Set<string> = new Set([...rpCharacterDataKeys]);
-
-export interface IProcessingInstructionRps extends ICharacterDataRps {
-  readonly target?: string;
-}
-
-export function setProcessingInstructionRps(instance: IProcessingInstruction, data: IProcessingInstructionRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpProcessingInstructionKeys.has(key)) {
-      throw new Error(`${key} is not a property of ProcessingInstruction`);
+// tslint:disable-next-line:variable-name
+export function ProcessingInstructionGenerator(CharacterData: Constructable<ICharacterData>) {
+  return class ProcessingInstruction extends CharacterData implements IProcessingInstruction {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<ProcessingInstruction>(ProcessingInstruction, this, internalHandler, ProcessingInstructionConstantKeys, ProcessingInstructionPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get target(): string {
+      return internalHandler.get<string>(this, 'target', false);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IProcessingInstructionProperties extends ICharacterDataProperties {
+  target?: string;
+}
+
+export interface IProcessingInstructionReadonlyProperties extends ICharacterDataReadonlyProperties {
+  target?: string;
+}
+
+// tslint:disable-next-line:variable-name
+export const ProcessingInstructionPropertyKeys = [...CharacterDataPropertyKeys, 'target'];
+
+// tslint:disable-next-line:variable-name
+export const ProcessingInstructionConstantKeys = [...CharacterDataConstantKeys];

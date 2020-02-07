@@ -1,54 +1,65 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IAudioTrack } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfAudioTrack } = StateMachine<
+  IAudioTrack,
+  IAudioTrackProperties,
+  IAudioTrackReadonlyProperties
+>('AudioTrack');
+export const internalHandler = new InternalHandler<IAudioTrack>('AudioTrack', getState, setState);
+
 export default class AudioTrack implements IAudioTrack {
-  protected readonly _: IAudioTrackRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<AudioTrack>(AudioTrack, this, internalHandler, AudioTrackConstantKeys, AudioTrackPropertyKeys);
+  }
 
   // properties
 
   public get enabled(): boolean {
-    return InternalHandler.get<AudioTrack, boolean>(this, 'enabled');
+    return internalHandler.get<boolean>(this, 'enabled', false);
   }
 
   public set enabled(value: boolean) {
-    InternalHandler.set<AudioTrack, boolean>(this, 'enabled', value);
+    internalHandler.set<boolean>(this, 'enabled', value);
   }
 
   public get id(): string {
-    return InternalHandler.get<AudioTrack, string>(this, 'id');
+    return internalHandler.get<string>(this, 'id', false);
   }
 
   public get kind(): string {
-    return InternalHandler.get<AudioTrack, string>(this, 'kind');
+    return internalHandler.get<string>(this, 'kind', false);
   }
 
   public get label(): string {
-    return InternalHandler.get<AudioTrack, string>(this, 'label');
+    return internalHandler.get<string>(this, 'label', false);
   }
 
   public get language(): string {
-    return InternalHandler.get<AudioTrack, string>(this, 'language');
+    return internalHandler.get<string>(this, 'language', false);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpAudioTrackKeys: Set<string> = new Set([]);
-
-export interface IAudioTrackRps {
-  readonly id?: string;
-  readonly kind?: string;
-  readonly label?: string;
-  readonly language?: string;
+export interface IAudioTrackProperties {
+  enabled?: boolean;
+  id?: string;
+  kind?: string;
+  label?: string;
+  language?: string;
 }
 
-export function setAudioTrackRps(instance: IAudioTrack, data: IAudioTrackRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpAudioTrackKeys.has(key)) {
-      throw new Error(`${key} is not a property of AudioTrack`);
-    }
-    properties[key] = value;
-  });
+export interface IAudioTrackReadonlyProperties {
+  id?: string;
+  kind?: string;
+  label?: string;
+  language?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const AudioTrackPropertyKeys = ['enabled', 'id', 'kind', 'label', 'language'];
+
+// tslint:disable-next-line:variable-name
+export const AudioTrackConstantKeys = [];

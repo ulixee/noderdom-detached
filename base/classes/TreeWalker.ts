@@ -1,79 +1,89 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { INode, INodeFilter, ITreeWalker } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfTreeWalker } = StateMachine<
+  ITreeWalker,
+  ITreeWalkerProperties,
+  ITreeWalkerReadonlyProperties
+>('TreeWalker');
+export const internalHandler = new InternalHandler<ITreeWalker>('TreeWalker', getState, setState);
+
 export default class TreeWalker implements ITreeWalker {
-  protected readonly _: ITreeWalkerRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<TreeWalker>(TreeWalker, this, internalHandler, TreeWalkerConstantKeys, TreeWalkerPropertyKeys);
+  }
 
   // properties
 
   public get currentNode(): INode {
-    return InternalHandler.get<TreeWalker, INode>(this, 'currentNode');
+    return internalHandler.get<INode>(this, 'currentNode', false);
   }
 
   public set currentNode(value: INode) {
-    InternalHandler.set<TreeWalker, INode>(this, 'currentNode', value);
+    internalHandler.set<INode>(this, 'currentNode', value);
   }
 
   public get filter(): INodeFilter | null {
-    return InternalHandler.get<TreeWalker, INodeFilter | null>(this, 'filter');
+    return internalHandler.get<INodeFilter | null>(this, 'filter', true);
   }
 
   public get root(): INode {
-    return InternalHandler.get<TreeWalker, INode>(this, 'root');
+    return internalHandler.get<INode>(this, 'root', false);
   }
 
   public get whatToShow(): number {
-    return InternalHandler.get<TreeWalker, number>(this, 'whatToShow');
+    return internalHandler.get<number>(this, 'whatToShow', false);
   }
 
   // methods
 
   public firstChild(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'firstChild', []);
+    return internalHandler.run<INode | null>(this, 'firstChild', []);
   }
 
   public lastChild(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'lastChild', []);
+    return internalHandler.run<INode | null>(this, 'lastChild', []);
   }
 
   public nextNode(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'nextNode', []);
+    return internalHandler.run<INode | null>(this, 'nextNode', []);
   }
 
   public nextSibling(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'nextSibling', []);
+    return internalHandler.run<INode | null>(this, 'nextSibling', []);
   }
 
   public parentNode(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'parentNode', []);
+    return internalHandler.run<INode | null>(this, 'parentNode', []);
   }
 
   public previousNode(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'previousNode', []);
+    return internalHandler.run<INode | null>(this, 'previousNode', []);
   }
 
   public previousSibling(): INode | null {
-    return InternalHandler.run<TreeWalker, INode | null>(this, 'previousSibling', []);
+    return internalHandler.run<INode | null>(this, 'previousSibling', []);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpTreeWalkerKeys: Set<string> = new Set([]);
-
-export interface ITreeWalkerRps {
-  readonly filter?: INodeFilter | null;
-  readonly root?: INode;
-  readonly whatToShow?: number;
+export interface ITreeWalkerProperties {
+  currentNode?: INode;
+  filter?: INodeFilter | null;
+  root?: INode;
+  whatToShow?: number;
 }
 
-export function setTreeWalkerRps(instance: ITreeWalker, data: ITreeWalkerRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpTreeWalkerKeys.has(key)) {
-      throw new Error(`${key} is not a property of TreeWalker`);
-    }
-    properties[key] = value;
-  });
+export interface ITreeWalkerReadonlyProperties {
+  filter?: INodeFilter | null;
+  root?: INode;
+  whatToShow?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const TreeWalkerPropertyKeys = ['currentNode', 'filter', 'root', 'whatToShow'];
+
+// tslint:disable-next-line:variable-name
+export const TreeWalkerConstantKeys = [];

@@ -1,46 +1,61 @@
-import InternalHandler from '../InternalHandler';
-import { IDocumentType } from '../interfaces';
-import Node, { INodeRps, rpNodeKeys } from './Node';
-import ChildNode, { IChildNodeRps, rpChildNodeKeys } from '../mixins/ChildNode';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { INode, IChildNode, IDocumentType } from '../interfaces';
+import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstantKeys } from './Node';
+import { IChildNodeProperties, IChildNodeReadonlyProperties, ChildNodePropertyKeys, ChildNodeConstantKeys } from '../mixins/ChildNode';
+
+export const { getState, setState, setReadonlyOfDocumentType } = StateMachine<
+  IDocumentType,
+  IDocumentTypeProperties,
+  IDocumentTypeReadonlyProperties
+>('DocumentType');
+export const internalHandler = new InternalHandler<IDocumentType>('DocumentType', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const DocumentTypeBase = ChildNode(Node);
+export function DocumentTypeGenerator(Node: Constructable<INode>, ChildNode: Constructable<IChildNode>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(Node, [ChildNode]) as unknown) as Constructable<INode & IChildNode>;
 
-export default class DocumentType extends DocumentTypeBase implements IDocumentType {
-  protected readonly _: IDocumentTypeRps = {};
-
-  // properties
-
-  public get name(): string {
-    return InternalHandler.get<DocumentType, string>(this, 'name');
-  }
-
-  public get publicId(): string {
-    return InternalHandler.get<DocumentType, string>(this, 'publicId');
-  }
-
-  public get systemId(): string {
-    return InternalHandler.get<DocumentType, string>(this, 'systemId');
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpDocumentTypeKeys: Set<string> = new Set([...rpNodeKeys, ...rpChildNodeKeys]);
-
-export interface IDocumentTypeRps extends INodeRps, IChildNodeRps {
-  readonly name?: string;
-  readonly publicId?: string;
-  readonly systemId?: string;
-}
-
-export function setDocumentTypeRps(instance: IDocumentType, data: IDocumentTypeRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpDocumentTypeKeys.has(key)) {
-      throw new Error(`${key} is not a property of DocumentType`);
+  return class DocumentType extends Parent implements IDocumentType {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<DocumentType>(DocumentType, this, internalHandler, DocumentTypeConstantKeys, DocumentTypePropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public get publicId(): string {
+      return internalHandler.get<string>(this, 'publicId', false);
+    }
+
+    public get systemId(): string {
+      return internalHandler.get<string>(this, 'systemId', false);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IDocumentTypeProperties extends INodeProperties, IChildNodeProperties {
+  name?: string;
+  publicId?: string;
+  systemId?: string;
+}
+
+export interface IDocumentTypeReadonlyProperties extends INodeReadonlyProperties, IChildNodeReadonlyProperties {
+  name?: string;
+  publicId?: string;
+  systemId?: string;
+}
+
+// tslint:disable-next-line:variable-name
+export const DocumentTypePropertyKeys = [...NodePropertyKeys, ...ChildNodePropertyKeys, 'name', 'publicId', 'systemId'];
+
+// tslint:disable-next-line:variable-name
+export const DocumentTypeConstantKeys = [...NodeConstantKeys, ...ChildNodeConstantKeys];

@@ -1,48 +1,65 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLOptGroupElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLOptGroupElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLOptGroupElement extends HTMLElement implements IHTMLOptGroupElement {
-  public get disabled(): boolean {
-    return InternalHandler.get<HTMLOptGroupElement, boolean>(this, 'disabled');
-  }
+export const { getState, setState, setReadonlyOfHTMLOptGroupElement } = StateMachine<
+  IHTMLOptGroupElement,
+  IHTMLOptGroupElementProperties,
+  IHTMLOptGroupElementReadonlyProperties
+>('HTMLOptGroupElement');
+export const internalHandler = new InternalHandler<IHTMLOptGroupElement>('HTMLOptGroupElement', getState, setState);
 
-  public set disabled(value: boolean) {
-    InternalHandler.set<HTMLOptGroupElement, boolean>(this, 'disabled', value);
-  }
-
-  public get label(): string {
-    return InternalHandler.get<HTMLOptGroupElement, string>(this, 'label');
-  }
-
-  public set label(value: string) {
-    InternalHandler.set<HTMLOptGroupElement, string>(this, 'label', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptGroupElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLOptGroupElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptGroupElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLOptGroupElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLOptGroupElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLOptGroupElementRps extends IHTMLElementRps {}
-
-export function setHTMLOptGroupElementRps(instance: IHTMLOptGroupElement, data: IHTMLOptGroupElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLOptGroupElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLOptGroupElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLOptGroupElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLOptGroupElement extends HTMLElement implements IHTMLOptGroupElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLOptGroupElement>(HTMLOptGroupElement, this, internalHandler, HTMLOptGroupElementConstantKeys, HTMLOptGroupElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get disabled(): boolean {
+      return internalHandler.get<boolean>(this, 'disabled', false);
+    }
+
+    public set disabled(value: boolean) {
+      internalHandler.set<boolean>(this, 'disabled', value);
+    }
+
+    public get label(): string {
+      return internalHandler.get<string>(this, 'label', false);
+    }
+
+    public set label(value: string) {
+      internalHandler.set<string>(this, 'label', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptGroupElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLOptGroupElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLOptGroupElementProperties extends IHTMLElementProperties {
+  disabled?: boolean;
+  label?: string;
+}
+
+export interface IHTMLOptGroupElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLOptGroupElementPropertyKeys = [...HTMLElementPropertyKeys, 'disabled', 'label'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLOptGroupElementConstantKeys = [...HTMLElementConstantKeys];

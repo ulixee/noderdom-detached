@@ -1,5 +1,13 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IDOMException } from '../interfaces';
+
+export const { getState, setState, setReadonlyOfDOMException } = StateMachine<
+  IDOMException,
+  IDOMExceptionProperties,
+  IDOMExceptionReadonlyProperties
+>('DOMException');
+export const internalHandler = new InternalHandler<IDOMException>('DOMException', getState, setState);
 
 export default class DOMException implements IDOMException {
   public static readonly ABORT_ERR: number = 20;
@@ -54,48 +62,43 @@ export default class DOMException implements IDOMException {
   public readonly VALIDATION_ERR: number = 16;
   public readonly WRONG_DOCUMENT_ERR: number = 4;
 
-  // store readonly properties
-
-  protected readonly _: IDOMExceptionRps = {};
-
   // constructor required for this class
 
-  constructor(message?: string, name?: string) {
-    InternalHandler.construct(this, [message, name]);
+  constructor(_message?: string, _name?: string) {
+    initializeConstantsAndPrototypes<DOMException>(DOMException, this, internalHandler, DOMExceptionConstantKeys, DOMExceptionPropertyKeys);
   }
 
   // properties
 
   public get code(): number {
-    return InternalHandler.get<DOMException, number>(this, 'code');
+    return internalHandler.get<number>(this, 'code', false);
   }
 
   public get message(): string {
-    return InternalHandler.get<DOMException, string>(this, 'message');
+    return internalHandler.get<string>(this, 'message', false);
   }
 
   public get name(): string {
-    return InternalHandler.get<DOMException, string>(this, 'name');
+    return internalHandler.get<string>(this, 'name', false);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpDOMExceptionKeys: Set<string> = new Set([]);
-
-export interface IDOMExceptionRps {
-  readonly code?: number;
-  readonly message?: string;
-  readonly name?: string;
+export interface IDOMExceptionProperties {
+  code?: number;
+  message?: string;
+  name?: string;
 }
 
-export function setDOMExceptionRps(instance: IDOMException, data: IDOMExceptionRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpDOMExceptionKeys.has(key)) {
-      throw new Error(`${key} is not a property of DOMException`);
-    }
-    properties[key] = value;
-  });
+export interface IDOMExceptionReadonlyProperties {
+  code?: number;
+  message?: string;
+  name?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const DOMExceptionPropertyKeys = ['code', 'message', 'name'];
+
+// tslint:disable-next-line:variable-name
+export const DOMExceptionConstantKeys = ['INDEX_SIZE_ERR', 'DOMSTRING_SIZE_ERR', 'HIERARCHY_REQUEST_ERR', 'WRONG_DOCUMENT_ERR', 'INVALID_CHARACTER_ERR', 'NO_DATA_ALLOWED_ERR', 'NO_MODIFICATION_ALLOWED_ERR', 'NOT_FOUND_ERR', 'NOT_SUPPORTED_ERR', 'INUSE_ATTRIBUTE_ERR', 'INVALID_STATE_ERR', 'SYNTAX_ERR', 'INVALID_MODIFICATION_ERR', 'NAMESPACE_ERR', 'INVALID_ACCESS_ERR', 'VALIDATION_ERR', 'TYPE_MISMATCH_ERR', 'SECURITY_ERR', 'NETWORK_ERR', 'ABORT_ERR', 'URL_MISMATCH_ERR', 'QUOTA_EXCEEDED_ERR', 'TIMEOUT_ERR', 'INVALID_NODE_TYPE_ERR', 'DATA_CLONE_ERR'];

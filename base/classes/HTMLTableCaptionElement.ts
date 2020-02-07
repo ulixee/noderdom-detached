@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLTableCaptionElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLTableCaptionElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLTableCaptionElement extends HTMLElement implements IHTMLTableCaptionElement {
-  public get align(): string {
-    return InternalHandler.get<HTMLTableCaptionElement, string>(this, 'align');
-  }
+export const { getState, setState, setReadonlyOfHTMLTableCaptionElement } = StateMachine<
+  IHTMLTableCaptionElement,
+  IHTMLTableCaptionElementProperties,
+  IHTMLTableCaptionElementReadonlyProperties
+>('HTMLTableCaptionElement');
+export const internalHandler = new InternalHandler<IHTMLTableCaptionElement>('HTMLTableCaptionElement', getState, setState);
 
-  public set align(value: string) {
-    InternalHandler.set<HTMLTableCaptionElement, string>(this, 'align', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableCaptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLTableCaptionElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableCaptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLTableCaptionElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLTableCaptionElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLTableCaptionElementRps extends IHTMLElementRps {}
-
-export function setHTMLTableCaptionElementRps(instance: IHTMLTableCaptionElement, data: IHTMLTableCaptionElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLTableCaptionElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLTableCaptionElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLTableCaptionElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLTableCaptionElement extends HTMLElement implements IHTMLTableCaptionElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLTableCaptionElement>(HTMLTableCaptionElement, this, internalHandler, HTMLTableCaptionElementConstantKeys, HTMLTableCaptionElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get align(): string {
+      return internalHandler.get<string>(this, 'align', false);
+    }
+
+    public set align(value: string) {
+      internalHandler.set<string>(this, 'align', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableCaptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLTableCaptionElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLTableCaptionElementProperties extends IHTMLElementProperties {
+  align?: string;
+}
+
+export interface IHTMLTableCaptionElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLTableCaptionElementPropertyKeys = [...HTMLElementPropertyKeys, 'align'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLTableCaptionElementConstantKeys = [...HTMLElementConstantKeys];

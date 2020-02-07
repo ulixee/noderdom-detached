@@ -1,19 +1,19 @@
-import DOMNode from './Node';
-import ChildishNode from './ChildishNode';
-import { IDocumentType } from '../interfaces';
+import { IDocumentType } from '../../base/interfaces';
+import { DocumentTypeGenerator, setState, internalHandler } from '../../base/classes/DocumentType';
 import NODE_TYPE from '../constants/NodeType';
+import Node from './Node';
+import ChildNode from '../../base/mixins/ChildNode';
 
 // tslint:disable-next-line:variable-name
-const DocumentTypeBase = ChildishNode(DOMNode);
+const Parent = DocumentTypeGenerator(Node, ChildNode);
 
-export default class DocumentType extends DocumentTypeBase implements IDocumentType {
-  public readonly name: string;
-  public readonly publicId: string;
-  public readonly systemId: string;
-
+export default class DocumentType extends Parent implements IDocumentType {
   constructor() {
-    super({
+    super();
+    setState(this, {
       nodeType: NODE_TYPE.DOCUMENT_TYPE_NODE,
     });
   }
 }
+
+internalHandler.handle('name', 'publicId', 'systemId');

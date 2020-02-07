@@ -1,15 +1,19 @@
-import BaseDocumentFragment, { setDocumentFragmentRps } from '../../base/classes/DocumentFragment';
+import { DocumentFragmentGenerator, setState } from '../../base/classes/DocumentFragment';
 import { IDocumentFragment } from '../../base/interfaces';
 import NODE_TYPE from '../constants/NodeType';
+import Node from './Node';
+import NonElementParentNode from '../../base/mixins/NonElementParentNode';
+import ParentNode from '../mixins/ParentNode';
 
-export default class DocumentFragment extends BaseDocumentFragment implements IDocumentFragment {
+// tslint:disable-next-line:variable-name
+const Parent = DocumentFragmentGenerator(Node, NonElementParentNode, ParentNode);
+
+export default class DocumentFragment extends Parent implements IDocumentFragment {
   constructor() {
     super();
-    setDocumentFragmentRps(this, {
+    setState(this, {
       nodeName: '#document-fragment',
       nodeType: NODE_TYPE.DOCUMENT_FRAGMENT_NODE,
     });
   }
 }
-
-export { setDocumentFragmentRps };

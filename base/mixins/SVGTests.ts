@@ -1,25 +1,38 @@
 import InternalHandler from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ISVGStringList, ISVGTests } from '../interfaces';
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+export const { getState, setState } = StateMachine<
+  ISVGTests,
+  ISVGTestsProperties,
+  ISVGTestsReadonlyProperties
+>('SVGTests');
+export const internalHandler = new InternalHandler<ISVGTests>('SVGTests', getState, setState);
 
-export default function SVGTests<TBase extends Constructor>(base: TBase) {
-  return class extends base implements ISVGTests {
-    public get requiredExtensions(): ISVGStringList {
-      return InternalHandler.get<SVGTests, ISVGStringList>(this, 'requiredExtensions');
-    }
+export default class SVGTests implements ISVGTests {
+  public get requiredExtensions(): ISVGStringList {
+    return internalHandler.get<ISVGStringList>(this, 'requiredExtensions', false);
+  }
 
-    public get systemLanguage(): ISVGStringList {
-      return InternalHandler.get<SVGTests, ISVGStringList>(this, 'systemLanguage');
-    }
-  };
+  public get systemLanguage(): ISVGStringList {
+    return internalHandler.get<ISVGStringList>(this, 'systemLanguage', false);
+  }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpSVGTestsKeys: Set<string> = new Set([]);
-
-export interface ISVGTestsRps {
-  readonly requiredExtensions?: ISVGStringList;
-  readonly systemLanguage?: ISVGStringList;
+export interface ISVGTestsProperties {
+  requiredExtensions?: ISVGStringList;
+  systemLanguage?: ISVGStringList;
 }
+
+export interface ISVGTestsReadonlyProperties {
+  requiredExtensions?: ISVGStringList;
+  systemLanguage?: ISVGStringList;
+}
+
+// tslint:disable-next-line:variable-name
+export const SVGTestsPropertyKeys = ['requiredExtensions', 'systemLanguage'];
+
+// tslint:disable-next-line:variable-name
+export const SVGTestsConstantKeys = [];

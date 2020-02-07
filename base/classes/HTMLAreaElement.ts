@@ -1,94 +1,113 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IDOMTokenList, IHTMLAreaElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
-import HTMLHyperlinkElementUtils, { IHTMLHyperlinkElementUtilsRps, rpHTMLHyperlinkElementUtilsKeys } from '../mixins/HTMLHyperlinkElementUtils';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IHTMLHyperlinkElementUtils, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IDOMTokenList, IHTMLAreaElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
+import { IHTMLHyperlinkElementUtilsProperties, IHTMLHyperlinkElementUtilsReadonlyProperties, HTMLHyperlinkElementUtilsPropertyKeys, HTMLHyperlinkElementUtilsConstantKeys } from '../mixins/HTMLHyperlinkElementUtils';
+
+export const { getState, setState, setReadonlyOfHTMLAreaElement } = StateMachine<
+  IHTMLAreaElement,
+  IHTMLAreaElementProperties,
+  IHTMLAreaElementReadonlyProperties
+>('HTMLAreaElement');
+export const internalHandler = new InternalHandler<IHTMLAreaElement>('HTMLAreaElement', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const HTMLAreaElementBase = HTMLHyperlinkElementUtils(HTMLElement);
+export function HTMLAreaElementGenerator(HTMLElement: Constructable<IHTMLElement>, HTMLHyperlinkElementUtils: Constructable<IHTMLHyperlinkElementUtils>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(HTMLElement, [HTMLHyperlinkElementUtils]) as unknown) as Constructable<IHTMLElement & IHTMLHyperlinkElementUtils>;
 
-export default class HTMLAreaElement extends HTMLAreaElementBase implements IHTMLAreaElement {
-  protected readonly _: IHTMLAreaElementRps = {};
-
-  // properties
-
-  public get alt(): string {
-    return InternalHandler.get<HTMLAreaElement, string>(this, 'alt');
-  }
-
-  public set alt(value: string) {
-    InternalHandler.set<HTMLAreaElement, string>(this, 'alt', value);
-  }
-
-  public get coords(): string {
-    return InternalHandler.get<HTMLAreaElement, string>(this, 'coords');
-  }
-
-  public set coords(value: string) {
-    InternalHandler.set<HTMLAreaElement, string>(this, 'coords', value);
-  }
-
-  public get noHref(): boolean {
-    return InternalHandler.get<HTMLAreaElement, boolean>(this, 'noHref');
-  }
-
-  public set noHref(value: boolean) {
-    InternalHandler.set<HTMLAreaElement, boolean>(this, 'noHref', value);
-  }
-
-  public get rel(): string {
-    return InternalHandler.get<HTMLAreaElement, string>(this, 'rel');
-  }
-
-  public set rel(value: string) {
-    InternalHandler.set<HTMLAreaElement, string>(this, 'rel', value);
-  }
-
-  public get relList(): IDOMTokenList {
-    return InternalHandler.get<HTMLAreaElement, IDOMTokenList>(this, 'relList');
-  }
-
-  public get shape(): string {
-    return InternalHandler.get<HTMLAreaElement, string>(this, 'shape');
-  }
-
-  public set shape(value: string) {
-    InternalHandler.set<HTMLAreaElement, string>(this, 'shape', value);
-  }
-
-  public get target(): string {
-    return InternalHandler.get<HTMLAreaElement, string>(this, 'target');
-  }
-
-  public set target(value: string) {
-    InternalHandler.set<HTMLAreaElement, string>(this, 'target', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAreaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLAreaElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAreaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLAreaElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLAreaElementKeys: Set<string> = new Set([...rpHTMLElementKeys, ...rpHTMLHyperlinkElementUtilsKeys]);
-
-export interface IHTMLAreaElementRps extends IHTMLElementRps, IHTMLHyperlinkElementUtilsRps {
-  readonly relList?: IDOMTokenList;
-}
-
-export function setHTMLAreaElementRps(instance: IHTMLAreaElement, data: IHTMLAreaElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLAreaElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLAreaElement`);
+  return class HTMLAreaElement extends Parent implements IHTMLAreaElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLAreaElement>(HTMLAreaElement, this, internalHandler, HTMLAreaElementConstantKeys, HTMLAreaElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get alt(): string {
+      return internalHandler.get<string>(this, 'alt', false);
+    }
+
+    public set alt(value: string) {
+      internalHandler.set<string>(this, 'alt', value);
+    }
+
+    public get coords(): string {
+      return internalHandler.get<string>(this, 'coords', false);
+    }
+
+    public set coords(value: string) {
+      internalHandler.set<string>(this, 'coords', value);
+    }
+
+    public get noHref(): boolean {
+      return internalHandler.get<boolean>(this, 'noHref', false);
+    }
+
+    public set noHref(value: boolean) {
+      internalHandler.set<boolean>(this, 'noHref', value);
+    }
+
+    public get rel(): string {
+      return internalHandler.get<string>(this, 'rel', false);
+    }
+
+    public set rel(value: string) {
+      internalHandler.set<string>(this, 'rel', value);
+    }
+
+    public get relList(): IDOMTokenList {
+      return internalHandler.get<IDOMTokenList>(this, 'relList', false);
+    }
+
+    public get shape(): string {
+      return internalHandler.get<string>(this, 'shape', false);
+    }
+
+    public set shape(value: string) {
+      internalHandler.set<string>(this, 'shape', value);
+    }
+
+    public get target(): string {
+      return internalHandler.get<string>(this, 'target', false);
+    }
+
+    public set target(value: string) {
+      internalHandler.set<string>(this, 'target', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAreaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAreaElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLAreaElementProperties extends IHTMLElementProperties, IHTMLHyperlinkElementUtilsProperties {
+  alt?: string;
+  coords?: string;
+  noHref?: boolean;
+  rel?: string;
+  relList?: IDOMTokenList;
+  shape?: string;
+  target?: string;
+}
+
+export interface IHTMLAreaElementReadonlyProperties extends IHTMLElementReadonlyProperties, IHTMLHyperlinkElementUtilsReadonlyProperties {
+  relList?: IDOMTokenList;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLAreaElementPropertyKeys = [...HTMLElementPropertyKeys, ...HTMLHyperlinkElementUtilsPropertyKeys, 'alt', 'coords', 'noHref', 'rel', 'relList', 'shape', 'target'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLAreaElementConstantKeys = [...HTMLElementConstantKeys, ...HTMLHyperlinkElementUtilsConstantKeys];

@@ -1,39 +1,47 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ISVGAnimatedString } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfSVGAnimatedString } = StateMachine<
+  ISVGAnimatedString,
+  ISVGAnimatedStringProperties,
+  ISVGAnimatedStringReadonlyProperties
+>('SVGAnimatedString');
+export const internalHandler = new InternalHandler<ISVGAnimatedString>('SVGAnimatedString', getState, setState);
+
 export default class SVGAnimatedString implements ISVGAnimatedString {
-  protected readonly _: ISVGAnimatedStringRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<SVGAnimatedString>(SVGAnimatedString, this, internalHandler, SVGAnimatedStringConstantKeys, SVGAnimatedStringPropertyKeys);
+  }
 
   // properties
 
   public get animVal(): string {
-    return InternalHandler.get<SVGAnimatedString, string>(this, 'animVal');
+    return internalHandler.get<string>(this, 'animVal', false);
   }
 
   public get baseVal(): string {
-    return InternalHandler.get<SVGAnimatedString, string>(this, 'baseVal');
+    return internalHandler.get<string>(this, 'baseVal', false);
   }
 
   public set baseVal(value: string) {
-    InternalHandler.set<SVGAnimatedString, string>(this, 'baseVal', value);
+    internalHandler.set<string>(this, 'baseVal', value);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpSVGAnimatedStringKeys: Set<string> = new Set([]);
-
-export interface ISVGAnimatedStringRps {
-  readonly animVal?: string;
+export interface ISVGAnimatedStringProperties {
+  animVal?: string;
+  baseVal?: string;
 }
 
-export function setSVGAnimatedStringRps(instance: ISVGAnimatedString, data: ISVGAnimatedStringRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpSVGAnimatedStringKeys.has(key)) {
-      throw new Error(`${key} is not a property of SVGAnimatedString`);
-    }
-    properties[key] = value;
-  });
+export interface ISVGAnimatedStringReadonlyProperties {
+  animVal?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const SVGAnimatedStringPropertyKeys = ['animVal', 'baseVal'];
+
+// tslint:disable-next-line:variable-name
+export const SVGAnimatedStringConstantKeys = [];

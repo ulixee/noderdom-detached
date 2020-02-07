@@ -1,134 +1,158 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IDOMTokenList, IHTMLAnchorElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
-import HTMLHyperlinkElementUtils, { IHTMLHyperlinkElementUtilsRps, rpHTMLHyperlinkElementUtilsKeys } from '../mixins/HTMLHyperlinkElementUtils';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IHTMLHyperlinkElementUtils, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IDOMTokenList, IHTMLAnchorElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
+import { IHTMLHyperlinkElementUtilsProperties, IHTMLHyperlinkElementUtilsReadonlyProperties, HTMLHyperlinkElementUtilsPropertyKeys, HTMLHyperlinkElementUtilsConstantKeys } from '../mixins/HTMLHyperlinkElementUtils';
+
+export const { getState, setState, setReadonlyOfHTMLAnchorElement } = StateMachine<
+  IHTMLAnchorElement,
+  IHTMLAnchorElementProperties,
+  IHTMLAnchorElementReadonlyProperties
+>('HTMLAnchorElement');
+export const internalHandler = new InternalHandler<IHTMLAnchorElement>('HTMLAnchorElement', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const HTMLAnchorElementBase = HTMLHyperlinkElementUtils(HTMLElement);
+export function HTMLAnchorElementGenerator(HTMLElement: Constructable<IHTMLElement>, HTMLHyperlinkElementUtils: Constructable<IHTMLHyperlinkElementUtils>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(HTMLElement, [HTMLHyperlinkElementUtils]) as unknown) as Constructable<IHTMLElement & IHTMLHyperlinkElementUtils>;
 
-export default class HTMLAnchorElement extends HTMLAnchorElementBase implements IHTMLAnchorElement {
-  protected readonly _: IHTMLAnchorElementRps = {};
-
-  // properties
-
-  public get charset(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'charset');
-  }
-
-  public set charset(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'charset', value);
-  }
-
-  public get coords(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'coords');
-  }
-
-  public set coords(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'coords', value);
-  }
-
-  public get download(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'download');
-  }
-
-  public set download(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'download', value);
-  }
-
-  public get hreflang(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'hreflang');
-  }
-
-  public set hreflang(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'hreflang', value);
-  }
-
-  public get name(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'name');
-  }
-
-  public set name(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'name', value);
-  }
-
-  public get rel(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'rel');
-  }
-
-  public set rel(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'rel', value);
-  }
-
-  public get relList(): IDOMTokenList {
-    return InternalHandler.get<HTMLAnchorElement, IDOMTokenList>(this, 'relList');
-  }
-
-  public get rev(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'rev');
-  }
-
-  public set rev(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'rev', value);
-  }
-
-  public get shape(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'shape');
-  }
-
-  public set shape(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'shape', value);
-  }
-
-  public get target(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'target');
-  }
-
-  public set target(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'target', value);
-  }
-
-  public get text(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'text');
-  }
-
-  public set text(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'text', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLAnchorElement, string>(this, 'type');
-  }
-
-  public set type(value: string) {
-    InternalHandler.set<HTMLAnchorElement, string>(this, 'type', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAnchorElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLAnchorElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAnchorElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLAnchorElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLAnchorElementKeys: Set<string> = new Set([...rpHTMLElementKeys, ...rpHTMLHyperlinkElementUtilsKeys]);
-
-export interface IHTMLAnchorElementRps extends IHTMLElementRps, IHTMLHyperlinkElementUtilsRps {
-  readonly relList?: IDOMTokenList;
-}
-
-export function setHTMLAnchorElementRps(instance: IHTMLAnchorElement, data: IHTMLAnchorElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLAnchorElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLAnchorElement`);
+  return class HTMLAnchorElement extends Parent implements IHTMLAnchorElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLAnchorElement>(HTMLAnchorElement, this, internalHandler, HTMLAnchorElementConstantKeys, HTMLAnchorElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get charset(): string {
+      return internalHandler.get<string>(this, 'charset', false);
+    }
+
+    public set charset(value: string) {
+      internalHandler.set<string>(this, 'charset', value);
+    }
+
+    public get coords(): string {
+      return internalHandler.get<string>(this, 'coords', false);
+    }
+
+    public set coords(value: string) {
+      internalHandler.set<string>(this, 'coords', value);
+    }
+
+    public get download(): string {
+      return internalHandler.get<string>(this, 'download', false);
+    }
+
+    public set download(value: string) {
+      internalHandler.set<string>(this, 'download', value);
+    }
+
+    public get hreflang(): string {
+      return internalHandler.get<string>(this, 'hreflang', false);
+    }
+
+    public set hreflang(value: string) {
+      internalHandler.set<string>(this, 'hreflang', value);
+    }
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public set name(value: string) {
+      internalHandler.set<string>(this, 'name', value);
+    }
+
+    public get rel(): string {
+      return internalHandler.get<string>(this, 'rel', false);
+    }
+
+    public set rel(value: string) {
+      internalHandler.set<string>(this, 'rel', value);
+    }
+
+    public get relList(): IDOMTokenList {
+      return internalHandler.get<IDOMTokenList>(this, 'relList', false);
+    }
+
+    public get rev(): string {
+      return internalHandler.get<string>(this, 'rev', false);
+    }
+
+    public set rev(value: string) {
+      internalHandler.set<string>(this, 'rev', value);
+    }
+
+    public get shape(): string {
+      return internalHandler.get<string>(this, 'shape', false);
+    }
+
+    public set shape(value: string) {
+      internalHandler.set<string>(this, 'shape', value);
+    }
+
+    public get target(): string {
+      return internalHandler.get<string>(this, 'target', false);
+    }
+
+    public set target(value: string) {
+      internalHandler.set<string>(this, 'target', value);
+    }
+
+    public get text(): string {
+      return internalHandler.get<string>(this, 'text', false);
+    }
+
+    public set text(value: string) {
+      internalHandler.set<string>(this, 'text', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAnchorElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLAnchorElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLAnchorElementProperties extends IHTMLElementProperties, IHTMLHyperlinkElementUtilsProperties {
+  charset?: string;
+  coords?: string;
+  download?: string;
+  hreflang?: string;
+  name?: string;
+  rel?: string;
+  relList?: IDOMTokenList;
+  rev?: string;
+  shape?: string;
+  target?: string;
+  text?: string;
+  type?: string;
+}
+
+export interface IHTMLAnchorElementReadonlyProperties extends IHTMLElementReadonlyProperties, IHTMLHyperlinkElementUtilsReadonlyProperties {
+  relList?: IDOMTokenList;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLAnchorElementPropertyKeys = [...HTMLElementPropertyKeys, ...HTMLHyperlinkElementUtilsPropertyKeys, 'charset', 'coords', 'download', 'hreflang', 'name', 'rel', 'relList', 'rev', 'shape', 'target', 'text', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLAnchorElementConstantKeys = [...HTMLElementConstantKeys, ...HTMLHyperlinkElementUtilsConstantKeys];

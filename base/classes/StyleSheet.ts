@@ -1,64 +1,77 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IElement, IProcessingInstruction, ICSSStyleSheet, IMediaList, IStyleSheet } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfStyleSheet } = StateMachine<
+  IStyleSheet,
+  IStyleSheetProperties,
+  IStyleSheetReadonlyProperties
+>('StyleSheet');
+export const internalHandler = new InternalHandler<IStyleSheet>('StyleSheet', getState, setState);
+
 export default class StyleSheet implements IStyleSheet {
-  protected readonly _: IStyleSheetRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<StyleSheet>(StyleSheet, this, internalHandler, StyleSheetConstantKeys, StyleSheetPropertyKeys);
+  }
 
   // properties
 
   public get disabled(): boolean {
-    return InternalHandler.get<StyleSheet, boolean>(this, 'disabled');
+    return internalHandler.get<boolean>(this, 'disabled', false);
   }
 
   public set disabled(value: boolean) {
-    InternalHandler.set<StyleSheet, boolean>(this, 'disabled', value);
+    internalHandler.set<boolean>(this, 'disabled', value);
   }
 
   public get href(): string | null {
-    return InternalHandler.get<StyleSheet, string | null>(this, 'href');
+    return internalHandler.get<string | null>(this, 'href', true);
   }
 
   public get media(): IMediaList {
-    return InternalHandler.get<StyleSheet, IMediaList>(this, 'media');
+    return internalHandler.get<IMediaList>(this, 'media', false);
   }
 
   public get ownerNode(): IElement | IProcessingInstruction | null {
-    return InternalHandler.get<StyleSheet, IElement | IProcessingInstruction | null>(this, 'ownerNode');
+    return internalHandler.get<IElement | IProcessingInstruction | null>(this, 'ownerNode', true);
   }
 
   public get parentStyleSheet(): ICSSStyleSheet | null {
-    return InternalHandler.get<StyleSheet, ICSSStyleSheet | null>(this, 'parentStyleSheet');
+    return internalHandler.get<ICSSStyleSheet | null>(this, 'parentStyleSheet', true);
   }
 
   public get title(): string | null {
-    return InternalHandler.get<StyleSheet, string | null>(this, 'title');
+    return internalHandler.get<string | null>(this, 'title', true);
   }
 
   public get type(): string {
-    return InternalHandler.get<StyleSheet, string>(this, 'type');
+    return internalHandler.get<string>(this, 'type', false);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpStyleSheetKeys: Set<string> = new Set([]);
-
-export interface IStyleSheetRps {
-  readonly href?: string | null;
-  readonly media?: IMediaList;
-  readonly ownerNode?: IElement | IProcessingInstruction | null;
-  readonly parentStyleSheet?: ICSSStyleSheet | null;
-  readonly title?: string | null;
-  readonly type?: string;
+export interface IStyleSheetProperties {
+  disabled?: boolean;
+  href?: string | null;
+  media?: IMediaList;
+  ownerNode?: IElement | IProcessingInstruction | null;
+  parentStyleSheet?: ICSSStyleSheet | null;
+  title?: string | null;
+  type?: string;
 }
 
-export function setStyleSheetRps(instance: IStyleSheet, data: IStyleSheetRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpStyleSheetKeys.has(key)) {
-      throw new Error(`${key} is not a property of StyleSheet`);
-    }
-    properties[key] = value;
-  });
+export interface IStyleSheetReadonlyProperties {
+  href?: string | null;
+  media?: IMediaList;
+  ownerNode?: IElement | IProcessingInstruction | null;
+  parentStyleSheet?: ICSSStyleSheet | null;
+  title?: string | null;
+  type?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const StyleSheetPropertyKeys = ['disabled', 'href', 'media', 'ownerNode', 'parentStyleSheet', 'title', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const StyleSheetConstantKeys = [];

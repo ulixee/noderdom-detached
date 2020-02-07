@@ -1,30 +1,48 @@
-import { IAttr, IElement, INamedNodeMap, INode, IMutable } from '../interfaces';
+import { IAttr, IElement, INamedNodeMap } from '../../base/interfaces';
+import { setReadonlyOfAttr } from '../../base/classes/Attr';
+import GeneratedNamedNodeMap, {
+  INamedNodeMapProperties as IOriginalNamedNodeMapProperties,
+  INamedNodeMapReadonlyProperties as IOriginalNamedNodeMapReadonlyProperties,
+} from '../../base/classes/NamedNodeMap';
 import DOMException from './DOMException';
-import Attr from '../api/Attr';
+import StateMachine from '../../base/StateMachine';
+import { iterableIteratorForArray } from '../utils/iterable';
 
-export default class NamedNodeMap extends Array<IAttr> implements INamedNodeMap {
-  private readonly ownerElement: IElement;
+export default class NamedNodeMap extends GeneratedNamedNodeMap implements INamedNodeMap {
+  private readonly proxy: any;
 
-  constructor(ownerElement: IElement) {
+  constructor() {
     super();
-    this.ownerElement = ownerElement;
+    const self = this;
+    const proxy = new Proxy(this, {
+      get(_: any, prop: string | number) {
+        if (prop === 'proxy') return undefined;
+        if (prop === '_internalInstance') return self;
+        const propIsNumber = typeof prop === 'number' || (typeof prop === 'string' && !isNaN(prop as any));
+        if (propIsNumber) {
+          return self.item.call(self, Number(prop));
+        }
+        const value = (self as any)[prop];
+        return typeof value === 'function' ? value.bind(self) : value;
+      },
+    });
+    Object.defineProperty(this, 'proxy', { enumerable: false, value: proxy });
+    setState(proxy, { itemsByName: new Map(), items: [] });
+    return proxy;
   }
 
-  public get length() {
-    return super.length;
+  public get length(): number {
+    return getState(this.proxy).itemsByName.size;
   }
 
   public getNamedItem(qualifiedName: string): IAttr | null {
-    for (const attr of this) {
-      if (attr.nodeName === qualifiedName) {
-        return attr;
-      }
-    }
-    return null;
+    const { itemsByName } = getState(this.proxy);
+    return itemsByName.has(qualifiedName) ? itemsByName.get(qualifiedName) : null;
   }
 
   public getNamedItemNS(namespace: string | null, localName: string): IAttr | null {
-    for (const attr of this) {
+    const items: IAttr[] = getState(this.proxy).itemsByName.values();
+    for (const attr of items) {
       if (attr.localName === localName && attr.namespaceURI === namespace) {
         return attr;
       }
@@ -33,82 +51,128 @@ export default class NamedNodeMap extends Array<IAttr> implements INamedNodeMap 
   }
 
   public item(index: number): IAttr | null {
-    return this[index] || null;
+    return getState(this.proxy).items[index] || null;
   }
 
   public removeNamedItem(qualifiedName: string): IAttr {
     const attr = this.getNamedItem(qualifiedName);
-
     if (attr === null) {
       throw new DOMException(undefined, 'NotFoundError');
     }
-
-    this.removeNamedNode(attr);
+    removeNamedNode(this.proxy, attr);
     return attr;
   }
 
   public removeNamedItemNS(namespace: string | null, localName: string): IAttr {
     const attr = this.getNamedItemNS(namespace, localName);
-
     if (attr === null) {
       throw new DOMException(undefined, 'NotFoundError');
     }
-
-    this.removeNamedNode(attr);
+    removeNamedNode(this.proxy, attr);
     return attr;
   }
 
   public setNamedItem(attr: IAttr): IAttr | null {
     const el = attr.ownerElement;
-    if (el && el !== this.ownerElement) {
+    const ownerElement = getState(this.proxy).ownerElement;
+    if (el && el !== ownerElement) {
       throw new DOMException(undefined, 'InuseAttributeError');
     }
     const oldAttr = this.getNamedItem(attr.nodeName);
-    this.addNamedNode(attr, oldAttr);
+    addNamedNode(this.proxy, attr, oldAttr);
     return oldAttr;
   }
 
   public setNamedItemNS(attr: IAttr): IAttr | null {
     const el = attr.ownerElement;
+    const ownerElement = getState(this.proxy).ownerElement;
     let oldAttr: IAttr | null;
-    if (el && el !== this.ownerElement) {
+    if (el && el !== ownerElement) {
       throw new DOMException(undefined, 'InuseAttributeError');
     }
     oldAttr = this.getNamedItemNS(attr.namespaceURI, attr.localName);
-    this.addNamedNode(attr, oldAttr);
+    addNamedNode(this.proxy, attr, oldAttr);
     return oldAttr;
   }
 
+  public [Symbol.iterator](): IterableIterator<IAttr> {
+    return iterableIteratorForArray<IAttr>(() => getState(this.proxy).items);
+  }
+
   [index: number]: IAttr;
+}
 
-  private findNodeIndex(node: INode) {
-    let i = this.length;
-    while (i > 0) {
-      i -= 1;
-      if (this[i] === node) {
-        return i;
-      }
+////////////////////////////////////////
+
+function addNamedNode(namedNodeMap: NamedNodeMap, newAttr: IAttr, oldAttr: IAttr | null) {
+  const { itemsByName, items } = getState(namedNodeMap);
+  const ownerElement = getState(namedNodeMap).ownerElement;
+  const internalInstance: NamedNodeMap = (namedNodeMap as any)._internalInstance;
+  let indexOfNewAttr = items.length;
+
+  if (oldAttr) {
+    const indexOfOldAttr = items.indexOf(oldAttr);
+    if (indexOfOldAttr >= 0) {
+      indexOfNewAttr = indexOfOldAttr;
     }
-    return -1;
+    itemsByName.delete(oldAttr.name);
+    setReadonlyOfAttr(oldAttr, { ownerElement: null });
   }
 
-  private addNamedNode(newAttr: IAttr, oldAttr: IAttr | null) {
-    if (oldAttr) {
-      this[this.findNodeIndex(oldAttr)] = newAttr;
-    } else {
-      this[this.length] = newAttr;
-    }
-    if (this.ownerElement) {
-      (newAttr as IMutable<IAttr>).ownerElement = this.ownerElement;
-    }
+  items[indexOfNewAttr] = newAttr;
+  itemsByName.set(newAttr.name, newAttr);
+  if (ownerElement) {
+    setReadonlyOfAttr(newAttr, { ownerElement });
   }
 
-  private removeNamedNode(attr: IAttr) {
-    const i = this.findNodeIndex(attr);
-    if (i < 0) {
-      throw new DOMException(`${this.ownerElement.nodeName}@${attr}`, 'NotFoundError');
+  createAttrProperty(namedNodeMap, internalInstance, indexOfNewAttr, newAttr);
+}
+
+function removeNamedNode(namedNodeMap: NamedNodeMap, attr: IAttr) {
+  const { itemsByName, items } = getState(namedNodeMap);
+  const ownerElement = getState(namedNodeMap).ownerElement;
+  const internalInstance: NamedNodeMap = (namedNodeMap as any)._internalInstance;
+  if (!itemsByName.has(attr.name)) {
+    throw new DOMException(`${ownerElement.nodeName}@${attr}`, 'NotFoundError');
+  }
+
+  itemsByName.delete(attr.name);
+  setReadonlyOfAttr(attr, { ownerElement: null });
+
+  const indexOfAttr = items.indexOf(attr);
+  if (indexOfAttr >= 0) {
+    items.splice(indexOfAttr, 1);
+    for (let i = indexOfAttr; i < items.size; i += 1) {
+      createAttrProperty(namedNodeMap, internalInstance, i, attr);
     }
-    this.splice(i, 1);
-    (attr as IMutable<Attr>).ownerElement = null;
+    delete internalInstance[items.size];
   }
 }
+
+function createAttrProperty(namedNodeMap: INamedNodeMap, internalInstance: INamedNodeMap, i: number, attr: IAttr) {
+  Object.defineProperty(internalInstance, i, {
+    get: () => namedNodeMap.getNamedItem.call(internalInstance, attr.name),
+    enumerable: true,
+    configurable: true,
+  });
+}
+
+// SUPPORT FOR CUSTOM INTERNAL STATE GENERATOR ////////////////////////////////////////
+
+export interface INamedNodeMapProperties extends IOriginalNamedNodeMapProperties {
+  ownerElement?: IElement;
+  itemsByName?: Map<string, IAttr>;
+  items?: IAttr[];
+}
+
+export interface INamedNodeMapReadonlyProperties extends IOriginalNamedNodeMapReadonlyProperties {
+  ownerElement?: IElement;
+  itemsByName?: Map<string, IAttr>;
+  items?: IAttr[];
+}
+
+export const { getState, setState, setReadonlyOfNamedNodeMap } = StateMachine<
+  INamedNodeMap,
+  INamedNodeMapProperties,
+  INamedNodeMapReadonlyProperties
+>('NamedNodeMap');

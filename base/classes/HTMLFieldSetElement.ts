@@ -1,97 +1,116 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLCollection, IValidityState, IHTMLFieldSetElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IHTMLCollection, IValidityState, IHTMLFieldSetElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLFieldSetElement extends HTMLElement implements IHTMLFieldSetElement {
-  protected readonly _: IHTMLFieldSetElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLFieldSetElement } = StateMachine<
+  IHTMLFieldSetElement,
+  IHTMLFieldSetElementProperties,
+  IHTMLFieldSetElementReadonlyProperties
+>('HTMLFieldSetElement');
+export const internalHandler = new InternalHandler<IHTMLFieldSetElement>('HTMLFieldSetElement', getState, setState);
 
-  // properties
-
-  public get disabled(): boolean {
-    return InternalHandler.get<HTMLFieldSetElement, boolean>(this, 'disabled');
-  }
-
-  public set disabled(value: boolean) {
-    InternalHandler.set<HTMLFieldSetElement, boolean>(this, 'disabled', value);
-  }
-
-  public get elements(): IHTMLCollection {
-    return InternalHandler.get<HTMLFieldSetElement, IHTMLCollection>(this, 'elements');
-  }
-
-  public get form(): IHTMLFormElement | null {
-    return InternalHandler.get<HTMLFieldSetElement, IHTMLFormElement | null>(this, 'form');
-  }
-
-  public get name(): string {
-    return InternalHandler.get<HTMLFieldSetElement, string>(this, 'name');
-  }
-
-  public set name(value: string) {
-    InternalHandler.set<HTMLFieldSetElement, string>(this, 'name', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLFieldSetElement, string>(this, 'type');
-  }
-
-  public get validationMessage(): string {
-    return InternalHandler.get<HTMLFieldSetElement, string>(this, 'validationMessage');
-  }
-
-  public get validity(): IValidityState {
-    return InternalHandler.get<HTMLFieldSetElement, IValidityState>(this, 'validity');
-  }
-
-  public get willValidate(): boolean {
-    return InternalHandler.get<HTMLFieldSetElement, boolean>(this, 'willValidate');
-  }
-
-  // methods
-
-  public checkValidity(): boolean {
-    return InternalHandler.run<HTMLFieldSetElement, boolean>(this, 'checkValidity', []);
-  }
-
-  public reportValidity(): boolean {
-    return InternalHandler.run<HTMLFieldSetElement, boolean>(this, 'reportValidity', []);
-  }
-
-  public setCustomValidity(error: string): void {
-    InternalHandler.run<HTMLFieldSetElement, void>(this, 'setCustomValidity', [error]);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLFieldSetElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLFieldSetElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLFieldSetElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLFieldSetElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLFieldSetElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLFieldSetElementRps extends IHTMLElementRps {
-  readonly elements?: IHTMLCollection;
-  readonly form?: IHTMLFormElement | null;
-  readonly type?: string;
-  readonly validationMessage?: string;
-  readonly validity?: IValidityState;
-  readonly willValidate?: boolean;
-}
-
-export function setHTMLFieldSetElementRps(instance: IHTMLFieldSetElement, data: IHTMLFieldSetElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLFieldSetElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLFieldSetElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLFieldSetElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLFieldSetElement extends HTMLElement implements IHTMLFieldSetElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLFieldSetElement>(HTMLFieldSetElement, this, internalHandler, HTMLFieldSetElementConstantKeys, HTMLFieldSetElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get disabled(): boolean {
+      return internalHandler.get<boolean>(this, 'disabled', false);
+    }
+
+    public set disabled(value: boolean) {
+      internalHandler.set<boolean>(this, 'disabled', value);
+    }
+
+    public get elements(): IHTMLCollection {
+      return internalHandler.get<IHTMLCollection>(this, 'elements', false);
+    }
+
+    public get form(): IHTMLFormElement | null {
+      return internalHandler.get<IHTMLFormElement | null>(this, 'form', true);
+    }
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public set name(value: string) {
+      internalHandler.set<string>(this, 'name', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public get validationMessage(): string {
+      return internalHandler.get<string>(this, 'validationMessage', false);
+    }
+
+    public get validity(): IValidityState {
+      return internalHandler.get<IValidityState>(this, 'validity', false);
+    }
+
+    public get willValidate(): boolean {
+      return internalHandler.get<boolean>(this, 'willValidate', false);
+    }
+
+    // methods
+
+    public checkValidity(): boolean {
+      return internalHandler.run<boolean>(this, 'checkValidity', []);
+    }
+
+    public reportValidity(): boolean {
+      return internalHandler.run<boolean>(this, 'reportValidity', []);
+    }
+
+    public setCustomValidity(error: string): void {
+      internalHandler.run<void>(this, 'setCustomValidity', [error]);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLFieldSetElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLFieldSetElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLFieldSetElementProperties extends IHTMLElementProperties {
+  disabled?: boolean;
+  elements?: IHTMLCollection;
+  form?: IHTMLFormElement | null;
+  name?: string;
+  type?: string;
+  validationMessage?: string;
+  validity?: IValidityState;
+  willValidate?: boolean;
+}
+
+export interface IHTMLFieldSetElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  elements?: IHTMLCollection;
+  form?: IHTMLFormElement | null;
+  type?: string;
+  validationMessage?: string;
+  validity?: IValidityState;
+  willValidate?: boolean;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLFieldSetElementPropertyKeys = [...HTMLElementPropertyKeys, 'disabled', 'elements', 'form', 'name', 'type', 'validationMessage', 'validity', 'willValidate'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLFieldSetElementConstantKeys = [...HTMLElementConstantKeys];

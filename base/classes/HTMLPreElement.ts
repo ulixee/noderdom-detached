@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLPreElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLPreElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLPreElement extends HTMLElement implements IHTMLPreElement {
-  public get width(): number {
-    return InternalHandler.get<HTMLPreElement, number>(this, 'width');
-  }
+export const { getState, setState, setReadonlyOfHTMLPreElement } = StateMachine<
+  IHTMLPreElement,
+  IHTMLPreElementProperties,
+  IHTMLPreElementReadonlyProperties
+>('HTMLPreElement');
+export const internalHandler = new InternalHandler<IHTMLPreElement>('HTMLPreElement', getState, setState);
 
-  public set width(value: number) {
-    InternalHandler.set<HTMLPreElement, number>(this, 'width', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLPreElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLPreElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLPreElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLPreElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLPreElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLPreElementRps extends IHTMLElementRps {}
-
-export function setHTMLPreElementRps(instance: IHTMLPreElement, data: IHTMLPreElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLPreElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLPreElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLPreElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLPreElement extends HTMLElement implements IHTMLPreElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLPreElement>(HTMLPreElement, this, internalHandler, HTMLPreElementConstantKeys, HTMLPreElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get width(): number {
+      return internalHandler.get<number>(this, 'width', false);
+    }
+
+    public set width(value: number) {
+      internalHandler.set<number>(this, 'width', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLPreElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLPreElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLPreElementProperties extends IHTMLElementProperties {
+  width?: number;
+}
+
+export interface IHTMLPreElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLPreElementPropertyKeys = [...HTMLElementPropertyKeys, 'width'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLPreElementConstantKeys = [...HTMLElementConstantKeys];

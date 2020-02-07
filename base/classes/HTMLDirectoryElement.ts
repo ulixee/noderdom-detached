@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLDirectoryElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLDirectoryElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLDirectoryElement extends HTMLElement implements IHTMLDirectoryElement {
-  public get compact(): boolean {
-    return InternalHandler.get<HTMLDirectoryElement, boolean>(this, 'compact');
-  }
+export const { getState, setState, setReadonlyOfHTMLDirectoryElement } = StateMachine<
+  IHTMLDirectoryElement,
+  IHTMLDirectoryElementProperties,
+  IHTMLDirectoryElementReadonlyProperties
+>('HTMLDirectoryElement');
+export const internalHandler = new InternalHandler<IHTMLDirectoryElement>('HTMLDirectoryElement', getState, setState);
 
-  public set compact(value: boolean) {
-    InternalHandler.set<HTMLDirectoryElement, boolean>(this, 'compact', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDirectoryElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLDirectoryElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDirectoryElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLDirectoryElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLDirectoryElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLDirectoryElementRps extends IHTMLElementRps {}
-
-export function setHTMLDirectoryElementRps(instance: IHTMLDirectoryElement, data: IHTMLDirectoryElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLDirectoryElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLDirectoryElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLDirectoryElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLDirectoryElement extends HTMLElement implements IHTMLDirectoryElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLDirectoryElement>(HTMLDirectoryElement, this, internalHandler, HTMLDirectoryElementConstantKeys, HTMLDirectoryElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get compact(): boolean {
+      return internalHandler.get<boolean>(this, 'compact', false);
+    }
+
+    public set compact(value: boolean) {
+      internalHandler.set<boolean>(this, 'compact', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDirectoryElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLDirectoryElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLDirectoryElementProperties extends IHTMLElementProperties {
+  compact?: boolean;
+}
+
+export interface IHTMLDirectoryElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLDirectoryElementPropertyKeys = [...HTMLElementPropertyKeys, 'compact'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLDirectoryElementConstantKeys = [...HTMLElementConstantKeys];

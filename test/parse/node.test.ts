@@ -8,15 +8,16 @@ import CDATASection from '../../src/api/CDATASection';
 describe('Node parse tests', () => {
   it('element test', () => {
     const dom = new DOMParser().parseFromString('<xml><child/></xml>', 'text/xml');
+    const root = dom.documentElement!;
     expect(dom.childNodes).toHaveLength(1);
-    expect(dom.documentElement.childNodes).toHaveLength(1);
-    expect(dom.documentElement.tagName).toBe('XML');
-    expect((dom.documentElement.firstChild as Element).tagName).toBe('CHILD');
+    expect(root.childNodes).toHaveLength(1);
+    expect(root.tagName).toBe('XML');
+    expect((root.firstChild as Element).tagName).toBe('CHILD');
   });
 
   it('text test', () => {
     const dom = new DOMParser().parseFromString('<xml>start center end</xml>', 'text/xml');
-    const root = dom.documentElement;
+    const root = dom.documentElement!;
     expect((root.firstChild as Text).data).toBe('start center end');
     expect(root.firstChild!.nextSibling == null);
   });
@@ -26,7 +27,7 @@ describe('Node parse tests', () => {
       '<xml>start <![CDATA[<encoded>]]> end<![CDATA[[[[[[[[[]]]]]]]]]]></xml>',
       'text/xml',
     );
-    const root = dom.documentElement;
+    const root = dom.documentElement!;
     expect((root.firstChild as Text).data).toBe('start ');
     expect((root.firstChild!.nextSibling as CDATASection).data).toBe('<encoded>');
     expect((root.firstChild!.nextSibling!.nextSibling!.nextSibling as CDATASection).data).toBe('[[[[[[[[]]]]]]]]');
@@ -34,13 +35,13 @@ describe('Node parse tests', () => {
 
   it('cdata empty', () => {
     const dom = new DOMParser().parseFromString('<xml><![CDATA[]]>start <![CDATA[]]> end</xml>', 'text/xml');
-    const root = dom.documentElement;
+    const root = dom.documentElement!;
     expect(root.textContent).toBe('start  end');
   });
 
   it('comment', () => {
     const dom = new DOMParser().parseFromString('<xml><!-- comment&>< --></xml>', 'text/xml');
-    const root = dom.documentElement;
+    const root = dom.documentElement!;
     expect(root.firstChild!.nodeValue).toBe(' comment&>< ');
   });
 
@@ -49,7 +50,7 @@ describe('Node parse tests', () => {
       '<xml>start <![CDATA[<encoded>]]> <!-- comment -->end</xml>',
       'text/xml',
     );
-    const root = dom.documentElement;
+    const root = dom.documentElement!;
     expect(root.firstChild!.nodeValue).toBe('start ');
     expect(root.firstChild!.nextSibling!.nodeValue).toBe('<encoded>');
     expect(root.firstChild!.nextSibling!.nextSibling!.nextSibling!.nodeValue).toBe(' comment ');
@@ -59,8 +60,9 @@ describe('Node parse tests', () => {
   it('append node', () => {
     const dom = new DOMParser().parseFromString('<xml/>', 'text/xml');
     const child = dom.createElement('child');
-    expect(child).toBe(dom.documentElement.appendChild(child));
-    expect(child).toBe(dom.documentElement.firstChild);
+    const root = dom.documentElement!;
+    expect(child).toBe(root.appendChild(child));
+    expect(child).toBe(root.firstChild);
     const fragment = dom.createDocumentFragment();
     expect(child).toBe(fragment.appendChild(child));
   });
@@ -68,7 +70,7 @@ describe('Node parse tests', () => {
   it('insert node', () => {
     const dom = new DOMParser().parseFromString('<xml><child/></xml>', 'text/xml');
     const sibling = dom.createElement('sibling');
-    const child = dom.documentElement.firstChild!;
+    const child = dom.documentElement!.firstChild!;
     child.parentNode!.insertBefore(sibling, child);
     expect(sibling).toBe(child.previousSibling);
     expect(sibling.nextSibling).toBe(child);
@@ -87,7 +89,7 @@ describe('Node parse tests', () => {
     expect(last.previousSibling).toBe(first);
     expect(first.nextSibling).toBe(last);
 
-    const child = dom.documentElement.firstChild!;
+    const child = dom.documentElement!.firstChild!;
     child.parentNode!.insertBefore(fragment, child);
     expect(last.previousSibling).toBe(first);
     expect(first.nextSibling).toBe(last);

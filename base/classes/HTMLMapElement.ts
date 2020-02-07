@@ -1,50 +1,63 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLMapElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLMapElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLMapElement extends HTMLElement implements IHTMLMapElement {
-  protected readonly _: IHTMLMapElementRps = {};
+export const { getState, setState, setReadonlyOfHTMLMapElement } = StateMachine<
+  IHTMLMapElement,
+  IHTMLMapElementProperties,
+  IHTMLMapElementReadonlyProperties
+>('HTMLMapElement');
+export const internalHandler = new InternalHandler<IHTMLMapElement>('HTMLMapElement', getState, setState);
 
-  // properties
-
-  public get areas(): IHTMLCollection {
-    return InternalHandler.get<HTMLMapElement, IHTMLCollection>(this, 'areas');
-  }
-
-  public get name(): string {
-    return InternalHandler.get<HTMLMapElement, string>(this, 'name');
-  }
-
-  public set name(value: string) {
-    InternalHandler.set<HTMLMapElement, string>(this, 'name', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMapElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLMapElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMapElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLMapElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLMapElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLMapElementRps extends IHTMLElementRps {
-  readonly areas?: IHTMLCollection;
-}
-
-export function setHTMLMapElementRps(instance: IHTMLMapElement, data: IHTMLMapElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLMapElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLMapElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLMapElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLMapElement extends HTMLElement implements IHTMLMapElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLMapElement>(HTMLMapElement, this, internalHandler, HTMLMapElementConstantKeys, HTMLMapElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get areas(): IHTMLCollection {
+      return internalHandler.get<IHTMLCollection>(this, 'areas', false);
+    }
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public set name(value: string) {
+      internalHandler.set<string>(this, 'name', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMapElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLMapElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLMapElementProperties extends IHTMLElementProperties {
+  areas?: IHTMLCollection;
+  name?: string;
+}
+
+export interface IHTMLMapElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  areas?: IHTMLCollection;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLMapElementPropertyKeys = [...HTMLElementPropertyKeys, 'areas', 'name'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLMapElementConstantKeys = [...HTMLElementConstantKeys];

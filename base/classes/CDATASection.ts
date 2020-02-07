@@ -1,21 +1,33 @@
-import { ICDATASection } from '../interfaces';
-import Text, { ITextRps, rpTextKeys } from './Text';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IText, ICDATASection } from '../interfaces';
+import { ITextProperties, ITextReadonlyProperties, TextPropertyKeys, TextConstantKeys } from './Text';
 
-export default class CDATASection extends Text implements ICDATASection {}
+export const { getState, setState, setReadonlyOfCDATASection } = StateMachine<
+  ICDATASection,
+  ICDATASectionProperties,
+  ICDATASectionReadonlyProperties
+>('CDATASection');
+export const internalHandler = new InternalHandler<ICDATASection>('CDATASection', getState, setState);
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpCDATASectionKeys: Set<string> = new Set([...rpTextKeys]);
-
-export interface ICDATASectionRps extends ITextRps {}
-
-export function setCDATASectionRps(instance: ICDATASection, data: ICDATASectionRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpCDATASectionKeys.has(key)) {
-      throw new Error(`${key} is not a property of CDATASection`);
+// tslint:disable-next-line:variable-name
+export function CDATASectionGenerator(Text: Constructable<IText>) {
+  return class CDATASection extends Text implements ICDATASection {constructor() {
+      super();
+      initializeConstantsAndPrototypes<CDATASection>(CDATASection, this, internalHandler, CDATASectionConstantKeys, CDATASectionPropertyKeys);
     }
-    properties[key] = value;
-  });
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface ICDATASectionProperties extends ITextProperties {}
+
+export interface ICDATASectionReadonlyProperties extends ITextReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const CDATASectionPropertyKeys = [...TextPropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const CDATASectionConstantKeys = [...TextConstantKeys];

@@ -1,26 +1,46 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IDocumentType, IXMLDocument, IDocument, IDOMImplementation } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfDOMImplementation } = StateMachine<
+  IDOMImplementation,
+  IDOMImplementationProperties,
+  IDOMImplementationReadonlyProperties
+>('DOMImplementation');
+export const internalHandler = new InternalHandler<IDOMImplementation>('DOMImplementation', getState, setState);
+
 export default class DOMImplementation implements IDOMImplementation {
+  constructor() {
+    initializeConstantsAndPrototypes<DOMImplementation>(DOMImplementation, this, internalHandler, DOMImplementationConstantKeys, DOMImplementationPropertyKeys);
+  }
+
+  // methods
+
   public createDocument(namespace: string | null, qualifiedName: string, doctype?: IDocumentType | null): IXMLDocument {
-    return InternalHandler.run<DOMImplementation, IXMLDocument>(this, 'createDocument', [namespace, qualifiedName, doctype]);
+    return internalHandler.run<IXMLDocument>(this, 'createDocument', [namespace, qualifiedName, doctype]);
   }
 
   public createDocumentType(qualifiedName: string, publicId: string, systemId: string): IDocumentType {
-    return InternalHandler.run<DOMImplementation, IDocumentType>(this, 'createDocumentType', [qualifiedName, publicId, systemId]);
+    return internalHandler.run<IDocumentType>(this, 'createDocumentType', [qualifiedName, publicId, systemId]);
   }
 
   public createHTMLDocument(title?: string): IDocument {
-    return InternalHandler.run<DOMImplementation, IDocument>(this, 'createHTMLDocument', [title]);
+    return internalHandler.run<IDocument>(this, 'createHTMLDocument', [title]);
   }
 
   public hasFeature(): boolean {
-    return InternalHandler.run<DOMImplementation, boolean>(this, 'hasFeature', []);
+    return internalHandler.run<boolean>(this, 'hasFeature', []);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpDOMImplementationKeys: Set<string> = new Set([]);
+export interface IDOMImplementationProperties {}
 
-export interface IDOMImplementationRps {}
+export interface IDOMImplementationReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const DOMImplementationPropertyKeys = [];
+
+// tslint:disable-next-line:variable-name
+export const DOMImplementationConstantKeys = [];

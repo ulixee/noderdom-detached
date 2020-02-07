@@ -1,23 +1,23 @@
-import { IDocument, IDOMParser, IMutable } from '../interfaces';
+import { IDocument, IDOMParser } from '../../base/interfaces';
 import HTMLParser from '../parser/HTMLParser';
 import XMLParser from '../parser/XMLParser';
 import DOMImplementation from './DOMImplementation';
-import Document from './Document';
+import { setReadonlyOfDocument } from '../../base/classes/Document';
 
 export default class DOMParser implements IDOMParser {
-  public parseFromString(markup: string, mimeType: string = ''): IDocument {
-    switch (mimeType) {
+  public parseFromString(str: string, type: string = ''): IDocument {
+    switch (type) {
       case 'text/html': {
-        return this.createDocument('html', mimeType, markup);
+        return this.createDocument('html', type, str);
       }
       case 'text/xml':
       case 'application/xml':
       case 'application/xhtml+xml':
       case 'image/svg+xml': {
         try {
-          return this.createDocument('xml', mimeType, markup);
+          return this.createDocument('xml', type, str);
         } catch (error) {
-          const document = this.createDocument('xml', mimeType);
+          const document = this.createDocument('xml', type);
           const element = document.createElementNS(
             'http://www.mozilla.org/newlayout/xml/parsererror.xml',
             'parsererror',
@@ -32,19 +32,22 @@ export default class DOMParser implements IDOMParser {
     }
   }
 
-  private createDocument(parsingMode: 'html' | 'xml', mimeType: string, markup?: string) {
+  private createDocument(parsingMode: 'html' | 'xml', type: string, str?: string) {
     const domImplementation = new DOMImplementation();
     const document =
       parsingMode === 'html'
         ? domImplementation.createHTMLDocument()
         : domImplementation.createDocument(null, null, null);
-    (document as IMutable<Document>).contentType = mimeType;
 
-    if (markup !== undefined) {
+    setReadonlyOfDocument(document, {
+      contentType: type,
+    });
+
+    if (str !== undefined) {
       if (parsingMode === 'html') {
-        HTMLParser.parseIntoDocument(markup, domImplementation, document);
+        HTMLParser.parseIntoDocument(str, domImplementation, document);
       } else if (parsingMode === 'xml') {
-        XMLParser.parseIntoDocument(markup, domImplementation, document);
+        XMLParser.parseIntoDocument(str, domImplementation, document);
       }
     }
     return document;

@@ -1,27 +1,34 @@
-import InternalHandler from '../InternalHandler';
-import { IStaticRangeInit, IStaticRange } from '../interfaces';
-import AbstractRange, { IAbstractRangeRps, rpAbstractRangeKeys } from './AbstractRange';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IAbstractRange, IStaticRangeInit, IStaticRange } from '../interfaces';
+import { IAbstractRangeProperties, IAbstractRangeReadonlyProperties, AbstractRangePropertyKeys, AbstractRangeConstantKeys } from './AbstractRange';
 
-export default class StaticRange extends AbstractRange implements IStaticRange {
-  constructor(init: IStaticRangeInit) {
-    super();
-    InternalHandler.construct(this, [init]);
-  }
-}
+export const { getState, setState, setReadonlyOfStaticRange } = StateMachine<
+  IStaticRange,
+  IStaticRangeProperties,
+  IStaticRangeReadonlyProperties
+>('StaticRange');
+export const internalHandler = new InternalHandler<IStaticRange>('StaticRange', getState, setState);
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpStaticRangeKeys: Set<string> = new Set([...rpAbstractRangeKeys]);
-
-export interface IStaticRangeRps extends IAbstractRangeRps {}
-
-export function setStaticRangeRps(instance: IStaticRange, data: IStaticRangeRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpStaticRangeKeys.has(key)) {
-      throw new Error(`${key} is not a property of StaticRange`);
+// tslint:disable-next-line:variable-name
+export function StaticRangeGenerator(AbstractRange: Constructable<IAbstractRange>) {
+  return class StaticRange extends AbstractRange implements IStaticRange {
+    constructor(_init: IStaticRangeInit) {
+      super();
+      initializeConstantsAndPrototypes<StaticRange>(StaticRange, this, internalHandler, StaticRangeConstantKeys, StaticRangePropertyKeys);
     }
-    properties[key] = value;
-  });
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IStaticRangeProperties extends IAbstractRangeProperties {}
+
+export interface IStaticRangeReadonlyProperties extends IAbstractRangeReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const StaticRangePropertyKeys = [...AbstractRangePropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const StaticRangeConstantKeys = [...AbstractRangeConstantKeys];

@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLBRElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLBRElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLBRElement extends HTMLElement implements IHTMLBRElement {
-  public get clear(): string {
-    return InternalHandler.get<HTMLBRElement, string>(this, 'clear');
-  }
+export const { getState, setState, setReadonlyOfHTMLBRElement } = StateMachine<
+  IHTMLBRElement,
+  IHTMLBRElementProperties,
+  IHTMLBRElementReadonlyProperties
+>('HTMLBRElement');
+export const internalHandler = new InternalHandler<IHTMLBRElement>('HTMLBRElement', getState, setState);
 
-  public set clear(value: string) {
-    InternalHandler.set<HTMLBRElement, string>(this, 'clear', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLBRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLBRElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLBRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLBRElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLBRElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLBRElementRps extends IHTMLElementRps {}
-
-export function setHTMLBRElementRps(instance: IHTMLBRElement, data: IHTMLBRElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLBRElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLBRElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLBRElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLBRElement extends HTMLElement implements IHTMLBRElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLBRElement>(HTMLBRElement, this, internalHandler, HTMLBRElementConstantKeys, HTMLBRElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get clear(): string {
+      return internalHandler.get<string>(this, 'clear', false);
+    }
+
+    public set clear(value: string) {
+      internalHandler.set<string>(this, 'clear', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLBRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLBRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLBRElementProperties extends IHTMLElementProperties {
+  clear?: string;
+}
+
+export interface IHTMLBRElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLBRElementPropertyKeys = [...HTMLElementPropertyKeys, 'clear'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLBRElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,51 +1,62 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { INode, IAbstractRange } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfAbstractRange } = StateMachine<
+  IAbstractRange,
+  IAbstractRangeProperties,
+  IAbstractRangeReadonlyProperties
+>('AbstractRange');
+export const internalHandler = new InternalHandler<IAbstractRange>('AbstractRange', getState, setState);
+
 export default class AbstractRange implements IAbstractRange {
-  protected readonly _: IAbstractRangeRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<AbstractRange>(AbstractRange, this, internalHandler, AbstractRangeConstantKeys, AbstractRangePropertyKeys);
+  }
 
   // properties
 
   public get collapsed(): boolean {
-    return InternalHandler.get<AbstractRange, boolean>(this, 'collapsed');
+    return internalHandler.get<boolean>(this, 'collapsed', false);
   }
 
   public get endContainer(): INode {
-    return InternalHandler.get<AbstractRange, INode>(this, 'endContainer');
+    return internalHandler.get<INode>(this, 'endContainer', false);
   }
 
   public get endOffset(): number {
-    return InternalHandler.get<AbstractRange, number>(this, 'endOffset');
+    return internalHandler.get<number>(this, 'endOffset', false);
   }
 
   public get startContainer(): INode {
-    return InternalHandler.get<AbstractRange, INode>(this, 'startContainer');
+    return internalHandler.get<INode>(this, 'startContainer', false);
   }
 
   public get startOffset(): number {
-    return InternalHandler.get<AbstractRange, number>(this, 'startOffset');
+    return internalHandler.get<number>(this, 'startOffset', false);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpAbstractRangeKeys: Set<string> = new Set([]);
-
-export interface IAbstractRangeRps {
-  readonly collapsed?: boolean;
-  readonly endContainer?: INode;
-  readonly endOffset?: number;
-  readonly startContainer?: INode;
-  readonly startOffset?: number;
+export interface IAbstractRangeProperties {
+  collapsed?: boolean;
+  endContainer?: INode;
+  endOffset?: number;
+  startContainer?: INode;
+  startOffset?: number;
 }
 
-export function setAbstractRangeRps(instance: IAbstractRange, data: IAbstractRangeRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpAbstractRangeKeys.has(key)) {
-      throw new Error(`${key} is not a property of AbstractRange`);
-    }
-    properties[key] = value;
-  });
+export interface IAbstractRangeReadonlyProperties {
+  collapsed?: boolean;
+  endContainer?: INode;
+  endOffset?: number;
+  startContainer?: INode;
+  startOffset?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const AbstractRangePropertyKeys = ['collapsed', 'endContainer', 'endOffset', 'startContainer', 'startOffset'];
+
+// tslint:disable-next-line:variable-name
+export const AbstractRangeConstantKeys = [];

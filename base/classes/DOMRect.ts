@@ -1,67 +1,79 @@
-import InternalHandler from '../InternalHandler';
-import { IDOMRectInit, IDOMRect } from '../interfaces';
-import DOMRectReadOnly, { IDOMRectReadOnlyRps, rpDOMRectReadOnlyKeys } from './DOMRectReadOnly';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IDOMRectReadOnly, IDOMRectInit, IDOMRect } from '../interfaces';
+import { IDOMRectReadOnlyProperties, IDOMRectReadOnlyReadonlyProperties, DOMRectReadOnlyPropertyKeys, DOMRectReadOnlyConstantKeys } from './DOMRectReadOnly';
 
-export default class DOMRect extends DOMRectReadOnly implements IDOMRect {
-  constructor(x?: number, y?: number, width?: number, height?: number) {
-    super();
-    InternalHandler.construct(this, [x, y, width, height]);
-  }
+export const { getState, setState, setReadonlyOfDOMRect } = StateMachine<
+  IDOMRect,
+  IDOMRectProperties,
+  IDOMRectReadonlyProperties
+>('DOMRect');
+export const internalHandler = new InternalHandler<IDOMRect>('DOMRect', getState, setState);
 
-  // properties
-
-  public get height(): number {
-    return InternalHandler.get<DOMRect, number>(this, 'height');
-  }
-
-  public set height(value: number) {
-    InternalHandler.set<DOMRect, number>(this, 'height', value);
-  }
-
-  public get width(): number {
-    return InternalHandler.get<DOMRect, number>(this, 'width');
-  }
-
-  public set width(value: number) {
-    InternalHandler.set<DOMRect, number>(this, 'width', value);
-  }
-
-  public get x(): number {
-    return InternalHandler.get<DOMRect, number>(this, 'x');
-  }
-
-  public set x(value: number) {
-    InternalHandler.set<DOMRect, number>(this, 'x', value);
-  }
-
-  public get y(): number {
-    return InternalHandler.get<DOMRect, number>(this, 'y');
-  }
-
-  public set y(value: number) {
-    InternalHandler.set<DOMRect, number>(this, 'y', value);
-  }
-
-  // methods
-
-  public fromRect(other?: IDOMRectInit): IDOMRect {
-    return InternalHandler.run<DOMRect, IDOMRect>(this, 'fromRect', [other]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpDOMRectKeys: Set<string> = new Set([...rpDOMRectReadOnlyKeys]);
-
-export interface IDOMRectRps extends IDOMRectReadOnlyRps {}
-
-export function setDOMRectRps(instance: IDOMRect, data: IDOMRectRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpDOMRectKeys.has(key)) {
-      throw new Error(`${key} is not a property of DOMRect`);
+// tslint:disable-next-line:variable-name
+export function DOMRectGenerator(DOMRectReadOnly: Constructable<IDOMRectReadOnly>) {
+  return class DOMRect extends DOMRectReadOnly implements IDOMRect {
+    constructor(_x?: number, _y?: number, _width?: number, _height?: number) {
+      super();
+      initializeConstantsAndPrototypes<DOMRect>(DOMRect, this, internalHandler, DOMRectConstantKeys, DOMRectPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get height(): number {
+      return internalHandler.get<number>(this, 'height', false);
+    }
+
+    public set height(value: number) {
+      internalHandler.set<number>(this, 'height', value);
+    }
+
+    public get width(): number {
+      return internalHandler.get<number>(this, 'width', false);
+    }
+
+    public set width(value: number) {
+      internalHandler.set<number>(this, 'width', value);
+    }
+
+    public get x(): number {
+      return internalHandler.get<number>(this, 'x', false);
+    }
+
+    public set x(value: number) {
+      internalHandler.set<number>(this, 'x', value);
+    }
+
+    public get y(): number {
+      return internalHandler.get<number>(this, 'y', false);
+    }
+
+    public set y(value: number) {
+      internalHandler.set<number>(this, 'y', value);
+    }
+
+    // methods
+
+    public fromRect(other?: IDOMRectInit): IDOMRect {
+      return internalHandler.run<IDOMRect>(this, 'fromRect', [other]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IDOMRectProperties extends IDOMRectReadOnlyProperties {
+  height?: number;
+  width?: number;
+  x?: number;
+  y?: number;
+}
+
+export interface IDOMRectReadonlyProperties extends IDOMRectReadOnlyReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const DOMRectPropertyKeys = [...DOMRectReadOnlyPropertyKeys, 'height', 'width', 'x', 'y'];
+
+// tslint:disable-next-line:variable-name
+export const DOMRectConstantKeys = [...DOMRectReadOnlyConstantKeys];

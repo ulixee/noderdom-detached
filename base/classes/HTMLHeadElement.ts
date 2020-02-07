@@ -1,31 +1,43 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHeadElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHeadElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLHeadElement extends HTMLElement implements IHTMLHeadElement {public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLHeadElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
+export const { getState, setState, setReadonlyOfHTMLHeadElement } = StateMachine<
+  IHTMLHeadElement,
+  IHTMLHeadElementProperties,
+  IHTMLHeadElementReadonlyProperties
+>('HTMLHeadElement');
+export const internalHandler = new InternalHandler<IHTMLHeadElement>('HTMLHeadElement', getState, setState);
 
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLHeadElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLHeadElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLHeadElementRps extends IHTMLElementRps {}
-
-export function setHTMLHeadElementRps(instance: IHTMLHeadElement, data: IHTMLHeadElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLHeadElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLHeadElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLHeadElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLHeadElement extends HTMLElement implements IHTMLHeadElement {constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLHeadElement>(HTMLHeadElement, this, internalHandler, HTMLHeadElementConstantKeys, HTMLHeadElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHeadElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLHeadElementProperties extends IHTMLElementProperties {}
+
+export interface IHTMLHeadElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLHeadElementPropertyKeys = [...HTMLElementPropertyKeys];
+
+// tslint:disable-next-line:variable-name
+export const HTMLHeadElementConstantKeys = [...HTMLElementConstantKeys];

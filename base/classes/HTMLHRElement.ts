@@ -1,72 +1,92 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHRElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLHRElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLHRElement extends HTMLElement implements IHTMLHRElement {
-  public get align(): string {
-    return InternalHandler.get<HTMLHRElement, string>(this, 'align');
-  }
+export const { getState, setState, setReadonlyOfHTMLHRElement } = StateMachine<
+  IHTMLHRElement,
+  IHTMLHRElementProperties,
+  IHTMLHRElementReadonlyProperties
+>('HTMLHRElement');
+export const internalHandler = new InternalHandler<IHTMLHRElement>('HTMLHRElement', getState, setState);
 
-  public set align(value: string) {
-    InternalHandler.set<HTMLHRElement, string>(this, 'align', value);
-  }
-
-  public get color(): string {
-    return InternalHandler.get<HTMLHRElement, string>(this, 'color');
-  }
-
-  public set color(value: string) {
-    InternalHandler.set<HTMLHRElement, string>(this, 'color', value);
-  }
-
-  public get noShade(): boolean {
-    return InternalHandler.get<HTMLHRElement, boolean>(this, 'noShade');
-  }
-
-  public set noShade(value: boolean) {
-    InternalHandler.set<HTMLHRElement, boolean>(this, 'noShade', value);
-  }
-
-  public get size(): string {
-    return InternalHandler.get<HTMLHRElement, string>(this, 'size');
-  }
-
-  public set size(value: string) {
-    InternalHandler.set<HTMLHRElement, string>(this, 'size', value);
-  }
-
-  public get width(): string {
-    return InternalHandler.get<HTMLHRElement, string>(this, 'width');
-  }
-
-  public set width(value: string) {
-    InternalHandler.set<HTMLHRElement, string>(this, 'width', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLHRElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLHRElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLHRElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLHRElementRps extends IHTMLElementRps {}
-
-export function setHTMLHRElementRps(instance: IHTMLHRElement, data: IHTMLHRElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLHRElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLHRElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLHRElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLHRElement extends HTMLElement implements IHTMLHRElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLHRElement>(HTMLHRElement, this, internalHandler, HTMLHRElementConstantKeys, HTMLHRElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get align(): string {
+      return internalHandler.get<string>(this, 'align', false);
+    }
+
+    public set align(value: string) {
+      internalHandler.set<string>(this, 'align', value);
+    }
+
+    public get color(): string {
+      return internalHandler.get<string>(this, 'color', false);
+    }
+
+    public set color(value: string) {
+      internalHandler.set<string>(this, 'color', value);
+    }
+
+    public get noShade(): boolean {
+      return internalHandler.get<boolean>(this, 'noShade', false);
+    }
+
+    public set noShade(value: boolean) {
+      internalHandler.set<boolean>(this, 'noShade', value);
+    }
+
+    public get size(): string {
+      return internalHandler.get<string>(this, 'size', false);
+    }
+
+    public set size(value: string) {
+      internalHandler.set<string>(this, 'size', value);
+    }
+
+    public get width(): string {
+      return internalHandler.get<string>(this, 'width', false);
+    }
+
+    public set width(value: string) {
+      internalHandler.set<string>(this, 'width', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLHRElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLHRElementProperties extends IHTMLElementProperties {
+  align?: string;
+  color?: string;
+  noShade?: boolean;
+  size?: string;
+  width?: string;
+}
+
+export interface IHTMLHRElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLHRElementPropertyKeys = [...HTMLElementPropertyKeys, 'align', 'color', 'noShade', 'size', 'width'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLHRElementConstantKeys = [...HTMLElementConstantKeys];

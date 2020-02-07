@@ -1,39 +1,50 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IDOMRect, IDOMRectList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfDOMRectList } = StateMachine<
+  IDOMRectList,
+  IDOMRectListProperties,
+  IDOMRectListReadonlyProperties
+>('DOMRectList');
+export const internalHandler = new InternalHandler<IDOMRectList>('DOMRectList', getState, setState);
+
 export default class DOMRectList implements IDOMRectList {
-  protected readonly _: IDOMRectListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<DOMRectList>(DOMRectList, this, internalHandler, DOMRectListConstantKeys, DOMRectListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<DOMRectList, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public item(index: number): IDOMRect | null {
-    return InternalHandler.run<DOMRectList, IDOMRect | null>(this, 'item', [index]);
+    return internalHandler.run<IDOMRect | null>(this, 'item', [index]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<IDOMRect> {
+    return internalHandler.run<IterableIterator<IDOMRect>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: IDOMRect;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpDOMRectListKeys: Set<string> = new Set([]);
-
-export interface IDOMRectListRps {
-  readonly length?: number;
+export interface IDOMRectListProperties {
+  length?: number;
 }
 
-export function setDOMRectListRps(instance: IDOMRectList, data: IDOMRectListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpDOMRectListKeys.has(key)) {
-      throw new Error(`${key} is not a property of DOMRectList`);
-    }
-    properties[key] = value;
-  });
+export interface IDOMRectListReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const DOMRectListPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const DOMRectListConstantKeys = [];

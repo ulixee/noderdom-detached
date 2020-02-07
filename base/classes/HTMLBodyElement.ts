@@ -1,84 +1,106 @@
-import InternalHandler from '../InternalHandler';
-import { IHTMLBodyElementEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLBodyElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
-import WindowEventHandlers, { IWindowEventHandlersRps, rpWindowEventHandlersKeys } from '../mixins/WindowEventHandlers';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IWindowEventHandlers, IHTMLBodyElementEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLBodyElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
+import { IWindowEventHandlersProperties, IWindowEventHandlersReadonlyProperties, WindowEventHandlersPropertyKeys, WindowEventHandlersConstantKeys } from '../mixins/WindowEventHandlers';
+
+export const { getState, setState, setReadonlyOfHTMLBodyElement } = StateMachine<
+  IHTMLBodyElement,
+  IHTMLBodyElementProperties,
+  IHTMLBodyElementReadonlyProperties
+>('HTMLBodyElement');
+export const internalHandler = new InternalHandler<IHTMLBodyElement>('HTMLBodyElement', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const HTMLBodyElementBase = WindowEventHandlers(HTMLElement);
+export function HTMLBodyElementGenerator(HTMLElement: Constructable<IHTMLElement>, WindowEventHandlers: Constructable<IWindowEventHandlers>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(HTMLElement, [WindowEventHandlers]) as unknown) as Constructable<IHTMLElement & IWindowEventHandlers>;
 
-export default class HTMLBodyElement extends HTMLBodyElementBase implements IHTMLBodyElement {
-  public get aLink(): string {
-    return InternalHandler.get<HTMLBodyElement, string>(this, 'aLink');
-  }
-
-  public set aLink(value: string) {
-    InternalHandler.set<HTMLBodyElement, string>(this, 'aLink', value);
-  }
-
-  public get background(): string {
-    return InternalHandler.get<HTMLBodyElement, string>(this, 'background');
-  }
-
-  public set background(value: string) {
-    InternalHandler.set<HTMLBodyElement, string>(this, 'background', value);
-  }
-
-  public get bgColor(): string {
-    return InternalHandler.get<HTMLBodyElement, string>(this, 'bgColor');
-  }
-
-  public set bgColor(value: string) {
-    InternalHandler.set<HTMLBodyElement, string>(this, 'bgColor', value);
-  }
-
-  public get link(): string {
-    return InternalHandler.get<HTMLBodyElement, string>(this, 'link');
-  }
-
-  public set link(value: string) {
-    InternalHandler.set<HTMLBodyElement, string>(this, 'link', value);
-  }
-
-  public get text(): string {
-    return InternalHandler.get<HTMLBodyElement, string>(this, 'text');
-  }
-
-  public set text(value: string) {
-    InternalHandler.set<HTMLBodyElement, string>(this, 'text', value);
-  }
-
-  public get vLink(): string {
-    return InternalHandler.get<HTMLBodyElement, string>(this, 'vLink');
-  }
-
-  public set vLink(value: string) {
-    InternalHandler.set<HTMLBodyElement, string>(this, 'vLink', value);
-  }
-
-  public addEventListener<K extends keyof IHTMLBodyElementEventMap>(type: K, listener: (this: IHTMLBodyElement, ev: IHTMLBodyElementEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLBodyElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IHTMLBodyElementEventMap>(type: K, listener: (this: IHTMLBodyElement, ev: IHTMLBodyElementEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLBodyElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLBodyElementKeys: Set<string> = new Set([...rpHTMLElementKeys, ...rpWindowEventHandlersKeys]);
-
-export interface IHTMLBodyElementRps extends IHTMLElementRps, IWindowEventHandlersRps {}
-
-export function setHTMLBodyElementRps(instance: IHTMLBodyElement, data: IHTMLBodyElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLBodyElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLBodyElement`);
+  return class HTMLBodyElement extends Parent implements IHTMLBodyElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLBodyElement>(HTMLBodyElement, this, internalHandler, HTMLBodyElementConstantKeys, HTMLBodyElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get aLink(): string {
+      return internalHandler.get<string>(this, 'aLink', false);
+    }
+
+    public set aLink(value: string) {
+      internalHandler.set<string>(this, 'aLink', value);
+    }
+
+    public get background(): string {
+      return internalHandler.get<string>(this, 'background', false);
+    }
+
+    public set background(value: string) {
+      internalHandler.set<string>(this, 'background', value);
+    }
+
+    public get bgColor(): string {
+      return internalHandler.get<string>(this, 'bgColor', false);
+    }
+
+    public set bgColor(value: string) {
+      internalHandler.set<string>(this, 'bgColor', value);
+    }
+
+    public get link(): string {
+      return internalHandler.get<string>(this, 'link', false);
+    }
+
+    public set link(value: string) {
+      internalHandler.set<string>(this, 'link', value);
+    }
+
+    public get text(): string {
+      return internalHandler.get<string>(this, 'text', false);
+    }
+
+    public set text(value: string) {
+      internalHandler.set<string>(this, 'text', value);
+    }
+
+    public get vLink(): string {
+      return internalHandler.get<string>(this, 'vLink', false);
+    }
+
+    public set vLink(value: string) {
+      internalHandler.set<string>(this, 'vLink', value);
+    }
+
+    public addEventListener<K extends keyof IHTMLBodyElementEventMap>(type: K, listener: (this: IHTMLBodyElement, ev: IHTMLBodyElementEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IHTMLBodyElementEventMap>(type: K, listener: (this: IHTMLBodyElement, ev: IHTMLBodyElementEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLBodyElementProperties extends IHTMLElementProperties, IWindowEventHandlersProperties {
+  aLink?: string;
+  background?: string;
+  bgColor?: string;
+  link?: string;
+  text?: string;
+  vLink?: string;
+}
+
+export interface IHTMLBodyElementReadonlyProperties extends IHTMLElementReadonlyProperties, IWindowEventHandlersReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLBodyElementPropertyKeys = [...HTMLElementPropertyKeys, ...WindowEventHandlersPropertyKeys, 'aLink', 'background', 'bgColor', 'link', 'text', 'vLink'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLBodyElementConstantKeys = [...HTMLElementConstantKeys, ...WindowEventHandlersConstantKeys];

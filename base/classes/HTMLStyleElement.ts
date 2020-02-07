@@ -1,52 +1,70 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLStyleElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
-import LinkStyle, { ILinkStyleRps, rpLinkStyleKeys } from '../mixins/LinkStyle';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, ILinkStyle, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLStyleElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
+import { ILinkStyleProperties, ILinkStyleReadonlyProperties, LinkStylePropertyKeys, LinkStyleConstantKeys } from '../mixins/LinkStyle';
+
+export const { getState, setState, setReadonlyOfHTMLStyleElement } = StateMachine<
+  IHTMLStyleElement,
+  IHTMLStyleElementProperties,
+  IHTMLStyleElementReadonlyProperties
+>('HTMLStyleElement');
+export const internalHandler = new InternalHandler<IHTMLStyleElement>('HTMLStyleElement', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const HTMLStyleElementBase = LinkStyle(HTMLElement);
+export function HTMLStyleElementGenerator(HTMLElement: Constructable<IHTMLElement>, LinkStyle: Constructable<ILinkStyle>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(HTMLElement, [LinkStyle]) as unknown) as Constructable<IHTMLElement & ILinkStyle>;
 
-export default class HTMLStyleElement extends HTMLStyleElementBase implements IHTMLStyleElement {
-  public get media(): string {
-    return InternalHandler.get<HTMLStyleElement, string>(this, 'media');
-  }
-
-  public set media(value: string) {
-    InternalHandler.set<HTMLStyleElement, string>(this, 'media', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLStyleElement, string>(this, 'type');
-  }
-
-  public set type(value: string) {
-    InternalHandler.set<HTMLStyleElement, string>(this, 'type', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLStyleElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLStyleElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLStyleElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLStyleElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLStyleElementKeys: Set<string> = new Set([...rpHTMLElementKeys, ...rpLinkStyleKeys]);
-
-export interface IHTMLStyleElementRps extends IHTMLElementRps, ILinkStyleRps {}
-
-export function setHTMLStyleElementRps(instance: IHTMLStyleElement, data: IHTMLStyleElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLStyleElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLStyleElement`);
+  return class HTMLStyleElement extends Parent implements IHTMLStyleElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLStyleElement>(HTMLStyleElement, this, internalHandler, HTMLStyleElementConstantKeys, HTMLStyleElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get media(): string {
+      return internalHandler.get<string>(this, 'media', false);
+    }
+
+    public set media(value: string) {
+      internalHandler.set<string>(this, 'media', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLStyleElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLStyleElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLStyleElementProperties extends IHTMLElementProperties, ILinkStyleProperties {
+  media?: string;
+  type?: string;
+}
+
+export interface IHTMLStyleElementReadonlyProperties extends IHTMLElementReadonlyProperties, ILinkStyleReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLStyleElementPropertyKeys = [...HTMLElementPropertyKeys, ...LinkStylePropertyKeys, 'media', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLStyleElementConstantKeys = [...HTMLElementConstantKeys, ...LinkStyleConstantKeys];

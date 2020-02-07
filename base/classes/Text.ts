@@ -1,49 +1,55 @@
-import InternalHandler from '../InternalHandler';
-import { IText } from '../interfaces';
-import CharacterData, { ICharacterDataRps, rpCharacterDataKeys } from './CharacterData';
-import Slotable, { ISlotableRps, rpSlotableKeys } from '../mixins/Slotable';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { ICharacterData, ISlotable, IText } from '../interfaces';
+import { ICharacterDataProperties, ICharacterDataReadonlyProperties, CharacterDataPropertyKeys, CharacterDataConstantKeys } from './CharacterData';
+import { ISlotableProperties, ISlotableReadonlyProperties, SlotablePropertyKeys, SlotableConstantKeys } from '../mixins/Slotable';
+
+export const { getState, setState, setReadonlyOfText } = StateMachine<
+  IText,
+  ITextProperties,
+  ITextReadonlyProperties
+>('Text');
+export const internalHandler = new InternalHandler<IText>('Text', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const TextBase = Slotable(CharacterData);
+export function TextGenerator(CharacterData: Constructable<ICharacterData>, Slotable: Constructable<ISlotable>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(CharacterData, [Slotable]) as unknown) as Constructable<ICharacterData & ISlotable>;
 
-export default class Text extends TextBase implements IText {
-  protected readonly _: ITextRps = {};
-
-  // constructor required for this class
-
-  constructor(data?: string) {
-    super();
-    InternalHandler.construct(this, [data]);
-  }
-
-  // properties
-
-  public get wholeText(): string {
-    return InternalHandler.get<Text, string>(this, 'wholeText');
-  }
-
-  // methods
-
-  public splitText(offset: number): IText {
-    return InternalHandler.run<Text, IText>(this, 'splitText', [offset]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpTextKeys: Set<string> = new Set([...rpCharacterDataKeys, ...rpSlotableKeys]);
-
-export interface ITextRps extends ICharacterDataRps, ISlotableRps {
-  readonly wholeText?: string;
-}
-
-export function setTextRps(instance: IText, data: ITextRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpTextKeys.has(key)) {
-      throw new Error(`${key} is not a property of Text`);
+  return class Text extends Parent implements IText {
+    constructor(_data?: string) {
+      super();
+      initializeConstantsAndPrototypes<Text>(Text, this, internalHandler, TextConstantKeys, TextPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get wholeText(): string {
+      return internalHandler.get<string>(this, 'wholeText', false);
+    }
+
+    // methods
+
+    public splitText(offset: number): IText {
+      return internalHandler.run<IText>(this, 'splitText', [offset]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface ITextProperties extends ICharacterDataProperties, ISlotableProperties {
+  wholeText?: string;
+}
+
+export interface ITextReadonlyProperties extends ICharacterDataReadonlyProperties, ISlotableReadonlyProperties {
+  wholeText?: string;
+}
+
+// tslint:disable-next-line:variable-name
+export const TextPropertyKeys = [...CharacterDataPropertyKeys, ...SlotablePropertyKeys, 'wholeText'];
+
+// tslint:disable-next-line:variable-name
+export const TextConstantKeys = [...CharacterDataConstantKeys, ...SlotableConstantKeys];

@@ -1,67 +1,81 @@
-import InternalHandler from '../InternalHandler';
-import { ICharacterData } from '../interfaces';
-import Node, { INodeRps, rpNodeKeys } from './Node';
-import ChildNode, { IChildNodeRps, rpChildNodeKeys } from '../mixins/ChildNode';
-import NonDocumentTypeChildNode, { INonDocumentTypeChildNodeRps, rpNonDocumentTypeChildNodeKeys } from '../mixins/NonDocumentTypeChildNode';
+import ClassMixer from '../ClassMixer';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { INode, IChildNode, INonDocumentTypeChildNode, ICharacterData } from '../interfaces';
+import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstantKeys } from './Node';
+import { IChildNodeProperties, IChildNodeReadonlyProperties, ChildNodePropertyKeys, ChildNodeConstantKeys } from '../mixins/ChildNode';
+import { INonDocumentTypeChildNodeProperties, INonDocumentTypeChildNodeReadonlyProperties, NonDocumentTypeChildNodePropertyKeys, NonDocumentTypeChildNodeConstantKeys } from '../mixins/NonDocumentTypeChildNode';
+
+export const { getState, setState, setReadonlyOfCharacterData } = StateMachine<
+  ICharacterData,
+  ICharacterDataProperties,
+  ICharacterDataReadonlyProperties
+>('CharacterData');
+export const internalHandler = new InternalHandler<ICharacterData>('CharacterData', getState, setState);
 
 // tslint:disable-next-line:variable-name
-const CharacterDataBase = ChildNode(NonDocumentTypeChildNode(Node));
+export function CharacterDataGenerator(Node: Constructable<INode>, ChildNode: Constructable<IChildNode>, NonDocumentTypeChildNode: Constructable<INonDocumentTypeChildNode>) {
+  // tslint:disable-next-line:variable-name
+  const Parent = (ClassMixer(Node, [ChildNode, NonDocumentTypeChildNode]) as unknown) as Constructable<INode & IChildNode & INonDocumentTypeChildNode>;
 
-export default class CharacterData extends CharacterDataBase implements ICharacterData {
-  protected readonly _: ICharacterDataRps = {};
-
-  // properties
-
-  public get data(): string {
-    return InternalHandler.get<CharacterData, string>(this, 'data');
-  }
-
-  public set data(value: string) {
-    InternalHandler.set<CharacterData, string>(this, 'data', value);
-  }
-
-  public get length(): number {
-    return InternalHandler.get<CharacterData, number>(this, 'length');
-  }
-
-  // methods
-
-  public appendData(data: string): void {
-    InternalHandler.run<CharacterData, void>(this, 'appendData', [data]);
-  }
-
-  public deleteData(offset: number, count: number): void {
-    InternalHandler.run<CharacterData, void>(this, 'deleteData', [offset, count]);
-  }
-
-  public insertData(offset: number, data: string): void {
-    InternalHandler.run<CharacterData, void>(this, 'insertData', [offset, data]);
-  }
-
-  public replaceData(offset: number, count: number, data: string): void {
-    InternalHandler.run<CharacterData, void>(this, 'replaceData', [offset, count, data]);
-  }
-
-  public substringData(offset: number, count: number): string {
-    return InternalHandler.run<CharacterData, string>(this, 'substringData', [offset, count]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpCharacterDataKeys: Set<string> = new Set([...rpNodeKeys, ...rpChildNodeKeys, ...rpNonDocumentTypeChildNodeKeys]);
-
-export interface ICharacterDataRps extends INodeRps, IChildNodeRps, INonDocumentTypeChildNodeRps {
-  readonly length?: number;
-}
-
-export function setCharacterDataRps(instance: ICharacterData, data: ICharacterDataRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpCharacterDataKeys.has(key)) {
-      throw new Error(`${key} is not a property of CharacterData`);
+  return class CharacterData extends Parent implements ICharacterData {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<CharacterData>(CharacterData, this, internalHandler, CharacterDataConstantKeys, CharacterDataPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get data(): string {
+      return internalHandler.get<string>(this, 'data', false);
+    }
+
+    public set data(value: string) {
+      internalHandler.set<string>(this, 'data', value);
+    }
+
+    public get length(): number {
+      return internalHandler.get<number>(this, 'length', false);
+    }
+
+    // methods
+
+    public appendData(data: string): void {
+      internalHandler.run<void>(this, 'appendData', [data]);
+    }
+
+    public deleteData(offset: number, count: number): void {
+      internalHandler.run<void>(this, 'deleteData', [offset, count]);
+    }
+
+    public insertData(offset: number, data: string): void {
+      internalHandler.run<void>(this, 'insertData', [offset, data]);
+    }
+
+    public replaceData(offset: number, count: number, data: string): void {
+      internalHandler.run<void>(this, 'replaceData', [offset, count, data]);
+    }
+
+    public substringData(offset: number, count: number): string {
+      return internalHandler.run<string>(this, 'substringData', [offset, count]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface ICharacterDataProperties extends INodeProperties, IChildNodeProperties, INonDocumentTypeChildNodeProperties {
+  data?: string;
+  length?: number;
+}
+
+export interface ICharacterDataReadonlyProperties extends INodeReadonlyProperties, IChildNodeReadonlyProperties, INonDocumentTypeChildNodeReadonlyProperties {
+  length?: number;
+}
+
+// tslint:disable-next-line:variable-name
+export const CharacterDataPropertyKeys = [...NodePropertyKeys, ...ChildNodePropertyKeys, ...NonDocumentTypeChildNodePropertyKeys, 'data', 'length'];
+
+// tslint:disable-next-line:variable-name
+export const CharacterDataConstantKeys = [...NodeConstantKeys, ...ChildNodeConstantKeys, ...NonDocumentTypeChildNodeConstantKeys];

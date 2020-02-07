@@ -1,39 +1,50 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { ITextTrackCue, ITextTrackCueList } from '../interfaces';
 
+export const { getState, setState, setReadonlyOfTextTrackCueList } = StateMachine<
+  ITextTrackCueList,
+  ITextTrackCueListProperties,
+  ITextTrackCueListReadonlyProperties
+>('TextTrackCueList');
+export const internalHandler = new InternalHandler<ITextTrackCueList>('TextTrackCueList', getState, setState);
+
 export default class TextTrackCueList implements ITextTrackCueList {
-  protected readonly _: ITextTrackCueListRps = {};
+  constructor() {
+    initializeConstantsAndPrototypes<TextTrackCueList>(TextTrackCueList, this, internalHandler, TextTrackCueListConstantKeys, TextTrackCueListPropertyKeys);
+  }
 
   // properties
 
   public get length(): number {
-    return InternalHandler.get<TextTrackCueList, number>(this, 'length');
+    return internalHandler.get<number>(this, 'length', false);
   }
 
   // methods
 
   public getCueById(id: string): ITextTrackCue | null {
-    return InternalHandler.run<TextTrackCueList, ITextTrackCue | null>(this, 'getCueById', [id]);
+    return internalHandler.run<ITextTrackCue | null>(this, 'getCueById', [id]);
+  }
+
+  public [Symbol.iterator](): IterableIterator<ITextTrackCue> {
+    return internalHandler.run<IterableIterator<ITextTrackCue>>(this, '[Symbol.iterator]', []);
   }
 
   [index: number]: ITextTrackCue;
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpTextTrackCueListKeys: Set<string> = new Set([]);
-
-export interface ITextTrackCueListRps {
-  readonly length?: number;
+export interface ITextTrackCueListProperties {
+  length?: number;
 }
 
-export function setTextTrackCueListRps(instance: ITextTrackCueList, data: ITextTrackCueListRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpTextTrackCueListKeys.has(key)) {
-      throw new Error(`${key} is not a property of TextTrackCueList`);
-    }
-    properties[key] = value;
-  });
+export interface ITextTrackCueListReadonlyProperties {
+  length?: number;
 }
+
+// tslint:disable-next-line:variable-name
+export const TextTrackCueListPropertyKeys = ['length'];
+
+// tslint:disable-next-line:variable-name
+export const TextTrackCueListConstantKeys = [];

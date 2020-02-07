@@ -1,40 +1,56 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLParagraphElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLParagraphElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export default class HTMLParagraphElement extends HTMLElement implements IHTMLParagraphElement {
-  public get align(): string {
-    return InternalHandler.get<HTMLParagraphElement, string>(this, 'align');
-  }
+export const { getState, setState, setReadonlyOfHTMLParagraphElement } = StateMachine<
+  IHTMLParagraphElement,
+  IHTMLParagraphElementProperties,
+  IHTMLParagraphElementReadonlyProperties
+>('HTMLParagraphElement');
+export const internalHandler = new InternalHandler<IHTMLParagraphElement>('HTMLParagraphElement', getState, setState);
 
-  public set align(value: string) {
-    InternalHandler.set<HTMLParagraphElement, string>(this, 'align', value);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLParagraphElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLParagraphElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLParagraphElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLParagraphElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLParagraphElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLParagraphElementRps extends IHTMLElementRps {}
-
-export function setHTMLParagraphElementRps(instance: IHTMLParagraphElement, data: IHTMLParagraphElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLParagraphElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLParagraphElement`);
+// tslint:disable-next-line:variable-name
+export function HTMLParagraphElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLParagraphElement extends HTMLElement implements IHTMLParagraphElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLParagraphElement>(HTMLParagraphElement, this, internalHandler, HTMLParagraphElementConstantKeys, HTMLParagraphElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get align(): string {
+      return internalHandler.get<string>(this, 'align', false);
+    }
+
+    public set align(value: string) {
+      internalHandler.set<string>(this, 'align', value);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLParagraphElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLParagraphElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLParagraphElementProperties extends IHTMLElementProperties {
+  align?: string;
+}
+
+export interface IHTMLParagraphElementReadonlyProperties extends IHTMLElementReadonlyProperties {}
+
+// tslint:disable-next-line:variable-name
+export const HTMLParagraphElementPropertyKeys = [...HTMLElementPropertyKeys, 'align'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLParagraphElementConstantKeys = [...HTMLElementConstantKeys];

@@ -1,5 +1,13 @@
-import InternalHandler from '../InternalHandler';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
 import { IEventTarget, IEventInit, IEvent } from '../interfaces';
+
+export const { getState, setState, setReadonlyOfEvent } = StateMachine<
+  IEvent,
+  IEventProperties,
+  IEventReadonlyProperties
+>('Event');
+export const internalHandler = new InternalHandler<IEvent>('Event', getState, setState);
 
 export default class Event implements IEvent {
   public static readonly AT_TARGET: number = 2;
@@ -12,126 +20,131 @@ export default class Event implements IEvent {
   public readonly CAPTURING_PHASE: number = 1;
   public readonly NONE: number = 0;
 
-  // store readonly properties
-
-  protected readonly _: IEventRps = {};
-
   // constructor required for this class
 
-  constructor(type: string, eventInitDict?: IEventInit) {
-    InternalHandler.construct(this, [type, eventInitDict]);
+  constructor(_type: string, _eventInitDict?: IEventInit) {
+    initializeConstantsAndPrototypes<Event>(Event, this, internalHandler, EventConstantKeys, EventPropertyKeys);
   }
 
   // properties
 
   public get bubbles(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'bubbles');
+    return internalHandler.get<boolean>(this, 'bubbles', false);
   }
 
   public get cancelBubble(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'cancelBubble');
+    return internalHandler.get<boolean>(this, 'cancelBubble', false);
   }
 
   public set cancelBubble(value: boolean) {
-    InternalHandler.set<Event, boolean>(this, 'cancelBubble', value);
+    internalHandler.set<boolean>(this, 'cancelBubble', value);
   }
 
   public get cancelable(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'cancelable');
+    return internalHandler.get<boolean>(this, 'cancelable', false);
   }
 
   public get composed(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'composed');
+    return internalHandler.get<boolean>(this, 'composed', false);
   }
 
   public get currentTarget(): IEventTarget | null {
-    return InternalHandler.get<Event, IEventTarget | null>(this, 'currentTarget');
+    return internalHandler.get<IEventTarget | null>(this, 'currentTarget', true);
   }
 
   public get defaultPrevented(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'defaultPrevented');
+    return internalHandler.get<boolean>(this, 'defaultPrevented', false);
   }
 
   public get eventPhase(): number {
-    return InternalHandler.get<Event, number>(this, 'eventPhase');
+    return internalHandler.get<number>(this, 'eventPhase', false);
   }
 
   public get isTrusted(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'isTrusted');
+    return internalHandler.get<boolean>(this, 'isTrusted', false);
   }
 
   public get returnValue(): boolean {
-    return InternalHandler.get<Event, boolean>(this, 'returnValue');
+    return internalHandler.get<boolean>(this, 'returnValue', false);
   }
 
   public set returnValue(value: boolean) {
-    InternalHandler.set<Event, boolean>(this, 'returnValue', value);
+    internalHandler.set<boolean>(this, 'returnValue', value);
   }
 
   public get srcElement(): IEventTarget | null {
-    return InternalHandler.get<Event, IEventTarget | null>(this, 'srcElement');
+    return internalHandler.get<IEventTarget | null>(this, 'srcElement', true);
   }
 
   public get target(): IEventTarget | null {
-    return InternalHandler.get<Event, IEventTarget | null>(this, 'target');
+    return internalHandler.get<IEventTarget | null>(this, 'target', true);
   }
 
   public get timeStamp(): number {
-    return InternalHandler.get<Event, number>(this, 'timeStamp');
+    return internalHandler.get<number>(this, 'timeStamp', false);
   }
 
   public get type(): string {
-    return InternalHandler.get<Event, string>(this, 'type');
+    return internalHandler.get<string>(this, 'type', false);
   }
 
   // methods
 
   public composedPath(): Iterable<IEventTarget> {
-    return InternalHandler.run<Event, Iterable<IEventTarget>>(this, 'composedPath', []);
+    return internalHandler.run<Iterable<IEventTarget>>(this, 'composedPath', []);
   }
 
   public initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void {
-    InternalHandler.run<Event, void>(this, 'initEvent', [type, bubbles, cancelable]);
+    internalHandler.run<void>(this, 'initEvent', [type, bubbles, cancelable]);
   }
 
   public preventDefault(): void {
-    InternalHandler.run<Event, void>(this, 'preventDefault', []);
+    internalHandler.run<void>(this, 'preventDefault', []);
   }
 
   public stopImmediatePropagation(): void {
-    InternalHandler.run<Event, void>(this, 'stopImmediatePropagation', []);
+    internalHandler.run<void>(this, 'stopImmediatePropagation', []);
   }
 
   public stopPropagation(): void {
-    InternalHandler.run<Event, void>(this, 'stopPropagation', []);
+    internalHandler.run<void>(this, 'stopPropagation', []);
   }
 }
 
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
 
-export const rpEventKeys: Set<string> = new Set([]);
-
-export interface IEventRps {
-  readonly bubbles?: boolean;
-  readonly cancelable?: boolean;
-  readonly composed?: boolean;
-  readonly currentTarget?: IEventTarget | null;
-  readonly defaultPrevented?: boolean;
-  readonly eventPhase?: number;
-  readonly isTrusted?: boolean;
-  readonly srcElement?: IEventTarget | null;
-  readonly target?: IEventTarget | null;
-  readonly timeStamp?: number;
-  readonly type?: string;
+export interface IEventProperties {
+  bubbles?: boolean;
+  cancelBubble?: boolean;
+  cancelable?: boolean;
+  composed?: boolean;
+  currentTarget?: IEventTarget | null;
+  defaultPrevented?: boolean;
+  eventPhase?: number;
+  isTrusted?: boolean;
+  returnValue?: boolean;
+  srcElement?: IEventTarget | null;
+  target?: IEventTarget | null;
+  timeStamp?: number;
+  type?: string;
 }
 
-export function setEventRps(instance: IEvent, data: IEventRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpEventKeys.has(key)) {
-      throw new Error(`${key} is not a property of Event`);
-    }
-    properties[key] = value;
-  });
+export interface IEventReadonlyProperties {
+  bubbles?: boolean;
+  cancelable?: boolean;
+  composed?: boolean;
+  currentTarget?: IEventTarget | null;
+  defaultPrevented?: boolean;
+  eventPhase?: number;
+  isTrusted?: boolean;
+  srcElement?: IEventTarget | null;
+  target?: IEventTarget | null;
+  timeStamp?: number;
+  type?: string;
 }
+
+// tslint:disable-next-line:variable-name
+export const EventPropertyKeys = ['bubbles', 'cancelBubble', 'cancelable', 'composed', 'currentTarget', 'defaultPrevented', 'eventPhase', 'isTrusted', 'returnValue', 'srcElement', 'target', 'timeStamp', 'type'];
+
+// tslint:disable-next-line:variable-name
+export const EventConstantKeys = ['NONE', 'CAPTURING_PHASE', 'AT_TARGET', 'BUBBLING_PHASE'];

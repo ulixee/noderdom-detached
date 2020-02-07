@@ -1,393 +1,446 @@
-import InternalHandler from '../InternalHandler';
-import { IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IFileList, IHTMLElement, IValidityState, INodeList, ISelectionMode, IHTMLInputElement } from '../interfaces';
-import HTMLElement, { IHTMLElementRps, rpHTMLElementKeys } from './HTMLElement';
-
-export default class HTMLInputElement extends HTMLElement implements IHTMLInputElement {
-  protected readonly _: IHTMLInputElementRps = {};
-
-  // properties
-
-  public get accept(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'accept');
-  }
-
-  public set accept(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'accept', value);
-  }
-
-  public get align(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'align');
-  }
-
-  public set align(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'align', value);
-  }
-
-  public get alt(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'alt');
-  }
-
-  public set alt(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'alt', value);
-  }
-
-  public get autocomplete(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'autocomplete');
-  }
-
-  public set autocomplete(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'autocomplete', value);
-  }
-
-  public get autofocus(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'autofocus');
-  }
-
-  public set autofocus(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'autofocus', value);
-  }
-
-  public get checked(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'checked');
-  }
-
-  public set checked(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'checked', value);
-  }
-
-  public get defaultChecked(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'defaultChecked');
-  }
-
-  public set defaultChecked(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'defaultChecked', value);
-  }
-
-  public get defaultValue(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'defaultValue');
-  }
-
-  public set defaultValue(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'defaultValue', value);
-  }
-
-  public get dirName(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'dirName');
-  }
-
-  public set dirName(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'dirName', value);
-  }
-
-  public get disabled(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'disabled');
-  }
-
-  public set disabled(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'disabled', value);
-  }
-
-  public get files(): IFileList | null {
-    return InternalHandler.get<HTMLInputElement, IFileList | null>(this, 'files');
-  }
-
-  public set files(value: IFileList | null) {
-    InternalHandler.set<HTMLInputElement, IFileList | null>(this, 'files', value);
-  }
-
-  public get form(): IHTMLFormElement | null {
-    return InternalHandler.get<HTMLInputElement, IHTMLFormElement | null>(this, 'form');
-  }
-
-  public get formNoValidate(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'formNoValidate');
-  }
-
-  public set formNoValidate(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'formNoValidate', value);
-  }
-
-  public get formTarget(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'formTarget');
-  }
-
-  public set formTarget(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'formTarget', value);
-  }
-
-  public get indeterminate(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'indeterminate');
-  }
-
-  public set indeterminate(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'indeterminate', value);
-  }
-
-  public get inputMode(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'inputMode');
-  }
-
-  public set inputMode(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'inputMode', value);
-  }
-
-  public get labels(): INodeList | null {
-    return InternalHandler.get<HTMLInputElement, INodeList | null>(this, 'labels');
-  }
-
-  public get list(): IHTMLElement | null {
-    return InternalHandler.get<HTMLInputElement, IHTMLElement | null>(this, 'list');
-  }
-
-  public get max(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'max');
-  }
-
-  public set max(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'max', value);
-  }
-
-  public get maxLength(): number {
-    return InternalHandler.get<HTMLInputElement, number>(this, 'maxLength');
-  }
-
-  public set maxLength(value: number) {
-    InternalHandler.set<HTMLInputElement, number>(this, 'maxLength', value);
-  }
-
-  public get min(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'min');
-  }
-
-  public set min(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'min', value);
-  }
-
-  public get minLength(): number {
-    return InternalHandler.get<HTMLInputElement, number>(this, 'minLength');
-  }
-
-  public set minLength(value: number) {
-    InternalHandler.set<HTMLInputElement, number>(this, 'minLength', value);
-  }
-
-  public get multiple(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'multiple');
-  }
-
-  public set multiple(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'multiple', value);
-  }
-
-  public get name(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'name');
-  }
-
-  public set name(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'name', value);
-  }
-
-  public get pattern(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'pattern');
-  }
-
-  public set pattern(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'pattern', value);
-  }
-
-  public get placeholder(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'placeholder');
-  }
-
-  public set placeholder(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'placeholder', value);
-  }
-
-  public get readOnly(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'readOnly');
-  }
-
-  public set readOnly(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'readOnly', value);
-  }
-
-  public get required(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'required');
-  }
-
-  public set required(value: boolean) {
-    InternalHandler.set<HTMLInputElement, boolean>(this, 'required', value);
-  }
-
-  public get selectionDirection(): string | null {
-    return InternalHandler.get<HTMLInputElement, string | null>(this, 'selectionDirection');
-  }
-
-  public set selectionDirection(value: string | null) {
-    InternalHandler.set<HTMLInputElement, string | null>(this, 'selectionDirection', value);
-  }
-
-  public get selectionEnd(): number | null {
-    return InternalHandler.get<HTMLInputElement, number | null>(this, 'selectionEnd');
-  }
-
-  public set selectionEnd(value: number | null) {
-    InternalHandler.set<HTMLInputElement, number | null>(this, 'selectionEnd', value);
-  }
-
-  public get selectionStart(): number | null {
-    return InternalHandler.get<HTMLInputElement, number | null>(this, 'selectionStart');
-  }
-
-  public set selectionStart(value: number | null) {
-    InternalHandler.set<HTMLInputElement, number | null>(this, 'selectionStart', value);
-  }
-
-  public get size(): number {
-    return InternalHandler.get<HTMLInputElement, number>(this, 'size');
-  }
-
-  public set size(value: number) {
-    InternalHandler.set<HTMLInputElement, number>(this, 'size', value);
-  }
-
-  public get src(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'src');
-  }
-
-  public set src(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'src', value);
-  }
-
-  public get step(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'step');
-  }
-
-  public set step(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'step', value);
-  }
-
-  public get type(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'type');
-  }
-
-  public set type(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'type', value);
-  }
-
-  public get useMap(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'useMap');
-  }
-
-  public set useMap(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'useMap', value);
-  }
-
-  public get validationMessage(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'validationMessage');
-  }
-
-  public get validity(): IValidityState {
-    return InternalHandler.get<HTMLInputElement, IValidityState>(this, 'validity');
-  }
-
-  public get value(): string {
-    return InternalHandler.get<HTMLInputElement, string>(this, 'value');
-  }
-
-  public set value(value: string) {
-    InternalHandler.set<HTMLInputElement, string>(this, 'value', value);
-  }
-
-  public get valueAsDate(): any {
-    return InternalHandler.get<HTMLInputElement, any>(this, 'valueAsDate');
-  }
-
-  public set valueAsDate(value: any) {
-    InternalHandler.set<HTMLInputElement, any>(this, 'valueAsDate', value);
-  }
-
-  public get valueAsNumber(): number {
-    return InternalHandler.get<HTMLInputElement, number>(this, 'valueAsNumber');
-  }
-
-  public set valueAsNumber(value: number) {
-    InternalHandler.set<HTMLInputElement, number>(this, 'valueAsNumber', value);
-  }
-
-  public get willValidate(): boolean {
-    return InternalHandler.get<HTMLInputElement, boolean>(this, 'willValidate');
-  }
-
-  // methods
-
-  public checkValidity(): boolean {
-    return InternalHandler.run<HTMLInputElement, boolean>(this, 'checkValidity', []);
-  }
-
-  public reportValidity(): boolean {
-    return InternalHandler.run<HTMLInputElement, boolean>(this, 'reportValidity', []);
-  }
-
-  public select(): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'select', []);
-  }
-
-  public setCustomValidity(error: string): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'setCustomValidity', [error]);
-  }
-
-  public setRangeText(replacement: string): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'setRangeText', [replacement]);
-  }
-
-  public setRangeText(replacement: string, start: number, end: number, selectionMode?: ISelectionMode): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'setRangeText', [replacement, start, end, selectionMode]);
-  }
-
-  public setSelectionRange(start: number, end: number, direction?: string): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'setSelectionRange', [start, end, direction]);
-  }
-
-  public stepDown(n?: number): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'stepDown', [n]);
-  }
-
-  public stepUp(n?: number): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'stepUp', [n]);
-  }
-
-  public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLInputElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
-  public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'addEventListener', [type, listener, options]);
-  }
-
-  public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLInputElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
-  public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
-    InternalHandler.run<HTMLInputElement, void>(this, 'removeEventListener', [type, listener, options]);
-  }
-}
-
-// SUPPORT FOR UPDATING READONLY PROPERTIES ////////////////////////////////////
-
-export const rpHTMLInputElementKeys: Set<string> = new Set([...rpHTMLElementKeys]);
-
-export interface IHTMLInputElementRps extends IHTMLElementRps {
-  readonly form?: IHTMLFormElement | null;
-  readonly labels?: INodeList | null;
-  readonly list?: IHTMLElement | null;
-  readonly validationMessage?: string;
-  readonly validity?: IValidityState;
-  readonly willValidate?: boolean;
-}
-
-export function setHTMLInputElementRps(instance: IHTMLInputElement, data: IHTMLInputElementRps): void {
-  // @ts-ignore
-  const properties: Record<string, any> = instance._;
-  Object.entries(data).forEach(([key, value]: [string, any]) => {
-    if (!rpHTMLInputElementKeys.has(key)) {
-      throw new Error(`${key} is not a property of HTMLInputElement`);
+import Constructable from '../Constructable';
+import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHandler';
+import StateMachine from '../StateMachine';
+import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLFormElement, IFileList, IValidityState, INodeList, ISelectionMode, IHTMLInputElement } from '../interfaces';
+import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
+
+export const { getState, setState, setReadonlyOfHTMLInputElement } = StateMachine<
+  IHTMLInputElement,
+  IHTMLInputElementProperties,
+  IHTMLInputElementReadonlyProperties
+>('HTMLInputElement');
+export const internalHandler = new InternalHandler<IHTMLInputElement>('HTMLInputElement', getState, setState);
+
+// tslint:disable-next-line:variable-name
+export function HTMLInputElementGenerator(HTMLElement: Constructable<IHTMLElement>) {
+  return class HTMLInputElement extends HTMLElement implements IHTMLInputElement {
+    constructor() {
+      super();
+      initializeConstantsAndPrototypes<HTMLInputElement>(HTMLInputElement, this, internalHandler, HTMLInputElementConstantKeys, HTMLInputElementPropertyKeys);
     }
-    properties[key] = value;
-  });
+
+    // properties
+
+    public get accept(): string {
+      return internalHandler.get<string>(this, 'accept', false);
+    }
+
+    public set accept(value: string) {
+      internalHandler.set<string>(this, 'accept', value);
+    }
+
+    public get align(): string {
+      return internalHandler.get<string>(this, 'align', false);
+    }
+
+    public set align(value: string) {
+      internalHandler.set<string>(this, 'align', value);
+    }
+
+    public get alt(): string {
+      return internalHandler.get<string>(this, 'alt', false);
+    }
+
+    public set alt(value: string) {
+      internalHandler.set<string>(this, 'alt', value);
+    }
+
+    public get autocomplete(): string {
+      return internalHandler.get<string>(this, 'autocomplete', false);
+    }
+
+    public set autocomplete(value: string) {
+      internalHandler.set<string>(this, 'autocomplete', value);
+    }
+
+    public get autofocus(): boolean {
+      return internalHandler.get<boolean>(this, 'autofocus', false);
+    }
+
+    public set autofocus(value: boolean) {
+      internalHandler.set<boolean>(this, 'autofocus', value);
+    }
+
+    public get checked(): boolean {
+      return internalHandler.get<boolean>(this, 'checked', false);
+    }
+
+    public set checked(value: boolean) {
+      internalHandler.set<boolean>(this, 'checked', value);
+    }
+
+    public get defaultChecked(): boolean {
+      return internalHandler.get<boolean>(this, 'defaultChecked', false);
+    }
+
+    public set defaultChecked(value: boolean) {
+      internalHandler.set<boolean>(this, 'defaultChecked', value);
+    }
+
+    public get defaultValue(): string {
+      return internalHandler.get<string>(this, 'defaultValue', false);
+    }
+
+    public set defaultValue(value: string) {
+      internalHandler.set<string>(this, 'defaultValue', value);
+    }
+
+    public get dirName(): string {
+      return internalHandler.get<string>(this, 'dirName', false);
+    }
+
+    public set dirName(value: string) {
+      internalHandler.set<string>(this, 'dirName', value);
+    }
+
+    public get disabled(): boolean {
+      return internalHandler.get<boolean>(this, 'disabled', false);
+    }
+
+    public set disabled(value: boolean) {
+      internalHandler.set<boolean>(this, 'disabled', value);
+    }
+
+    public get files(): IFileList | null {
+      return internalHandler.get<IFileList | null>(this, 'files', true);
+    }
+
+    public set files(value: IFileList | null) {
+      internalHandler.set<IFileList | null>(this, 'files', value);
+    }
+
+    public get form(): IHTMLFormElement | null {
+      return internalHandler.get<IHTMLFormElement | null>(this, 'form', true);
+    }
+
+    public get formNoValidate(): boolean {
+      return internalHandler.get<boolean>(this, 'formNoValidate', false);
+    }
+
+    public set formNoValidate(value: boolean) {
+      internalHandler.set<boolean>(this, 'formNoValidate', value);
+    }
+
+    public get formTarget(): string {
+      return internalHandler.get<string>(this, 'formTarget', false);
+    }
+
+    public set formTarget(value: string) {
+      internalHandler.set<string>(this, 'formTarget', value);
+    }
+
+    public get indeterminate(): boolean {
+      return internalHandler.get<boolean>(this, 'indeterminate', false);
+    }
+
+    public set indeterminate(value: boolean) {
+      internalHandler.set<boolean>(this, 'indeterminate', value);
+    }
+
+    public get inputMode(): string {
+      return internalHandler.get<string>(this, 'inputMode', false);
+    }
+
+    public set inputMode(value: string) {
+      internalHandler.set<string>(this, 'inputMode', value);
+    }
+
+    public get labels(): INodeList | null {
+      return internalHandler.get<INodeList | null>(this, 'labels', true);
+    }
+
+    public get list(): IHTMLElement | null {
+      return internalHandler.get<IHTMLElement | null>(this, 'list', true);
+    }
+
+    public get max(): string {
+      return internalHandler.get<string>(this, 'max', false);
+    }
+
+    public set max(value: string) {
+      internalHandler.set<string>(this, 'max', value);
+    }
+
+    public get maxLength(): number {
+      return internalHandler.get<number>(this, 'maxLength', false);
+    }
+
+    public set maxLength(value: number) {
+      internalHandler.set<number>(this, 'maxLength', value);
+    }
+
+    public get min(): string {
+      return internalHandler.get<string>(this, 'min', false);
+    }
+
+    public set min(value: string) {
+      internalHandler.set<string>(this, 'min', value);
+    }
+
+    public get minLength(): number {
+      return internalHandler.get<number>(this, 'minLength', false);
+    }
+
+    public set minLength(value: number) {
+      internalHandler.set<number>(this, 'minLength', value);
+    }
+
+    public get multiple(): boolean {
+      return internalHandler.get<boolean>(this, 'multiple', false);
+    }
+
+    public set multiple(value: boolean) {
+      internalHandler.set<boolean>(this, 'multiple', value);
+    }
+
+    public get name(): string {
+      return internalHandler.get<string>(this, 'name', false);
+    }
+
+    public set name(value: string) {
+      internalHandler.set<string>(this, 'name', value);
+    }
+
+    public get pattern(): string {
+      return internalHandler.get<string>(this, 'pattern', false);
+    }
+
+    public set pattern(value: string) {
+      internalHandler.set<string>(this, 'pattern', value);
+    }
+
+    public get placeholder(): string {
+      return internalHandler.get<string>(this, 'placeholder', false);
+    }
+
+    public set placeholder(value: string) {
+      internalHandler.set<string>(this, 'placeholder', value);
+    }
+
+    public get readOnly(): boolean {
+      return internalHandler.get<boolean>(this, 'readOnly', false);
+    }
+
+    public set readOnly(value: boolean) {
+      internalHandler.set<boolean>(this, 'readOnly', value);
+    }
+
+    public get required(): boolean {
+      return internalHandler.get<boolean>(this, 'required', false);
+    }
+
+    public set required(value: boolean) {
+      internalHandler.set<boolean>(this, 'required', value);
+    }
+
+    public get selectionDirection(): string | null {
+      return internalHandler.get<string | null>(this, 'selectionDirection', true);
+    }
+
+    public set selectionDirection(value: string | null) {
+      internalHandler.set<string | null>(this, 'selectionDirection', value);
+    }
+
+    public get selectionEnd(): number | null {
+      return internalHandler.get<number | null>(this, 'selectionEnd', true);
+    }
+
+    public set selectionEnd(value: number | null) {
+      internalHandler.set<number | null>(this, 'selectionEnd', value);
+    }
+
+    public get selectionStart(): number | null {
+      return internalHandler.get<number | null>(this, 'selectionStart', true);
+    }
+
+    public set selectionStart(value: number | null) {
+      internalHandler.set<number | null>(this, 'selectionStart', value);
+    }
+
+    public get size(): number {
+      return internalHandler.get<number>(this, 'size', false);
+    }
+
+    public set size(value: number) {
+      internalHandler.set<number>(this, 'size', value);
+    }
+
+    public get src(): string {
+      return internalHandler.get<string>(this, 'src', false);
+    }
+
+    public set src(value: string) {
+      internalHandler.set<string>(this, 'src', value);
+    }
+
+    public get step(): string {
+      return internalHandler.get<string>(this, 'step', false);
+    }
+
+    public set step(value: string) {
+      internalHandler.set<string>(this, 'step', value);
+    }
+
+    public get type(): string {
+      return internalHandler.get<string>(this, 'type', false);
+    }
+
+    public set type(value: string) {
+      internalHandler.set<string>(this, 'type', value);
+    }
+
+    public get useMap(): string {
+      return internalHandler.get<string>(this, 'useMap', false);
+    }
+
+    public set useMap(value: string) {
+      internalHandler.set<string>(this, 'useMap', value);
+    }
+
+    public get validationMessage(): string {
+      return internalHandler.get<string>(this, 'validationMessage', false);
+    }
+
+    public get validity(): IValidityState {
+      return internalHandler.get<IValidityState>(this, 'validity', false);
+    }
+
+    public get value(): string {
+      return internalHandler.get<string>(this, 'value', false);
+    }
+
+    public set value(value: string) {
+      internalHandler.set<string>(this, 'value', value);
+    }
+
+    public get valueAsDate(): any {
+      return internalHandler.get<any>(this, 'valueAsDate', false);
+    }
+
+    public set valueAsDate(value: any) {
+      internalHandler.set<any>(this, 'valueAsDate', value);
+    }
+
+    public get valueAsNumber(): number {
+      return internalHandler.get<number>(this, 'valueAsNumber', false);
+    }
+
+    public set valueAsNumber(value: number) {
+      internalHandler.set<number>(this, 'valueAsNumber', value);
+    }
+
+    public get willValidate(): boolean {
+      return internalHandler.get<boolean>(this, 'willValidate', false);
+    }
+
+    // methods
+
+    public checkValidity(): boolean {
+      return internalHandler.run<boolean>(this, 'checkValidity', []);
+    }
+
+    public reportValidity(): boolean {
+      return internalHandler.run<boolean>(this, 'reportValidity', []);
+    }
+
+    public select(): void {
+      internalHandler.run<void>(this, 'select', []);
+    }
+
+    public setCustomValidity(error: string): void {
+      internalHandler.run<void>(this, 'setCustomValidity', [error]);
+    }
+
+    public setRangeText(replacement: string): void {
+      internalHandler.run<void>(this, 'setRangeText', [replacement]);
+    }
+
+    public setRangeText(replacement: string, start: number, end: number, selectionMode?: ISelectionMode): void {
+      internalHandler.run<void>(this, 'setRangeText', [replacement, start, end, selectionMode]);
+    }
+
+    public setSelectionRange(start: number, end: number, direction?: string): void {
+      internalHandler.run<void>(this, 'setSelectionRange', [start, end, direction]);
+    }
+
+    public stepDown(n?: number): void {
+      internalHandler.run<void>(this, 'stepDown', [n]);
+    }
+
+    public stepUp(n?: number): void {
+      internalHandler.run<void>(this, 'stepUp', [n]);
+    }
+
+    public addEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLInputElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IAddEventListenerOptions): void;
+    public addEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IAddEventListenerOptions): void {
+      internalHandler.run<void>(this, 'addEventListener', [type, listener, options]);
+    }
+
+    public removeEventListener<K extends keyof IGlobalEventHandlersEventMap>(type: K, listener: (this: IHTMLInputElement, ev: IGlobalEventHandlersEventMap[K]) => any, options?: boolean | IEventListenerOptions): void;
+    public removeEventListener(type: string, listener: IEventListenerOrEventListenerObject, options?: boolean | IEventListenerOptions): void {
+      internalHandler.run<void>(this, 'removeEventListener', [type, listener, options]);
+    }
+  };
 }
+
+// INTERFACES RELATED TO STATE MACHINE PROPERTIES //////////////////////////////
+
+export interface IHTMLInputElementProperties extends IHTMLElementProperties {
+  accept?: string;
+  align?: string;
+  alt?: string;
+  autocomplete?: string;
+  autofocus?: boolean;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  defaultValue?: string;
+  dirName?: string;
+  disabled?: boolean;
+  files?: IFileList | null;
+  form?: IHTMLFormElement | null;
+  formNoValidate?: boolean;
+  formTarget?: string;
+  indeterminate?: boolean;
+  inputMode?: string;
+  labels?: INodeList | null;
+  list?: IHTMLElement | null;
+  max?: string;
+  maxLength?: number;
+  min?: string;
+  minLength?: number;
+  multiple?: boolean;
+  name?: string;
+  pattern?: string;
+  placeholder?: string;
+  readOnly?: boolean;
+  required?: boolean;
+  selectionDirection?: string | null;
+  selectionEnd?: number | null;
+  selectionStart?: number | null;
+  size?: number;
+  src?: string;
+  step?: string;
+  type?: string;
+  useMap?: string;
+  validationMessage?: string;
+  validity?: IValidityState;
+  value?: string;
+  valueAsDate?: any;
+  valueAsNumber?: number;
+  willValidate?: boolean;
+}
+
+export interface IHTMLInputElementReadonlyProperties extends IHTMLElementReadonlyProperties {
+  form?: IHTMLFormElement | null;
+  labels?: INodeList | null;
+  list?: IHTMLElement | null;
+  validationMessage?: string;
+  validity?: IValidityState;
+  willValidate?: boolean;
+}
+
+// tslint:disable-next-line:variable-name
+export const HTMLInputElementPropertyKeys = [...HTMLElementPropertyKeys, 'accept', 'align', 'alt', 'autocomplete', 'autofocus', 'checked', 'defaultChecked', 'defaultValue', 'dirName', 'disabled', 'files', 'form', 'formNoValidate', 'formTarget', 'indeterminate', 'inputMode', 'labels', 'list', 'max', 'maxLength', 'min', 'minLength', 'multiple', 'name', 'pattern', 'placeholder', 'readOnly', 'required', 'selectionDirection', 'selectionEnd', 'selectionStart', 'size', 'src', 'step', 'type', 'useMap', 'validationMessage', 'validity', 'value', 'valueAsDate', 'valueAsNumber', 'willValidate'];
+
+// tslint:disable-next-line:variable-name
+export const HTMLInputElementConstantKeys = [...HTMLElementConstantKeys];
