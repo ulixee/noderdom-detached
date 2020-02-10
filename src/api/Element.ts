@@ -1,5 +1,5 @@
-import { IAttr, IElement, IHTMLElement, ISVGElement, IHTMLCollection } from '../../base/interfaces';
-import { ElementGenerator, setState, internalHandler } from '../../base/classes/Element';
+import { IAttr, IElement, IHTMLElement, ISVGElement, IHTMLCollection, IDOMTokenList } from '../../base/interfaces';
+import { ElementGenerator, getState, setState, internalHandler } from '../../base/classes/Element';
 import NODE_TYPE from '../constants/NodeType';
 import ChildNode from '../../base/mixins/ChildNode';
 import NonDocumentTypeChildNode from '../mixins/NonDocumentTypeChildNode';
@@ -8,12 +8,11 @@ import Slotable from '../../base/mixins/Slotable';
 import { fragmentSerialization } from '../parser/Serialization';
 import DOMException from './DOMException';
 import { isElement } from '../utils/utils';
-import { _visitNode } from '../utils/document-utils';
-import HTMLCollection, { setReadonlyOfHTMLCollection } from './HTMLCollection';
-import HTMLElement from './HTMLElement';
 import NamedNodeMap, { setReadonlyOfNamedNodeMap } from './NamedNodeMap';
 import Node from './Node';
 import Document from './Document';
+import DOMTokenList from './DOMTokenList';
+import { getElementsByTagName, getElementsByTagNameNS, getElementsByClassName } from '../utils/queryable';
 
 // tslint:disable-next-line:variable-name
 const GeneratedElement = ElementGenerator(Node, ChildNode, NonDocumentTypeChildNode, ParentNode, Slotable);
@@ -29,6 +28,19 @@ export default class Element extends GeneratedElement implements IElement {
       nodeType: NODE_TYPE.ELEMENT_NODE,
       attributes: namedNodeMap,
     });
+  }
+
+  public get classList(): IDOMTokenList {
+    const state = getState(this);
+    if (!state.classList) {
+      state.classList = new DOMTokenList();
+      state.classList.value = this.className;
+    }
+    return state.classList;
+  }
+
+  public get className(): string {
+    return this.getAttribute('class') || '';
   }
 
   public get id(): string {
@@ -63,35 +75,16 @@ export default class Element extends GeneratedElement implements IElement {
     return this.attributes.getNamedItemNS(namespaceURI, localName);
   }
 
+  public getElementsByClassName(classNames: string): IHTMLCollection {
+    return getElementsByClassName(this, classNames);
+  }
+
   public getElementsByTagName(qualifiedName: string): IHTMLCollection<IElement | any> {
-    qualifiedName = qualifiedName.toUpperCase();
-    const items: Element[] = [];
-    _visitNode(this, node => {
-      if (node !== this && isElement(node) && (qualifiedName === '*' || (node as IElement).tagName === qualifiedName)) {
-        items.push(node as Element);
-      }
-    });
-    const htmlCollection = new HTMLCollection<Element>();
-    setReadonlyOfHTMLCollection(htmlCollection, { items });
-    return htmlCollection;
+    return getElementsByTagName<IElement | any>(this, qualifiedName);
   }
 
   public getElementsByTagNameNS(namespaceURI: string, localName: string): IHTMLCollection<IHTMLElement | ISVGElement> {
-    localName = localName.toLowerCase();
-    const items: HTMLElement[] = [];
-    _visitNode(this, node => {
-      if (
-        node !== this &&
-        isElement(node) &&
-        (namespaceURI === '*' || (node as IElement).namespaceURI === namespaceURI) &&
-        (localName === '*' || (node as IElement).localName === localName)
-      ) {
-        items.push(node as HTMLElement);
-      }
-    });
-    const htmlCollection = new HTMLCollection<IHTMLElement>();
-    setReadonlyOfHTMLCollection(htmlCollection, { items });
-    return htmlCollection;
+    return getElementsByTagNameNS<IHTMLElement | ISVGElement>(this, namespaceURI, localName);
   }
 
   public hasAttribute(qualifiedName: string): boolean {

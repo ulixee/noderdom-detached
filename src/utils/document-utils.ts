@@ -1,5 +1,4 @@
-import { IHTMLElement, INode } from '../../base/interfaces';
-import NODE_TYPE from '../constants/NodeType';
+import { INode } from '../../base/interfaces';
 
 /**
  * @param callback return true for continue,false for break
@@ -21,15 +20,4 @@ export function _visitNode(n: INode, callback: (node: INode) => boolean | undefi
     }
     node = node.nextSibling;
   }
-}
-
-export function findParentElement(node: INode): IHTMLElement | null {
-  let ancestorNode = node.parentNode as INode;
-  while (ancestorNode) {
-    if ([NODE_TYPE.ELEMENT_NODE, NODE_TYPE.DOCUMENT_NODE].includes(ancestorNode.nodeType)) {
-      return ancestorNode as IHTMLElement;
-    }
-    ancestorNode = ancestorNode.parentNode as INode;
-  }
-  return null;
 }

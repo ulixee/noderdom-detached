@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { INode, IXMLSerializer } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfXMLSerializer } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfXMLSerializer } = StateMachine<
   IXMLSerializer,
   IXMLSerializerProperties,
   IXMLSerializerReadonlyProperties

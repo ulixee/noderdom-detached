@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IElement, IProcessingInstruction, ICSSStyleSheet, IMediaList, IStyleSheet } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfStyleSheet } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfStyleSheet } = StateMachine<
   IStyleSheet,
   IStyleSheetProperties,
   IStyleSheetReadonlyProperties

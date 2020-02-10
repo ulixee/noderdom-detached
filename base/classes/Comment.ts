@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { ICharacterData, IComment } from '../interfaces';
 import { ICharacterDataProperties, ICharacterDataReadonlyProperties, CharacterDataPropertyKeys, CharacterDataConstantKeys } from './CharacterData';
 
-export const { getState, setState, setReadonlyOfComment } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfComment } = StateMachine<
   IComment,
   ICommentProperties,
   ICommentReadonlyProperties

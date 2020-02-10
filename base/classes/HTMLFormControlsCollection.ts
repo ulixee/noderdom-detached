@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLCollectionBase, IRadioNodeList, IElement, IHTMLFormControlsCollection } from '../interfaces';
 import { IHTMLCollectionBaseProperties, IHTMLCollectionBaseReadonlyProperties, HTMLCollectionBasePropertyKeys, HTMLCollectionBaseConstantKeys } from './HTMLCollectionBase';
 
-export const { getState, setState, setReadonlyOfHTMLFormControlsCollection } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLFormControlsCollection } = StateMachine<
   IHTMLFormControlsCollection,
   IHTMLFormControlsCollectionProperties,
   IHTMLFormControlsCollectionReadonlyProperties

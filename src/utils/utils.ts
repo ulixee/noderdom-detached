@@ -1,4 +1,4 @@
-import { IElement, IHTMLElement, INode } from '../../base/interfaces';
+import { INode } from '../../base/interfaces';
 import NODE_TYPE from '../constants/NodeType';
 
 export function isDocumentFragment(node: INode | null): boolean {
@@ -45,14 +45,4 @@ export function isCharacterData(node: INode | null): boolean {
       node.nodeType === NODE_TYPE.COMMENT_NODE ||
       node.nodeType === NODE_TYPE.PROCESSING_INSTRUCTION_NODE)
   );
-}
-
-export function copy(src: Record<string, any>, dest: Record<string, any>) {
-  for (const field of Object.keys(src)) {
-    dest[field] = src[field];
-  }
-}
-
-export function asHTMLElement<T extends IElement>(node: T) {
-  return node as T & IHTMLElement;
 }

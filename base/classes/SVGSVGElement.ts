@@ -6,7 +6,7 @@ import { ISVGGraphicsElement, IWindowEventHandlers, ISVGSVGElementEventMap, IAdd
 import { ISVGGraphicsElementProperties, ISVGGraphicsElementReadonlyProperties, SVGGraphicsElementPropertyKeys, SVGGraphicsElementConstantKeys } from './SVGGraphicsElement';
 import { IWindowEventHandlersProperties, IWindowEventHandlersReadonlyProperties, WindowEventHandlersPropertyKeys, WindowEventHandlersConstantKeys } from '../mixins/WindowEventHandlers';
 
-export const { getState, setState, setReadonlyOfSVGSVGElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSVGSVGElement } = StateMachine<
   ISVGSVGElement,
   ISVGSVGElementProperties,
   ISVGSVGElementReadonlyProperties

@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLCollection, IHTMLTableSectionElement } from '../interfaces';
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export const { getState, setState, setReadonlyOfHTMLTableSectionElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLTableSectionElement } = StateMachine<
   IHTMLTableSectionElement,
   IHTMLTableSectionElementProperties,
   IHTMLTableSectionElementReadonlyProperties

@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ITextTrackCue, ITextTrackCueList } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfTextTrackCueList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfTextTrackCueList } = StateMachine<
   ITextTrackCueList,
   ITextTrackCueListProperties,
   ITextTrackCueListReadonlyProperties

@@ -9,7 +9,7 @@ import { INonDocumentTypeChildNodeProperties, INonDocumentTypeChildNodeReadonlyP
 import { IParentNodeProperties, IParentNodeReadonlyProperties, ParentNodePropertyKeys, ParentNodeConstantKeys } from '../mixins/ParentNode';
 import { ISlotableProperties, ISlotableReadonlyProperties, SlotablePropertyKeys, SlotableConstantKeys } from '../mixins/Slotable';
 
-export const { getState, setState, setReadonlyOfElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfElement } = StateMachine<
   IElement,
   IElementProperties,
   IElementReadonlyProperties

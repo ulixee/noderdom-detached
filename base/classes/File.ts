@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IBlob, IBlobPart, IFilePropertyBag, IFile } from '../interfaces';
 import { IBlobProperties, IBlobReadonlyProperties, BlobPropertyKeys, BlobConstantKeys } from './Blob';
 
-export const { getState, setState, setReadonlyOfFile } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfFile } = StateMachine<
   IFile,
   IFileProperties,
   IFileReadonlyProperties

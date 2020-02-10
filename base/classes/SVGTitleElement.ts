@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { ISVGElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, ISVGTitleElement } from '../interfaces';
 import { ISVGElementProperties, ISVGElementReadonlyProperties, SVGElementPropertyKeys, SVGElementConstantKeys } from './SVGElement';
 
-export const { getState, setState, setReadonlyOfSVGTitleElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSVGTitleElement } = StateMachine<
   ISVGTitleElement,
   ISVGTitleElementProperties,
   ISVGTitleElementReadonlyProperties

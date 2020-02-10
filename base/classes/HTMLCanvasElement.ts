@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IRenderingContext, IBlobCallback, IHTMLCanvasElement } from '../interfaces';
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export const { getState, setState, setReadonlyOfHTMLCanvasElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLCanvasElement } = StateMachine<
   IHTMLCanvasElement,
   IHTMLCanvasElementProperties,
   IHTMLCanvasElementReadonlyProperties

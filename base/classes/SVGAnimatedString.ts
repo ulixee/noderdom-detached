@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ISVGAnimatedString } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfSVGAnimatedString } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSVGAnimatedString } = StateMachine<
   ISVGAnimatedString,
   ISVGAnimatedStringProperties,
   ISVGAnimatedStringReadonlyProperties

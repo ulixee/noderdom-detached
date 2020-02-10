@@ -6,7 +6,7 @@ import { ISVGElement, ISVGTests, IGlobalEventHandlersEventMap, IAddEventListener
 import { ISVGElementProperties, ISVGElementReadonlyProperties, SVGElementPropertyKeys, SVGElementConstantKeys } from './SVGElement';
 import { ISVGTestsProperties, ISVGTestsReadonlyProperties, SVGTestsPropertyKeys, SVGTestsConstantKeys } from '../mixins/SVGTests';
 
-export const { getState, setState, setReadonlyOfSVGGraphicsElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSVGGraphicsElement } = StateMachine<
   ISVGGraphicsElement,
   ISVGGraphicsElementProperties,
   ISVGGraphicsElementReadonlyProperties

@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IEventTarget, IAudioTrackListEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IAudioTrack, IEvent, IAudioTrackList } from '../interfaces';
 import { IEventTargetProperties, IEventTargetReadonlyProperties, EventTargetPropertyKeys, EventTargetConstantKeys } from './EventTarget';
 
-export const { getState, setState, setReadonlyOfAudioTrackList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfAudioTrackList } = StateMachine<
   IAudioTrackList,
   IAudioTrackListProperties,
   IAudioTrackListReadonlyProperties

@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IBlob, IBlobPart, IBlobPropertyBag } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfBlob } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfBlob } = StateMachine<
   IBlob,
   IBlobProperties,
   IBlobReadonlyProperties

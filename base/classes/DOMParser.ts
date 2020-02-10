@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ISupportedType, IDocument, IDOMParser } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfDOMParser } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDOMParser } = StateMachine<
   IDOMParser,
   IDOMParserProperties,
   IDOMParserReadonlyProperties

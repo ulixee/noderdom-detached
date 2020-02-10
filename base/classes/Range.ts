@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IAbstractRange, INode, IRange, IDocumentFragment } from '../interfaces';
 import { IAbstractRangeProperties, IAbstractRangeReadonlyProperties, AbstractRangePropertyKeys, AbstractRangeConstantKeys } from './AbstractRange';
 
-export const { getState, setState, setReadonlyOfRange } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfRange } = StateMachine<
   IRange,
   IRangeProperties,
   IRangeReadonlyProperties

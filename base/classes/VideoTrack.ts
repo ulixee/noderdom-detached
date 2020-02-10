@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IVideoTrack } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfVideoTrack } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfVideoTrack } = StateMachine<
   IVideoTrack,
   IVideoTrackProperties,
   IVideoTrackReadonlyProperties

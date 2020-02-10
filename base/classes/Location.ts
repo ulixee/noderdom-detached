@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ILocation } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfLocation } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfLocation } = StateMachine<
   ILocation,
   ILocationProperties,
   ILocationReadonlyProperties

@@ -2,7 +2,7 @@ import InternalHandler from '../InternalHandler';
 import StateMachine from '../StateMachine';
 import { IHTMLSlotElement, ISlotable } from '../interfaces';
 
-export const { getState, setState } = StateMachine<
+export const { getState, setState, setHiddenState } = StateMachine<
   ISlotable,
   ISlotableProperties,
   ISlotableReadonlyProperties

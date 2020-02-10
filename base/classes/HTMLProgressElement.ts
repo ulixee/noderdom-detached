@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, INodeList, IHTMLProgressElement } from '../interfaces';
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export const { getState, setState, setReadonlyOfHTMLProgressElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLProgressElement } = StateMachine<
   IHTMLProgressElement,
   IHTMLProgressElementProperties,
   IHTMLProgressElementReadonlyProperties

@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IMediaList } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfMediaList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfMediaList } = StateMachine<
   IMediaList,
   IMediaListProperties,
   IMediaListReadonlyProperties

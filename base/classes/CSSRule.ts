@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ICSSRule, ICSSStyleSheet } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfCSSRule } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfCSSRule } = StateMachine<
   ICSSRule,
   ICSSRuleProperties,
   ICSSRuleReadonlyProperties

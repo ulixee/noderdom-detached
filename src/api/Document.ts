@@ -5,12 +5,12 @@ import {
   IElement,
   IHTMLElement,
   IHTMLElementTagNameMap,
-  INode,
+  INodeList,
   IText,
   IElementCreationOptions,
   IHTMLCollection,
 } from '../../base/interfaces';
-import { DocumentGenerator, setReadonlyOfDocument, internalHandler } from '../../base/classes/Document';
+import { DocumentGenerator, getState, setState, setHiddenState, internalHandler } from '../../base/classes/Document';
 import { setReadonlyOfElement } from '../../base/classes/Element';
 import { setReadonlyOfAttr } from '../../base/classes/Attr';
 import { setReadonlyOfCDATASection } from '../../base/classes/CDATASection';
@@ -19,8 +19,6 @@ import { setReadonlyOfDocumentFragment } from '../../base/classes/DocumentFragme
 import { setReadonlyOfHTMLElement } from '../../base/classes/HTMLElement';
 import { setReadonlyOfProcessingInstruction } from '../../base/classes/ProcessingInstruction';
 import { setReadonlyOfText } from '../../base/classes/Text';
-import { _visitNode } from '../utils/document-utils';
-import { isElement } from '../utils/utils';
 import Attr from './Attr';
 import CDATASection from './CDATASection';
 import Comment from './Comment';
@@ -29,13 +27,18 @@ import Element from './Element';
 import HTMLElement from './HTMLElement';
 import ProcessingInstruction from './ProcessingInstruction';
 import Text from './Text';
-import HTMLCollection, { setReadonlyOfHTMLCollection } from './HTMLCollection';
 import NODE_TYPE from '../constants/NodeType';
 import Node from './Node';
 import DocumentOrShadowRoot from '../../base/mixins/DocumentOrShadowRoot';
 import GlobalEventHandlers from '../../base/mixins/GlobalEventHandlers';
-import NonElementParentNode from '../../base/mixins/NonElementParentNode';
+import NonElementParentNode from '../mixins/NonElementParentNode';
 import ParentNode from '../mixins/ParentNode';
+import DOMException from './DOMException';
+import { getElementsByTagName, getElementsByTagNameNS, getElementsByClassName } from '../utils/queryable';
+import { _visitNode } from '../utils/document-utils';
+import { isElement } from '../utils/utils';
+import NodeList, { pushIntoNodeList } from './NodeList';
+const nwsapi = require('nwsapi');
 
 // tslint:disable-next-line:variable-name
 const GeneratedDocument = DocumentGenerator(
@@ -49,7 +52,7 @@ const GeneratedDocument = DocumentGenerator(
 export default class Document extends GeneratedDocument implements IDocument {
   constructor() {
     super();
-    setReadonlyOfDocument(this, {
+    setState(this, {
       nodeName: '#document',
       nodeType: NODE_TYPE.DOCUMENT_NODE,
       contentType: 'text/html',
@@ -193,50 +196,50 @@ export default class Document extends GeneratedDocument implements IDocument {
     return text as Text;
   }
 
-  public getElementById(elementId: string): IHTMLElement | null {
-    if (!this.documentElement) return null;
-    let rtv: IElement | null = null;
-    _visitNode(this.documentElement, (node: INode) => {
-      if (isElement(node)) {
-        if ((node as IElement).getAttribute('id') === elementId) {
-          rtv = node as IElement;
-          return true;
-        }
+  public getElementsByClassName(classNames: string): IHTMLCollection {
+    return getElementsByClassName(this, classNames);
+  }
+
+  getElementsByName(elementName: string): INodeList {
+    const nodeList: INodeList = new NodeList();
+    _visitNode(this, node => {
+      if (node === this) return;
+      if (!isElement(node)) return;
+      const element = node as IElement;
+      if (element.getAttributeNS && element.getAttributeNS(null, 'name') === elementName) {
+        pushIntoNodeList<IElement>(nodeList, element);
       }
     });
-    return rtv;
+    return nodeList;
   }
 
   public getElementsByTagName(qualifiedName: string): IHTMLCollection {
-    qualifiedName = qualifiedName.toUpperCase();
-    const items: IElement[] = [];
-    _visitNode(this, node => {
-      if (node !== this && isElement(node) && (qualifiedName === '*' || (node as IElement).tagName === qualifiedName)) {
-        items.push(node as IElement);
-      }
-    });
-    const htmlCollection = new HTMLCollection<IElement>();
-    setReadonlyOfHTMLCollection(htmlCollection, { items });
-    return htmlCollection;
+    return getElementsByTagName<IElement | any>(this, qualifiedName);
   }
 
   public getElementsByTagNameNS(namespaceURI: string, localName: string): IHTMLCollection<IElement> {
-    localName = localName.toLowerCase();
-    const items: IElement[] = [];
-    _visitNode(this, node => {
-      if (
-        node !== this &&
-        isElement(node) &&
-        (namespaceURI === '*' || (node as IElement).namespaceURI === namespaceURI) &&
-        (localName === '*' || (node as IElement).localName === localName)
-      ) {
-        items.push(node as IElement);
-      }
-    });
-    const htmlCollection = new HTMLCollection<IElement>();
-    setReadonlyOfHTMLCollection(htmlCollection, { items });
-    return htmlCollection;
+    return getElementsByTagNameNS<IElement>(this, namespaceURI, localName);
   }
 }
 
-internalHandler.handle('doctype', 'inputEncoding', 'implementation');
+internalHandler.handle('doctype', 'inputEncoding', 'implementation', 'contentType', 'compatMode');
+
+// QUERY ENGINE //////////////////////////////////////////////
+
+export function queryEngine(document: IDocument) {
+  let { nwsapiInstance } = getState(document);
+  if (!nwsapiInstance) {
+    nwsapiInstance = nwsapi({
+      document,
+      DOMException,
+    });
+    nwsapiInstance.configure({
+      LOGERRORS: false,
+      VERBOSITY: true,
+      IDS_DUPES: true,
+      MIXEDCASE: true,
+    });
+    setHiddenState<{ nwsapiInstance: any }>(document, { nwsapiInstance });
+  }
+  return nwsapiInstance;
+}

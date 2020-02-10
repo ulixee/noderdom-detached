@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IStyleSheet, ICSSRule, ICSSRuleList, ICSSStyleSheet } from '../interfaces';
 import { IStyleSheetProperties, IStyleSheetReadonlyProperties, StyleSheetPropertyKeys, StyleSheetConstantKeys } from './StyleSheet';
 
-export const { getState, setState, setReadonlyOfCSSStyleSheet } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfCSSStyleSheet } = StateMachine<
   ICSSStyleSheet,
   ICSSStyleSheetProperties,
   ICSSStyleSheetReadonlyProperties

@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IEventTarget, ITextTrackListEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, ITextTrack, IEvent, ITextTrackList } from '../interfaces';
 import { IEventTargetProperties, IEventTargetReadonlyProperties, EventTargetPropertyKeys, EventTargetConstantKeys } from './EventTarget';
 
-export const { getState, setState, setReadonlyOfTextTrackList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfTextTrackList } = StateMachine<
   ITextTrackList,
   ITextTrackListProperties,
   ITextTrackListReadonlyProperties

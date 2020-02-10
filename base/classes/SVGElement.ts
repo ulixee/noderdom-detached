@@ -8,7 +8,7 @@ import { IElementCSSInlineStyleProperties, IElementCSSInlineStyleReadonlyPropert
 import { IGlobalEventHandlersProperties, IGlobalEventHandlersReadonlyProperties, GlobalEventHandlersPropertyKeys, GlobalEventHandlersConstantKeys } from '../mixins/GlobalEventHandlers';
 import { IHTMLOrSVGElementProperties, IHTMLOrSVGElementReadonlyProperties, HTMLOrSVGElementPropertyKeys, HTMLOrSVGElementConstantKeys } from '../mixins/HTMLOrSVGElement';
 
-export const { getState, setState, setReadonlyOfSVGElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSVGElement } = StateMachine<
   ISVGElement,
   ISVGElementProperties,
   ISVGElementReadonlyProperties

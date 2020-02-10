@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { INode, IElement, IAttr } from '../interfaces';
 import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstantKeys } from './Node';
 
-export const { getState, setState, setReadonlyOfAttr } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfAttr } = StateMachine<
   IAttr,
   IAttrProperties,
   IAttrReadonlyProperties

@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLMediaElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLAudioElement } from '../interfaces';
 import { IHTMLMediaElementProperties, IHTMLMediaElementReadonlyProperties, HTMLMediaElementPropertyKeys, HTMLMediaElementConstantKeys } from './HTMLMediaElement';
 
-export const { getState, setState, setReadonlyOfHTMLAudioElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLAudioElement } = StateMachine<
   IHTMLAudioElement,
   IHTMLAudioElementProperties,
   IHTMLAudioElementReadonlyProperties

@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { INode, INodeFilter, ITreeWalker } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfTreeWalker } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfTreeWalker } = StateMachine<
   ITreeWalker,
   ITreeWalkerProperties,
   ITreeWalkerReadonlyProperties

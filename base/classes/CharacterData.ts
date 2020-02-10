@@ -7,7 +7,7 @@ import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstan
 import { IChildNodeProperties, IChildNodeReadonlyProperties, ChildNodePropertyKeys, ChildNodeConstantKeys } from '../mixins/ChildNode';
 import { INonDocumentTypeChildNodeProperties, INonDocumentTypeChildNodeReadonlyProperties, NonDocumentTypeChildNodePropertyKeys, NonDocumentTypeChildNodeConstantKeys } from '../mixins/NonDocumentTypeChildNode';
 
-export const { getState, setState, setReadonlyOfCharacterData } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfCharacterData } = StateMachine<
   ICharacterData,
   ICharacterDataProperties,
   ICharacterDataReadonlyProperties

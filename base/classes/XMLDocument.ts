@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IDocument, IDocumentEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IXMLDocument } from '../interfaces';
 import { IDocumentProperties, IDocumentReadonlyProperties, DocumentPropertyKeys, DocumentConstantKeys } from './Document';
 
-export const { getState, setState, setReadonlyOfXMLDocument } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfXMLDocument } = StateMachine<
   IXMLDocument,
   IXMLDocumentProperties,
   IXMLDocumentReadonlyProperties

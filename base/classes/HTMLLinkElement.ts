@@ -6,7 +6,7 @@ import { IHTMLElement, ILinkStyle, IGlobalEventHandlersEventMap, IAddEventListen
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 import { ILinkStyleProperties, ILinkStyleReadonlyProperties, LinkStylePropertyKeys, LinkStyleConstantKeys } from '../mixins/LinkStyle';
 
-export const { getState, setState, setReadonlyOfHTMLLinkElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLLinkElement } = StateMachine<
   IHTMLLinkElement,
   IHTMLLinkElementProperties,
   IHTMLLinkElementReadonlyProperties

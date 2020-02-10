@@ -6,7 +6,7 @@ import { IDocumentFragment, IDocumentOrShadowRoot, IShadowRootMode, IElement, IS
 import { IDocumentFragmentProperties, IDocumentFragmentReadonlyProperties, DocumentFragmentPropertyKeys, DocumentFragmentConstantKeys } from './DocumentFragment';
 import { IDocumentOrShadowRootProperties, IDocumentOrShadowRootReadonlyProperties, DocumentOrShadowRootPropertyKeys, DocumentOrShadowRootConstantKeys } from '../mixins/DocumentOrShadowRoot';
 
-export const { getState, setState, setReadonlyOfShadowRoot } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfShadowRoot } = StateMachine<
   IShadowRoot,
   IShadowRootProperties,
   IShadowRootReadonlyProperties

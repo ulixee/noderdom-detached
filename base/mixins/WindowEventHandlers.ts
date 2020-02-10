@@ -2,7 +2,7 @@ import InternalHandler from '../InternalHandler';
 import StateMachine from '../StateMachine';
 import { IWindowEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IEvent, IWindowEventHandlers } from '../interfaces';
 
-export const { getState, setState } = StateMachine<
+export const { getState, setState, setHiddenState } = StateMachine<
   IWindowEventHandlers,
   IWindowEventHandlersProperties,
   IWindowEventHandlersReadonlyProperties

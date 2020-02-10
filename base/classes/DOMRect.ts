@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IDOMRectReadOnly, IDOMRectInit, IDOMRect } from '../interfaces';
 import { IDOMRectReadOnlyProperties, IDOMRectReadOnlyReadonlyProperties, DOMRectReadOnlyPropertyKeys, DOMRectReadOnlyConstantKeys } from './DOMRectReadOnly';
 
-export const { getState, setState, setReadonlyOfDOMRect } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDOMRect } = StateMachine<
   IDOMRect,
   IDOMRectProperties,
   IDOMRectReadonlyProperties

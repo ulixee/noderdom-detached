@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { INodeList, IRadioNodeList } from '../interfaces';
 import { INodeListProperties, INodeListReadonlyProperties, NodeListPropertyKeys, NodeListConstantKeys } from './NodeList';
 
-export const { getState, setState, setReadonlyOfRadioNodeList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfRadioNodeList } = StateMachine<
   IRadioNodeList,
   IRadioNodeListProperties,
   IRadioNodeListReadonlyProperties

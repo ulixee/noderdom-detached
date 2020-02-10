@@ -7,7 +7,7 @@ import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstan
 import { INonElementParentNodeProperties, INonElementParentNodeReadonlyProperties, NonElementParentNodePropertyKeys, NonElementParentNodeConstantKeys } from '../mixins/NonElementParentNode';
 import { IParentNodeProperties, IParentNodeReadonlyProperties, ParentNodePropertyKeys, ParentNodeConstantKeys } from '../mixins/ParentNode';
 
-export const { getState, setState, setReadonlyOfDocumentFragment } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDocumentFragment } = StateMachine<
   IDocumentFragment,
   IDocumentFragmentProperties,
   IDocumentFragmentReadonlyProperties

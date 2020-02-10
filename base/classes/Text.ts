@@ -6,7 +6,7 @@ import { ICharacterData, ISlotable, IText } from '../interfaces';
 import { ICharacterDataProperties, ICharacterDataReadonlyProperties, CharacterDataPropertyKeys, CharacterDataConstantKeys } from './CharacterData';
 import { ISlotableProperties, ISlotableReadonlyProperties, SlotablePropertyKeys, SlotableConstantKeys } from '../mixins/Slotable';
 
-export const { getState, setState, setReadonlyOfText } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfText } = StateMachine<
   IText,
   ITextProperties,
   ITextReadonlyProperties

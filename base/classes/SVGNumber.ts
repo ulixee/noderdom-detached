@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ISVGNumber } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfSVGNumber } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSVGNumber } = StateMachine<
   ISVGNumber,
   ISVGNumberProperties,
   ISVGNumberReadonlyProperties

@@ -6,7 +6,7 @@ import { IHTMLElement, IHTMLHyperlinkElementUtils, IGlobalEventHandlersEventMap,
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 import { IHTMLHyperlinkElementUtilsProperties, IHTMLHyperlinkElementUtilsReadonlyProperties, HTMLHyperlinkElementUtilsPropertyKeys, HTMLHyperlinkElementUtilsConstantKeys } from '../mixins/HTMLHyperlinkElementUtils';
 
-export const { getState, setState, setReadonlyOfHTMLAnchorElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLAnchorElement } = StateMachine<
   IHTMLAnchorElement,
   IHTMLAnchorElementProperties,
   IHTMLAnchorElementReadonlyProperties

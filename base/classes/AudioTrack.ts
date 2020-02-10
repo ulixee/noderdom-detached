@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IAudioTrack } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfAudioTrack } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfAudioTrack } = StateMachine<
   IAudioTrack,
   IAudioTrackProperties,
   IAudioTrackReadonlyProperties

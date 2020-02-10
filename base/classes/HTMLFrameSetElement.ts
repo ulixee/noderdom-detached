@@ -6,7 +6,7 @@ import { IHTMLElement, IWindowEventHandlers, IHTMLFrameSetElementEventMap, IAddE
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 import { IWindowEventHandlersProperties, IWindowEventHandlersReadonlyProperties, WindowEventHandlersPropertyKeys, WindowEventHandlersConstantKeys } from '../mixins/WindowEventHandlers';
 
-export const { getState, setState, setReadonlyOfHTMLFrameSetElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLFrameSetElement } = StateMachine<
   IHTMLFrameSetElement,
   IHTMLFrameSetElementProperties,
   IHTMLFrameSetElementReadonlyProperties

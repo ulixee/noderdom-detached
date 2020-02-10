@@ -9,7 +9,7 @@ import { IGlobalEventHandlersProperties, IGlobalEventHandlersReadonlyProperties,
 import { INonElementParentNodeProperties, INonElementParentNodeReadonlyProperties, NonElementParentNodePropertyKeys, NonElementParentNodeConstantKeys } from '../mixins/NonElementParentNode';
 import { IParentNodeProperties, IParentNodeReadonlyProperties, ParentNodePropertyKeys, ParentNodeConstantKeys } from '../mixins/ParentNode';
 
-export const { getState, setState, setReadonlyOfDocument } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDocument } = StateMachine<
   IDocument,
   IDocumentProperties,
   IDocumentReadonlyProperties

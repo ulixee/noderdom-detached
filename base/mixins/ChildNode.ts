@@ -2,7 +2,7 @@ import InternalHandler from '../InternalHandler';
 import StateMachine from '../StateMachine';
 import { INode, IChildNode } from '../interfaces';
 
-export const { getState, setState } = StateMachine<
+export const { getState, setState, setHiddenState } = StateMachine<
   IChildNode,
   IChildNodeProperties,
   IChildNodeReadonlyProperties

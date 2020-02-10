@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { INode, INodeList } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfNodeList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfNodeList } = StateMachine<
   INodeList,
   INodeListProperties,
   INodeListReadonlyProperties

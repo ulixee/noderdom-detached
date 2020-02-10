@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IEventTarget, IDocument, INode, IElement, INodeList, IGetRootNodeOptions } from '../interfaces';
 import { IEventTargetProperties, IEventTargetReadonlyProperties, EventTargetPropertyKeys, EventTargetConstantKeys } from './EventTarget';
 
-export const { getState, setState, setReadonlyOfNode } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfNode } = StateMachine<
   INode,
   INodeProperties,
   INodeReadonlyProperties

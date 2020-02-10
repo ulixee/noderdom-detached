@@ -6,7 +6,7 @@ import { IHTMLElement, IHTMLHyperlinkElementUtils, IGlobalEventHandlersEventMap,
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 import { IHTMLHyperlinkElementUtilsProperties, IHTMLHyperlinkElementUtilsReadonlyProperties, HTMLHyperlinkElementUtilsPropertyKeys, HTMLHyperlinkElementUtilsConstantKeys } from '../mixins/HTMLHyperlinkElementUtils';
 
-export const { getState, setState, setReadonlyOfHTMLAreaElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLAreaElement } = StateMachine<
   IHTMLAreaElement,
   IHTMLAreaElementProperties,
   IHTMLAreaElementReadonlyProperties

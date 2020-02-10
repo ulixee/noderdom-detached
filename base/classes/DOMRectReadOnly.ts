@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IDOMRectInit, IDOMRectReadOnly } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfDOMRectReadOnly } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDOMRectReadOnly } = StateMachine<
   IDOMRectReadOnly,
   IDOMRectReadOnlyProperties,
   IDOMRectReadOnlyReadonlyProperties

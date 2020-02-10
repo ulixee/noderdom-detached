@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IDOMStringMap } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfDOMStringMap } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDOMStringMap } = StateMachine<
   IDOMStringMap,
   IDOMStringMapProperties,
   IDOMStringMapReadonlyProperties

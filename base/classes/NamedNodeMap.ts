@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IAttr, INamedNodeMap } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfNamedNodeMap } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfNamedNodeMap } = StateMachine<
   INamedNodeMap,
   INamedNodeMapProperties,
   INamedNodeMapReadonlyProperties

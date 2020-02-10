@@ -6,7 +6,7 @@ import { INode, IChildNode, IDocumentType } from '../interfaces';
 import { INodeProperties, INodeReadonlyProperties, NodePropertyKeys, NodeConstantKeys } from './Node';
 import { IChildNodeProperties, IChildNodeReadonlyProperties, ChildNodePropertyKeys, ChildNodeConstantKeys } from '../mixins/ChildNode';
 
-export const { getState, setState, setReadonlyOfDocumentType } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDocumentType } = StateMachine<
   IDocumentType,
   IDocumentTypeProperties,
   IDocumentTypeReadonlyProperties

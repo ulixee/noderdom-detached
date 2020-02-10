@@ -6,7 +6,7 @@ import { IHTMLElement, IWindowEventHandlers, IHTMLBodyElementEventMap, IAddEvent
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 import { IWindowEventHandlersProperties, IWindowEventHandlersReadonlyProperties, WindowEventHandlersPropertyKeys, WindowEventHandlersConstantKeys } from '../mixins/WindowEventHandlers';
 
-export const { getState, setState, setReadonlyOfHTMLBodyElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLBodyElement } = StateMachine<
   IHTMLBodyElement,
   IHTMLBodyElementProperties,
   IHTMLBodyElementReadonlyProperties

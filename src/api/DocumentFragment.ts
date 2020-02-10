@@ -2,7 +2,7 @@ import { DocumentFragmentGenerator, setState } from '../../base/classes/Document
 import { IDocumentFragment } from '../../base/interfaces';
 import NODE_TYPE from '../constants/NodeType';
 import Node from './Node';
-import NonElementParentNode from '../../base/mixins/NonElementParentNode';
+import NonElementParentNode from '../mixins/NonElementParentNode';
 import ParentNode from '../mixins/ParentNode';
 
 // tslint:disable-next-line:variable-name

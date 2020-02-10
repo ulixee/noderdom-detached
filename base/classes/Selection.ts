@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { INode, IRange, ISelection } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfSelection } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfSelection } = StateMachine<
   ISelection,
   ISelectionProperties,
   ISelectionReadonlyProperties

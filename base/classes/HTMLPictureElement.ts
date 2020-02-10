@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IHTMLPictureElement } from '../interfaces';
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export const { getState, setState, setReadonlyOfHTMLPictureElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLPictureElement } = StateMachine<
   IHTMLPictureElement,
   IHTMLPictureElementProperties,
   IHTMLPictureElementReadonlyProperties

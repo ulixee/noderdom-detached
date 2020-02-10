@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLElement, IGlobalEventHandlersEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, ITimeRanges, IAudioTrackList, IVideoTrackList, ITextTrackList, ICanPlayTypeResult, ITextTrackKind, ITextTrack, IHTMLMediaElement } from '../interfaces';
 import { IHTMLElementProperties, IHTMLElementReadonlyProperties, HTMLElementPropertyKeys, HTMLElementConstantKeys } from './HTMLElement';
 
-export const { getState, setState, setReadonlyOfHTMLMediaElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLMediaElement } = StateMachine<
   IHTMLMediaElement,
   IHTMLMediaElementProperties,
   IHTMLMediaElementReadonlyProperties

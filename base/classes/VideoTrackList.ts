@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IEventTarget, IVideoTrackListEventMap, IAddEventListenerOptions, IEventListenerOrEventListenerObject, IEventListenerOptions, IVideoTrack, IEvent, IVideoTrackList } from '../interfaces';
 import { IEventTargetProperties, IEventTargetReadonlyProperties, EventTargetPropertyKeys, EventTargetConstantKeys } from './EventTarget';
 
-export const { getState, setState, setReadonlyOfVideoTrackList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfVideoTrackList } = StateMachine<
   IVideoTrackList,
   IVideoTrackListProperties,
   IVideoTrackListReadonlyProperties

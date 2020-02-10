@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IDOMException } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfDOMException } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDOMException } = StateMachine<
   IDOMException,
   IDOMExceptionProperties,
   IDOMExceptionReadonlyProperties

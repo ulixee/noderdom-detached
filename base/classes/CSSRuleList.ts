@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { ICSSRule, ICSSRuleList } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfCSSRuleList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfCSSRuleList } = StateMachine<
   ICSSRuleList,
   ICSSRuleListProperties,
   ICSSRuleListReadonlyProperties

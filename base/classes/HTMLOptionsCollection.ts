@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IHTMLCollection, IHTMLOptionElement, IHTMLOptGroupElement, IHTMLElement, IHTMLOptionsCollection } from '../interfaces';
 import { IHTMLCollectionProperties, IHTMLCollectionReadonlyProperties, HTMLCollectionPropertyKeys, HTMLCollectionConstantKeys } from './HTMLCollection';
 
-export const { getState, setState, setReadonlyOfHTMLOptionsCollection } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLOptionsCollection } = StateMachine<
   IHTMLOptionsCollection,
   IHTMLOptionsCollectionProperties,
   IHTMLOptionsCollectionReadonlyProperties

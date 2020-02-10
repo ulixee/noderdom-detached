@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { ICharacterData, IProcessingInstruction } from '../interfaces';
 import { ICharacterDataProperties, ICharacterDataReadonlyProperties, CharacterDataPropertyKeys, CharacterDataConstantKeys } from './CharacterData';
 
-export const { getState, setState, setReadonlyOfProcessingInstruction } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfProcessingInstruction } = StateMachine<
   IProcessingInstruction,
   IProcessingInstructionProperties,
   IProcessingInstructionReadonlyProperties

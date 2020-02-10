@@ -4,7 +4,7 @@ import StateMachine from '../StateMachine';
 import { IText, ICDATASection } from '../interfaces';
 import { ITextProperties, ITextReadonlyProperties, TextPropertyKeys, TextConstantKeys } from './Text';
 
-export const { getState, setState, setReadonlyOfCDATASection } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfCDATASection } = StateMachine<
   ICDATASection,
   ICDATASectionProperties,
   ICDATASectionReadonlyProperties

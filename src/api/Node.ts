@@ -1,10 +1,10 @@
-import { findParentElement } from '../utils/document-utils';
 import { getTextContent, locateNamespace, locateNamespacePrefix } from '../utils/node-utils';
 import { isDocumentFragment, isElement, isText } from '../utils/utils';
-import { INode, IParentNode, IText } from '../../base/interfaces';
+import { INode, IParentNode, IText, IElement } from '../../base/interfaces';
 import { NodeGenerator, setState, internalHandler } from '../../base/classes/Node';
 import NodeList, { spliceIntoNodeList, removeFromNodeList, indexOfNodeListItem } from './NodeList';
 import EventTarget from './EventTarget';
+import NODE_TYPE from '../constants/NodeType';
 
 export default class Node extends NodeGenerator(EventTarget) implements INode {
   constructor() {
@@ -28,6 +28,11 @@ export default class Node extends NodeGenerator(EventTarget) implements INode {
     }
     const i = indexOfNodeListItem(this.parentNode.childNodes, this);
     return i >= 0 ? this.parentNode.childNodes[i + 1] : null;
+  }
+
+  public get parentElement(): IElement | null {
+    const parentNode = this.parentNode;
+    return parentNode !== null && parentNode.nodeType === NODE_TYPE.ELEMENT_NODE ? (parentNode as IElement) : null;
   }
 
   public get previousSibling(): INode | null {
@@ -80,12 +85,10 @@ export default class Node extends NodeGenerator(EventTarget) implements INode {
       nodesToAdd = (newChild.childNodes as unknown) as INode[];
     }
 
-    // parentNode and parentElement must be set on all
-    const parentElement = findParentElement(this);
+    // parentNode must be set on all
     for (const childNode of nodesToAdd) {
       setState(childNode, {
         parentNode: (this as unknown) as INode & IParentNode,
-        parentElement: parentElement,
       });
     }
 
@@ -124,7 +127,6 @@ export default class Node extends NodeGenerator(EventTarget) implements INode {
     removeFromNodeList(this.childNodes, child);
     setState(child, {
       parentNode: null,
-      parentElement: null,
     });
     return child;
   }
@@ -135,4 +137,11 @@ export default class Node extends NodeGenerator(EventTarget) implements INode {
   }
 }
 
-internalHandler.handle('nodeName', 'nodeType', 'nodeValue', 'childNodes', 'ownerDocument', 'parentNode');
+internalHandler.handle(
+  'nodeName',
+  'nodeType',
+  'nodeValue',
+  'childNodes',
+  'ownerDocument',
+  'parentNode',
+);

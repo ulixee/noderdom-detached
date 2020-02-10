@@ -1,12 +1,12 @@
-import {
-  HTMLCollectionGenerator,
-  IHTMLCollectionProperties as IOriginalHTMLCollectionProperties,
-  IHTMLCollectionReadonlyProperties as IOriginalHTMLCollectionReadonlyProperties,
-} from '../../base/classes/HTMLCollection';
+import { HTMLCollectionGenerator, getState, setHiddenState } from '../../base/classes/HTMLCollection';
 import HTMLCollectionBase from '../../base/classes/HTMLCollectionBase';
 import { IElement, IHTMLCollection } from '../../base/interfaces';
-import StateMachine from '../../base/StateMachine';
-import { iterableIteratorForArray } from '../utils/iterable';
+import { createProxy, iterableIteratorForArray, addToArrayish, removeFromArrayish } from '../utils/arrayish';
+
+interface IHiddenProperties {
+  items: IElement[];
+  exposeItemsBy: string[];
+}
 
 // tslint:disable-next-line:variable-name
 const GeneratedHTMLCollection = HTMLCollectionGenerator(HTMLCollectionBase);
@@ -17,27 +17,9 @@ export default class HTMLCollection<T extends IElement = IElement> extends Gener
 
   constructor() {
     super();
-    const self = this;
-    const proxy = new Proxy(this, {
-      get(_: any, prop: string | number) {
-        if (prop === 'proxy') return undefined;
-        const propIsNumber = typeof prop === 'number' || (typeof prop === 'string' && !isNaN(prop as any));
-        if (propIsNumber) {
-          return self.item.call(self, Number(prop));
-        }
-        const value = (self as any)[prop];
-        if (typeof value === 'function') {
-          return value.bind(self);
-        }
-        if (value !== undefined) {
-          return value;
-        }
-        return self.namedItem.call(self, prop as string);
-      },
-    });
-    Object.defineProperty(this, 'proxy', { enumerable: false, value: proxy });
-    setState(proxy, { items: [] });
-    return proxy;
+    Object.defineProperty(this, 'proxy', { enumerable: false, value: createProxy(this) });
+    setHiddenState<IHiddenProperties>(this.proxy, { items: [], exposeItemsBy: ['index', 'name'] });
+    return this.proxy;
   }
 
   public get length(): number {
@@ -68,35 +50,16 @@ export default class HTMLCollection<T extends IElement = IElement> extends Gener
     return iterableIteratorForArray<T>(() => getState(this.proxy).items);
   }
 
+  [index: number]: IElement;
   [index: string]: IElement | any;
 }
 
-// SUPPORT FOR CUSTOM INTERNAL STATE GENERATOR ////////////////////////////////////////
-
-export interface IHTMLCollectionProperties extends IOriginalHTMLCollectionProperties {
-  items: IElement[];
-}
-
-export interface IHTMLCollectionReadonlyProperties extends IOriginalHTMLCollectionReadonlyProperties {
-  items: IElement[];
-}
-
-export const { getState, setState, setReadonlyOfHTMLCollection } = StateMachine<
-  IHTMLCollection,
-  IHTMLCollectionProperties,
-  IHTMLCollectionReadonlyProperties
->('HTMLCollection');
-
 // HELPER FUNCTIONS /////////////////////////////////////////////////////////////////////
 
-export function removeFromHTMLCollection(htmlCollection: IHTMLCollection, child: IElement) {
-  const items = getState(htmlCollection).items;
-  const i = items.indexOf(child);
-  items.splice(i, 1);
+export function pushIntoHTMLCollection(htmlCollection: IHTMLCollection, ...elementsToAdd: IElement[]) {
+  addToArrayish<IHTMLCollection, IElement>(htmlCollection, getState(htmlCollection), elementsToAdd);
 }
 
-export function pushIntoHTMLCollection(htmlCollection: IHTMLCollection, ...elementsToAdd: IElement[]) {
-  const { items } = getState(htmlCollection);
-  items.push(...elementsToAdd);
-  setState(htmlCollection, { items });
+export function removeFromHTMLCollection(htmlCollection: IHTMLCollection, child: IElement) {
+  removeFromArrayish<IHTMLCollection, IElement>(htmlCollection, getState(htmlCollection), child);
 }

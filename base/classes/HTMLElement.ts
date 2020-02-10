@@ -9,7 +9,7 @@ import { IElementContentEditableProperties, IElementContentEditableReadonlyPrope
 import { IGlobalEventHandlersProperties, IGlobalEventHandlersReadonlyProperties, GlobalEventHandlersPropertyKeys, GlobalEventHandlersConstantKeys } from '../mixins/GlobalEventHandlers';
 import { IHTMLOrSVGElementProperties, IHTMLOrSVGElementReadonlyProperties, HTMLOrSVGElementPropertyKeys, HTMLOrSVGElementConstantKeys } from '../mixins/HTMLOrSVGElement';
 
-export const { getState, setState, setReadonlyOfHTMLElement } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLElement } = StateMachine<
   IHTMLElement,
   IHTMLElementProperties,
   IHTMLElementReadonlyProperties

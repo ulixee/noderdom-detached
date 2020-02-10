@@ -2,7 +2,7 @@ import InternalHandler from '../InternalHandler';
 import StateMachine from '../StateMachine';
 import { IDOMStringMap, IHTMLOrSVGElement } from '../interfaces';
 
-export const { getState, setState } = StateMachine<
+export const { getState, setState, setHiddenState } = StateMachine<
   IHTMLOrSVGElement,
   IHTMLOrSVGElementProperties,
   IHTMLOrSVGElementReadonlyProperties

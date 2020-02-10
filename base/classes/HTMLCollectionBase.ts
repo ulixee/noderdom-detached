@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IElement, IHTMLCollectionBase } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfHTMLCollectionBase } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfHTMLCollectionBase } = StateMachine<
   IHTMLCollectionBase,
   IHTMLCollectionBaseProperties,
   IHTMLCollectionBaseReadonlyProperties

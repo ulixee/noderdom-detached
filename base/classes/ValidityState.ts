@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IValidityState } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfValidityState } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfValidityState } = StateMachine<
   IValidityState,
   IValidityStateProperties,
   IValidityStateReadonlyProperties

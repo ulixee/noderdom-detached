@@ -1,12 +1,16 @@
 const _objects = new WeakMap();
 
 export default function StateMachine<IClass, IProperties, IReadonlyProperties>(klass: string) {
-  function setState(instance: IClass, properties: IProperties): void {
+  function setState<P = IProperties>(instance: IClass, properties: P): void {
     const object: Record<string, any> = getState(instance);
     Object.entries(properties).forEach(([key, value]: [string, any]) => {
       object[key] = value;
     });
     _objects.set(instance as any, object);
+  }
+
+  function setHiddenState<IHiddenProperties extends {}>(instance: IClass, properties: IHiddenProperties): void {
+    setState<IHiddenProperties>(instance, properties);
   }
 
   function getState(instance: IClass) {
@@ -20,6 +24,7 @@ export default function StateMachine<IClass, IProperties, IReadonlyProperties>(k
   return {
     getState,
     setState,
+    setHiddenState,
     [`setReadonlyOf${klass}`]: setReadonlyOf,
   };
 }

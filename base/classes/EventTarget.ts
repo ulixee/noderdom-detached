@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IEventListenerOrEventListenerObject, IAddEventListenerOptions, IEventListenerOptions, IEvent, IEventTarget } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfEventTarget } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfEventTarget } = StateMachine<
   IEventTarget,
   IEventTargetProperties,
   IEventTargetReadonlyProperties

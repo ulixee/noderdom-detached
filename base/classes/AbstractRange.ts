@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { INode, IAbstractRange } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfAbstractRange } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfAbstractRange } = StateMachine<
   IAbstractRange,
   IAbstractRangeProperties,
   IAbstractRangeReadonlyProperties

@@ -2,7 +2,7 @@ import InternalHandler, { initializeConstantsAndPrototypes } from '../InternalHa
 import StateMachine from '../StateMachine';
 import { IDOMTokenList } from '../interfaces';
 
-export const { getState, setState, setReadonlyOfDOMTokenList } = StateMachine<
+export const { getState, setState, setHiddenState, setReadonlyOfDOMTokenList } = StateMachine<
   IDOMTokenList,
   IDOMTokenListProperties,
   IDOMTokenListReadonlyProperties
