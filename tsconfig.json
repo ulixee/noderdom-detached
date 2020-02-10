@@ -6,7 +6,7 @@
     "declaration": true /* Generates corresponding '.d.ts' file. */,
     "declarationDir": "./dist/types" /* Output directory for generated declaration files. */,
     "sourceMap": true /* Generates corresponding '.map' file. */,
-    "outDir": "./dist/lib" /* Redirect output structure to the directory. */,
+    "outDir": "./dist" /* Redirect output structure to the directory. */,
     "rootDirs": [
       "./src",
       "./test"
@@ -25,6 +25,6 @@
 
     "downlevelIteration": true
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./index.ts"],
   "exclude": []
 }

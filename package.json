@@ -16,6 +16,14 @@
     "DOMParser",
     "XMLSerializer"
   ],
+  "main": "./dist",
+  "scripts": {
+    "test": "NODE_ENV=test jest --runInBand",
+    "lint": "tslint --project ./",
+    "build": "tsc",
+    "clean": "tsc --build --clean",
+    "prepublishOnly": "npm run lint && npm run build && npm test"
+  },
   "dependencies": {
     "@types/parse5": "^5.0.2",
     "@types/underscore": "^1.9.4",
@@ -48,13 +56,6 @@
     "tslint-plugin-prettier": "^2.1.0",
     "typescript": "^3.7.5",
     "webidl2": "^23.10.1"
-  },
-  "scripts": {
-    "test": "NODE_ENV=test jest --runInBand",
-    "lint": "tslint --project ./",
-    "build": "tsc",
-    "clean": "tsc --build --clean",
-    "prepublishOnly": "npm run lint && npm run build && npm test"
   },
   "repository": {
     "type": "git",

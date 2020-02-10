@@ -1,0 +1,6 @@
+"use strict";
+// tslint:disable: prettier
+/// <reference no-default-lib="true"/>
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=interfaces.js.map

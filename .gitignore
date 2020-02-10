@@ -1,14 +1,7 @@
 node_modules/
 
-/docs/_build/
-lib/
-dist/
-types/
-
 # Logs
 *.log
-
-tests-to-import/
 
 # Coverage
 /.nyc_output

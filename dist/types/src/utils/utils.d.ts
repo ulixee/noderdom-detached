@@ -1,0 +1,11 @@
+import { INode } from '../../base/interfaces';
+export declare function isDocumentFragment(node: INode | null): boolean;
+export declare function isDocument(node: INode | null): boolean;
+export declare function isText(node: INode | null): boolean;
+export declare function isAttr(node: INode | null): boolean;
+export declare function isElement(node: INode | null): boolean;
+export declare function isProcessingInstruction(node: INode | null): boolean;
+export declare function isComment(node: INode | null): boolean;
+export declare function isCDATASection(node: INode | null): boolean;
+export declare function isDocumentType(node: INode | null): boolean;
+export declare function isCharacterData(node: INode | null): boolean;

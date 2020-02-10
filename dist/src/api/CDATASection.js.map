@@ -1,0 +1,1 @@
+{"version":3,"file":"CDATASection.js","sourceRoot":"","sources":["../../../src/api/CDATASection.ts"],"names":[],"mappings":";;;;;AAAA,kEAAkF;AAElF,kDAA0B;AAC1B,qEAA8C;AAE9C,MAAqB,YAAa,SAAQ,oCAAqB,CAAC,cAAI,CAAC;IACnE;QACE,KAAK,EAAE,CAAC;QACR,uBAAQ,CAAC,IAAI,EAAE;YACb,QAAQ,EAAE,gBAAgB;YAC1B,QAAQ,EAAE,kBAAS,CAAC,kBAAkB;SACvC,CAAC,CAAC;IACL,CAAC;CACF;AARD,+BAQC"}

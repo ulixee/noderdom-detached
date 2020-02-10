@@ -1,0 +1,78 @@
+import Constructable from '../Constructable';
+import InternalHandler from '../InternalHandler';
+import { INode, IChildNode, IDocumentType } from '../interfaces';
+import { INodeProperties, INodeReadonlyProperties } from './Node';
+import { IChildNodeProperties, IChildNodeReadonlyProperties } from '../mixins/ChildNode';
+export declare const getState: (instance: IDocumentType) => any, setState: <P = IDocumentTypeProperties>(instance: IDocumentType, properties: P) => void, setHiddenState: <IHiddenProperties extends {}>(instance: IDocumentType, properties: IHiddenProperties) => void, setReadonlyOfDocumentType: (instance: IDocumentType, properties: IDocumentTypeReadonlyProperties) => void;
+export declare const internalHandler: InternalHandler<IDocumentType>;
+export declare function DocumentTypeGenerator(Node: Constructable<INode>, ChildNode: Constructable<IChildNode>): {
+    new (): {
+        readonly name: string;
+        readonly publicId: string;
+        readonly systemId: string;
+        readonly ATTRIBUTE_NODE: number;
+        readonly CDATA_SECTION_NODE: number;
+        readonly COMMENT_NODE: number;
+        readonly DOCUMENT_FRAGMENT_NODE: number;
+        readonly DOCUMENT_NODE: number;
+        readonly DOCUMENT_POSITION_CONTAINED_BY: number;
+        readonly DOCUMENT_POSITION_CONTAINS: number;
+        readonly DOCUMENT_POSITION_DISCONNECTED: number;
+        readonly DOCUMENT_POSITION_FOLLOWING: number;
+        readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
+        readonly DOCUMENT_POSITION_PRECEDING: number;
+        readonly DOCUMENT_TYPE_NODE: number;
+        readonly ELEMENT_NODE: number;
+        readonly ENTITY_NODE: number;
+        readonly ENTITY_REFERENCE_NODE: number;
+        readonly NOTATION_NODE: number;
+        readonly PROCESSING_INSTRUCTION_NODE: number;
+        readonly TEXT_NODE: number;
+        readonly baseURI: string;
+        readonly childNodes: import("../interfaces").INodeList<INode>;
+        readonly firstChild: INode | null;
+        readonly isConnected: boolean;
+        readonly lastChild: INode | null;
+        readonly nextSibling: INode | null;
+        readonly nodeName: string;
+        readonly nodeType: number;
+        nodeValue: string | null;
+        readonly ownerDocument: import("../interfaces").IDocument | null;
+        readonly parentElement: import("../interfaces").IElement | null;
+        readonly parentNode: INode | null;
+        readonly previousSibling: INode | null;
+        textContent: string | null;
+        appendChild(node: INode): INode;
+        cloneNode(deep?: boolean | undefined): INode;
+        compareDocumentPosition(other: INode): number;
+        contains(other: INode | null): boolean;
+        getRootNode(options?: import("../interfaces").IGetRootNodeOptions | undefined): INode;
+        hasChildNodes(): boolean;
+        insertBefore(node: INode, child: INode | null): INode;
+        isDefaultNamespace(namespace: string | null): boolean;
+        isEqualNode(otherNode: INode | null): boolean;
+        isSameNode(otherNode: INode | null): boolean;
+        lookupNamespaceURI(prefix: string | null): string | null;
+        lookupPrefix(namespace: string | null): string | null;
+        normalize(): void;
+        removeChild(child: INode): INode;
+        replaceChild(node: INode, child: INode): INode;
+        dispatchEvent(event: import("../interfaces").IEvent): boolean;
+        after(...nodes: (string | INode)[]): void;
+        before(...nodes: (string | INode)[]): void;
+        remove(): void;
+        replaceWith(...nodes: (string | INode)[]): void;
+    };
+};
+export interface IDocumentTypeProperties extends INodeProperties, IChildNodeProperties {
+    name?: string;
+    publicId?: string;
+    systemId?: string;
+}
+export interface IDocumentTypeReadonlyProperties extends INodeReadonlyProperties, IChildNodeReadonlyProperties {
+    name?: string;
+    publicId?: string;
+    systemId?: string;
+}
+export declare const DocumentTypePropertyKeys: string[];
+export declare const DocumentTypeConstantKeys: string[];

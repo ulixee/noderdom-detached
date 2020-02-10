@@ -1,0 +1,75 @@
+import Constructable from '../Constructable';
+import InternalHandler from '../InternalHandler';
+import { INode, INonElementParentNode, IParentNode, IDocumentFragment } from '../interfaces';
+import { INodeProperties, INodeReadonlyProperties } from './Node';
+import { INonElementParentNodeProperties, INonElementParentNodeReadonlyProperties } from '../mixins/NonElementParentNode';
+import { IParentNodeProperties, IParentNodeReadonlyProperties } from '../mixins/ParentNode';
+export declare const getState: (instance: IDocumentFragment) => any, setState: <P = IDocumentFragmentProperties>(instance: IDocumentFragment, properties: P) => void, setHiddenState: <IHiddenProperties extends {}>(instance: IDocumentFragment, properties: IHiddenProperties) => void, setReadonlyOfDocumentFragment: (instance: IDocumentFragment, properties: IDocumentFragmentReadonlyProperties) => void;
+export declare const internalHandler: InternalHandler<IDocumentFragment>;
+export declare function DocumentFragmentGenerator(Node: Constructable<INode>, NonElementParentNode: Constructable<INonElementParentNode>, ParentNode: Constructable<IParentNode>): {
+    new (): {
+        readonly ATTRIBUTE_NODE: number;
+        readonly CDATA_SECTION_NODE: number;
+        readonly COMMENT_NODE: number;
+        readonly DOCUMENT_FRAGMENT_NODE: number;
+        readonly DOCUMENT_NODE: number;
+        readonly DOCUMENT_POSITION_CONTAINED_BY: number;
+        readonly DOCUMENT_POSITION_CONTAINS: number;
+        readonly DOCUMENT_POSITION_DISCONNECTED: number;
+        readonly DOCUMENT_POSITION_FOLLOWING: number;
+        readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
+        readonly DOCUMENT_POSITION_PRECEDING: number;
+        readonly DOCUMENT_TYPE_NODE: number;
+        readonly ELEMENT_NODE: number;
+        readonly ENTITY_NODE: number;
+        readonly ENTITY_REFERENCE_NODE: number;
+        readonly NOTATION_NODE: number;
+        readonly PROCESSING_INSTRUCTION_NODE: number;
+        readonly TEXT_NODE: number;
+        readonly baseURI: string;
+        readonly childNodes: import("../interfaces").INodeList<INode>;
+        readonly firstChild: INode | null;
+        readonly isConnected: boolean;
+        readonly lastChild: INode | null;
+        readonly nextSibling: INode | null;
+        readonly nodeName: string;
+        readonly nodeType: number;
+        nodeValue: string | null;
+        readonly ownerDocument: import("../interfaces").IDocument | null;
+        readonly parentElement: import("../interfaces").IElement | null;
+        readonly parentNode: INode | null;
+        readonly previousSibling: INode | null;
+        textContent: string | null;
+        appendChild(node: INode): INode;
+        cloneNode(deep?: boolean | undefined): INode;
+        compareDocumentPosition(other: INode): number;
+        contains(other: INode | null): boolean;
+        getRootNode(options?: import("../interfaces").IGetRootNodeOptions | undefined): INode;
+        hasChildNodes(): boolean;
+        insertBefore(node: INode, child: INode | null): INode;
+        isDefaultNamespace(namespace: string | null): boolean;
+        isEqualNode(otherNode: INode | null): boolean;
+        isSameNode(otherNode: INode | null): boolean;
+        lookupNamespaceURI(prefix: string | null): string | null;
+        lookupPrefix(namespace: string | null): string | null;
+        normalize(): void;
+        removeChild(child: INode): INode;
+        replaceChild(node: INode, child: INode): INode;
+        dispatchEvent(event: import("../interfaces").IEvent): boolean;
+        getElementById(elementId: string): import("../interfaces").IElement | null;
+        readonly childElementCount: number;
+        readonly children: import("../interfaces").IHTMLCollection<import("../interfaces").IElement>;
+        readonly firstElementChild: import("../interfaces").IElement | null;
+        readonly lastElementChild: import("../interfaces").IElement | null;
+        append(...nodes: (string | INode)[]): void;
+        prepend(...nodes: (string | INode)[]): void;
+        querySelector(selectors: string): import("../interfaces").IElement | null;
+        querySelectorAll(selectors: string): import("../interfaces").INodeList<INode>;
+    };
+};
+export interface IDocumentFragmentProperties extends INodeProperties, INonElementParentNodeProperties, IParentNodeProperties {
+}
+export interface IDocumentFragmentReadonlyProperties extends INodeReadonlyProperties, INonElementParentNodeReadonlyProperties, IParentNodeReadonlyProperties {
+}
+export declare const DocumentFragmentPropertyKeys: string[];
+export declare const DocumentFragmentConstantKeys: string[];
