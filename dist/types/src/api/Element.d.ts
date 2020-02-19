@@ -1,4 +1,4 @@
-import { IAttr, IElement, IHTMLElement, ISVGElement, IHTMLCollection, IDOMTokenList } from '../../base/interfaces';
+import { IAttr, IElement, IHTMLElement, ISVGElement, IHTMLCollection, IDOMTokenList, IDocument } from '../../base/interfaces';
 declare const GeneratedElement: {
     new (): {
         readonly attributes: import("../../base/interfaces").INamedNodeMap;
@@ -76,7 +76,7 @@ declare const GeneratedElement: {
         readonly nodeName: string;
         readonly nodeType: number;
         nodeValue: string | null;
-        readonly ownerDocument: import("../../base/interfaces").IDocument | null;
+        readonly ownerDocument: IDocument | null;
         readonly parentElement: IElement | null;
         readonly parentNode: import("../../base/interfaces").INode | null;
         readonly previousSibling: import("../../base/interfaces").INode | null;
@@ -121,6 +121,7 @@ export default class Element extends GeneratedElement implements IElement {
     get id(): string;
     get outerHTML(): string;
     get innerHTML(): string;
+    closest(selectors: string): IElement | null;
     getAttribute(qualifiedName: string): string | null;
     getAttributeNS(namespace: string | null, localName: string): string | null;
     getAttributeNode(name: string): IAttr | null;

@@ -21,6 +21,7 @@ const DOMException_1 = __importDefault(require("./DOMException"));
 const utils_1 = require("../utils/utils");
 const NamedNodeMap_1 = __importStar(require("./NamedNodeMap"));
 const Node_1 = __importDefault(require("./Node"));
+const Document_1 = require("./Document");
 const DOMTokenList_1 = __importDefault(require("./DOMTokenList"));
 const queryable_1 = require("../utils/queryable");
 // tslint:disable-next-line:variable-name
@@ -58,6 +59,14 @@ class Element extends GeneratedElement {
     get innerHTML() {
         const document = (this.nodeType === NodeType_1.default.DOCUMENT_NODE ? this : this.ownerDocument);
         return Serialization_1.fragmentSerialization(document, this, { requireWellFormed: true });
+    }
+    closest(selectors) {
+        const node = this;
+        const isDocumentNode = node.nodeType === NodeType_1.default.DOCUMENT_NODE;
+        const document = isDocumentNode ? node : node.ownerDocument;
+        if (!document)
+            return null;
+        return Document_1.queryEngine(document).closest(selectors, this);
     }
     getAttribute(qualifiedName) {
         const attr = this.getAttributeNode(qualifiedName);

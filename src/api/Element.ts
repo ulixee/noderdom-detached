@@ -1,4 +1,12 @@
-import { IAttr, IElement, IHTMLElement, ISVGElement, IHTMLCollection, IDOMTokenList } from '../../base/interfaces';
+import {
+  IAttr,
+  IElement,
+  IHTMLElement,
+  ISVGElement,
+  IHTMLCollection,
+  IDOMTokenList,
+  IDocument,
+} from '../../base/interfaces';
 import { ElementGenerator, getState, setState, internalHandler } from '../../base/classes/Element';
 import NODE_TYPE from '../constants/NodeType';
 import ChildNode from '../../base/mixins/ChildNode';
@@ -10,7 +18,7 @@ import DOMException from './DOMException';
 import { isElement } from '../utils/utils';
 import NamedNodeMap, { setReadonlyOfNamedNodeMap } from './NamedNodeMap';
 import Node from './Node';
-import Document from './Document';
+import Document, { queryEngine } from './Document';
 import DOMTokenList from './DOMTokenList';
 import { getElementsByTagName, getElementsByTagNameNS, getElementsByClassName } from '../utils/queryable';
 
@@ -55,6 +63,14 @@ export default class Element extends GeneratedElement implements IElement {
   public get innerHTML(): string {
     const document = (this.nodeType === NODE_TYPE.DOCUMENT_NODE ? this : this.ownerDocument) as Document;
     return fragmentSerialization(document, this, { requireWellFormed: true });
+  }
+
+  public closest(selectors: string): IElement | null {
+    const node = (this as unknown) as Node;
+    const isDocumentNode = node.nodeType === NODE_TYPE.DOCUMENT_NODE;
+    const document = isDocumentNode ? (node as IDocument) : node.ownerDocument;
+    if (!document) return null;
+    return queryEngine(document).closest(selectors, this);
   }
 
   public getAttribute(qualifiedName: string): string | null {

@@ -1,6 +1,6 @@
 import DOMParser from '../../src/api/DOMParser';
 import DOMException from '../../src/api/DOMException';
-import NODE_TYPES from '../../src/constants/NodeType';
+import NODE_TYPE from '../../src/constants/NodeType';
 import { IDocument, IElement } from '../../base/interfaces';
 import { readFileSync } from 'fs';
 
@@ -10,8 +10,8 @@ describe('O3XML tests', () => {
   }
 
   function isSame(a: IDocument | IElement, b: IDocument | IElement) {
-    const aElem = a.nodeType === NODE_TYPES.DOCUMENT_NODE ? (a as IDocument).documentElement! : (a as IElement);
-    const bElem = b.nodeType === NODE_TYPES.DOCUMENT_NODE ? (b as IDocument).documentElement! : (b as IElement);
+    const aElem = a.nodeType === NODE_TYPE.DOCUMENT_NODE ? (a as IDocument).documentElement! : (a as IElement);
+    const bElem = b.nodeType === NODE_TYPE.DOCUMENT_NODE ? (b as IDocument).documentElement! : (b as IElement);
     return aElem.outerHTML === bElem.outerHTML;
   }
 

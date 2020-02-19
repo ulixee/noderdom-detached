@@ -4,7 +4,7 @@ import HTMLCollection, { pushIntoHTMLCollection } from '../api/HTMLCollection';
 import Node from '../api/Node';
 import NodeList from '../api/NodeList';
 import { queryEngine } from '../api/Document';
-import NODE_TYPES from '../constants/NodeType';
+import NODE_TYPE from '../constants/NodeType';
 
 export default class ParentNode extends GeneratedParentNode implements IParentNode {
   public get children(): IHTMLCollection {
@@ -42,7 +42,7 @@ export default class ParentNode extends GeneratedParentNode implements IParentNo
 
   public querySelector(selectors: string): IElement | null {
     const node = (this as unknown) as Node;
-    const isDocumentNode = node.nodeType === NODE_TYPES.DOCUMENT_NODE;
+    const isDocumentNode = node.nodeType === NODE_TYPE.DOCUMENT_NODE;
     const document = isDocumentNode ? (node as IDocument) : node.ownerDocument;
     if (!document) return null;
     return queryEngine(document).first(selectors, this);
@@ -50,7 +50,7 @@ export default class ParentNode extends GeneratedParentNode implements IParentNo
 
   public querySelectorAll(selectors: string): INodeList<IElement> {
     const node = (this as unknown) as Node;
-    const isDocumentNode = node.nodeType === NODE_TYPES.DOCUMENT_NODE;
+    const isDocumentNode = node.nodeType === NODE_TYPE.DOCUMENT_NODE;
     const document = isDocumentNode ? (node as IDocument) : node.ownerDocument;
     if (!document) return new NodeList<IElement>();
     return queryEngine(document).select(selectors, this);
