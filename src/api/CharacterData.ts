@@ -13,7 +13,8 @@ export default class CharacterData extends GeneratedCharacterData implements ICh
   }
 
   public set data(value: string) {
-    setState(this, { data: value });
+    setState(this, { data: value, length: value.length });
+    this.nodeValue = value;
   }
 
   public get length(): number {
@@ -24,8 +25,7 @@ export default class CharacterData extends GeneratedCharacterData implements ICh
 
   public appendData(data: string): void {
     const appendedData = this.data + data;
-    this.nodeValue = this.data = appendedData;
-    setState(this, { length: appendedData.length });
+    this.data = appendedData;
   }
 
   public deleteData(offset: number, count: number): void {
@@ -40,8 +40,7 @@ export default class CharacterData extends GeneratedCharacterData implements ICh
     const start = this.data.substring(0, offset);
     const end = this.data.substring(offset + count);
     const replacedData = start + data + end;
-    this.nodeValue = this.data = replacedData;
-    setState(this, { length: replacedData.length });
+    this.data = replacedData;
   }
 
   public substringData(offset: number, count: number): string {

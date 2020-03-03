@@ -55,7 +55,7 @@ export default class Parse5TreeAdapter implements ITreeAdapter {
   }
 
   public appendChild(parentNode: INode & IParentNode, newNode: INode) {
-    const nodeToReplace = this.findNodeToReplace(parentNode, newNode)
+    const nodeToReplace = this.findNodeToReplace(parentNode, newNode);
     if (nodeToReplace) {
       parentNode.replaceChild(newNode, nodeToReplace);
     } else {

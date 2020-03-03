@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 
 describe('Element parse tests', () => {
   it('handles no attribute', () => {

@@ -1,6 +1,6 @@
 {
   "name": "noderdom",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A W3C Standard XML/HTMl DOM for Node",
   "homepage": "https://github.com/ulixee/noderdom",
   "author": {
@@ -16,13 +16,12 @@
     "DOMParser",
     "XMLSerializer"
   ],
-  "main": "./dist",
   "scripts": {
     "test": "NODE_ENV=test jest --runInBand",
     "lint": "tslint --project ./",
-    "build": "tsc",
-    "clean": "tsc --build --clean",
-    "prepublishOnly": "npm run lint && npm run build && npm test"
+    "compile": "tsc",
+    "build": "./build.sh",
+    "prepublishOnly": "npm run lint && npm test"
   },
   "dependencies": {
     "@types/parse5": "^5.0.2",

@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 import { IDocumentFragment, IDocument } from '../../base/interfaces';
 
 describe('Fragment tests', () => {

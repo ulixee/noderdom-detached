@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 import DOMException from '../../src/api/DOMException';
 import { IElement } from '../../base/interfaces';
 

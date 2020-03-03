@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 
 describe('Element tests', () => {
   it('getElementsByTagName', () => {

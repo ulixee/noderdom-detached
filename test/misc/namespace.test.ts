@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 
 describe('Namespace tests', () => {
   it.skip('test', () => {

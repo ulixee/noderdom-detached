@@ -46,7 +46,7 @@ describe('HTML Normalizer tests', () => {
 
     dom = new DOMParser().parseFromString('<Label onClick=doClick..">Hello, World</Label>', 'text/html');
     expect(dom.documentElement!.outerHTML).toBe(
-      '<html><head></head><body><label onclick="doClick..&quot;">Hello,</label></body></html>',
+      '<html><head></head><body><label onclick="doClick..&quot;">Hello, World</label></body></html>',
     );
   });
 

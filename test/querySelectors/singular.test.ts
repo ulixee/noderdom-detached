@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 import { IElement } from '../../base/interfaces';
 
 const parser = new DOMParser();

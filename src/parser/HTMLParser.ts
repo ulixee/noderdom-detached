@@ -7,7 +7,6 @@ export default class HTMLParser {
     const config = {
       treeAdapter: (new Parse5TreeAdapter(domImplementation, document) as unknown) as TreeAdapter,
     };
-
     return parse5.parseFragment(document, markup, config);
   }
 
@@ -15,7 +14,6 @@ export default class HTMLParser {
     const config = {
       treeAdapter: (new Parse5TreeAdapter(domImplementation, document) as unknown) as TreeAdapter,
     };
-
     const response = parse5.parse(markup, config);
     return response;
   }

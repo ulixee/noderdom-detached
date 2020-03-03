@@ -1,4 +1,4 @@
-import { DOMParser } from '../../src/index';
+import { DOMParser } from '../..';
 
 describe('Namespace parse tests', () => {
   it('uses default namespace', () => {
