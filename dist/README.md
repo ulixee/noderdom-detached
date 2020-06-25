@@ -10,10 +10,11 @@ Based on the work of [XMLDOM](https://github.com/jindw/xmldom), [XMLDOM-TS](http
 
 ## Usage
 
-Install with [npm](http://github.com/isaacs/npm):
+Install with yarn or npm:
 
 ```
-npm install noderdom
+yarn add noderdom-detached
+# npm install noderdom-detached
 ```
 
 ## Licence

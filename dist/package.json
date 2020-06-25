@@ -1,8 +1,8 @@
 {
-  "name": "noderdom",
+  "name": "noderdom-detached",
   "version": "0.3.2",
   "description": "A W3C Standard XML/HTMl DOM for Node",
-  "homepage": "https://github.com/ulixee/noderdom",
+  "homepage": "https://github.com/ulixee/noderdom-detached",
   "author": {
     "name": "Caleb Clark"
   },
@@ -28,6 +28,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ulixee/noderdom"
+    "url": "git://github.com/ulixee/noderdom-detached"
   }
 }
