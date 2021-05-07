@@ -30,7 +30,7 @@
     "nwsapi": "^2.2.0",
     "parse5": "^5.1.1",
     "saxes": "^4.0.2",
-    "underscore": "^1.9.2",
+    "underscore": "^1.12.1",
     "w3c-xmlserializer": "https://github.com/ulixee/w3c-xmlserializer.git"
   },
   "devDependencies": {
